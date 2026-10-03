@@ -1,0 +1,22 @@
+@import './styles/fonts.css';
+@import 'tailwindcss';
+@import './styles/theme.css';
+
+@layer base {
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  button, a, input, select { -webkit-tap-highlight-color: transparent; }
+  button:not(:disabled), select { cursor: pointer; }
+  button, a, input, select { @apply outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2; }
+  button, a { @apply transition duration-200; }
+  ::selection { background: #cee9df; color: #205e50; }
+  dialog::backdrop { background: #142f2b80; backdrop-filter: blur(5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+@layer base {
+  .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .large-text main p, .large-text main label, .large-text main input, .large-text main select, .large-text main button { font-size: max(1em, 14px); }
+}

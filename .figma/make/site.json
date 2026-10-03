@@ -1,0 +1,11 @@
+{
+  "title": "Emad WordLink",
+  "description": "Interactive English picture dictionary offering visual vocabulary lessons, practice activities, and progress tracking for language learners of all levels.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

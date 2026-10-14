@@ -1,3 +1,5 @@
+import type { CEFRMetadata } from "./cefr"
+
 export type BaseWord = {
   id: string
   word: string
@@ -6,6 +8,7 @@ export type BaseWord = {
   definition: string
   example: string
   level: "Beginner" | "Intermediate"
+  cefr?: CEFRMetadata
   related: string[]
 }
 export interface VocabularyAudio {

@@ -15,6 +15,7 @@ import {
   Link,
   useNavigate,
   useLocation,
+  useRouteError,
   useSearchParams,
 } from "react-router"
 import {
@@ -28,6 +29,7 @@ import {
   Check,
   CheckCircle2,
   Copy,
+  Download,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -50,6 +52,7 @@ import {
   Target,
   TrendingUp,
   Trophy,
+  Upload,
   UserRound,
   Volume2,
   X,
@@ -76,6 +79,13 @@ import {
 } from "./VocabularyImagery"
 import { CategoryPhoto, CategoryHero, categoryImages } from "./CategoryImagery"
 import WordPicture from "./WordPicture"
+import {
+  cefrLabels,
+  cefrLevels,
+  isCEFRLevel,
+  resolveCEFRSelection,
+  type CEFRLevel,
+} from "./cefr"
 import {
   getWordVisual,
   vocabularyVisuals,
@@ -1041,6 +1051,7 @@ type Preferences = {
   goal: number
   reduceMotion: boolean
   largeText: boolean
+  cefrLevel: CEFRLevel | "All levels"
 }
 interface WordMastery {
   attempts: number
@@ -1060,6 +1071,7 @@ interface LastLesson {
   url: string
 }
 export type Stored = {
+  schemaVersion: number
   lastLesson: LastLesson | null
   favorites: string[]
   learned: string[]
@@ -1086,7 +1098,10 @@ export type Stored = {
   }[]
   preferences: Preferences
 }
+const STORE_KEY = "emad-dictionary"
+const STORE_VERSION = 2
 const initial: Stored = {
+  schemaVersion: STORE_VERSION,
   lastLesson: null,
   favorites: [],
   learned: [],
@@ -1110,15 +1125,15 @@ const initial: Stored = {
     goal: 10,
     reduceMotion: false,
     largeText: false,
+    cefrLevel: "All levels",
   },
 }
-function readStore(): Stored {
-  try {
-    const saved = JSON.parse(localStorage.getItem("emad-dictionary") || "null")
-    return saved && typeof saved === "object"
+function normalizeStore(saved: any): Stored {
+  return saved && typeof saved === "object"
       ? {
           ...initial,
           ...saved,
+          schemaVersion: STORE_VERSION,
           lastLesson:
             saved.lastLesson &&
             topicNames.includes(saved.lastLesson.category) &&
@@ -1213,9 +1228,19 @@ function readStore(): Stored {
                   !Number.isNaN(new Date(session.date).getTime()),
               )
             : [],
-          preferences: { ...initial.preferences, ...saved.preferences },
+          preferences: {
+            ...initial.preferences,
+            ...saved.preferences,
+            cefrLevel: isCEFRLevel(saved.preferences?.cefrLevel)
+              ? saved.preferences.cefrLevel
+              : "All levels",
+          },
         }
       : initial
+}
+function readStore(): Stored {
+  try {
+    return normalizeStore(JSON.parse(localStorage.getItem(STORE_KEY) || "null"))
   } catch {
     return initial
   }
@@ -1390,6 +1415,31 @@ function AudioButton({
   )
 }
 
+const cefrColors: Record<CEFRLevel, string> = {
+  A1: "border-[#b9d9cc] bg-[#edf7f2] text-[#246553]",
+  A2: "border-[#c9dfbd] bg-[#f2f8ed] text-[#52703f]",
+  B1: "border-[#d9d6ad] bg-[#faf8e8] text-[#766c2f]",
+  B2: "border-[#ead0ad] bg-[#fcf3e7] text-[#8a5b2e]",
+  C1: "border-[#ddc6df] bg-[#f8eef8] text-[#744b76]",
+  C2: "border-[#c8d2e7] bg-[#eef2fa] text-[#425b88]",
+}
+
+function CEFRBadge({ word, detailed = false }: { word: Word; detailed?: boolean }) {
+  if (!word.cefr) return null
+  return (
+    <span
+      title={`${word.cefr.source}. ${word.cefr.confidence} confidence.`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold ${cefrColors[word.cefr.level]}`}
+    >
+      {word.cefr.level}
+      {detailed && <span>· {cefrLabels[word.cefr.level]}</span>}
+      {word.cefr.status === "provisional" && (
+        <span className="font-normal opacity-75">· provisional</span>
+      )}
+    </span>
+  )
+}
+
 const navigation: {
   path: string
   label: string
@@ -1479,7 +1529,7 @@ function Layout() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
     try {
-      localStorage.setItem("emad-dictionary", JSON.stringify(data))
+      localStorage.setItem(STORE_KEY, JSON.stringify(data))
     } catch {}
     document.documentElement.classList.toggle("dark", data.preferences.dark)
     document.documentElement.classList.toggle(
@@ -1687,6 +1737,12 @@ function Layout() {
       }}
     >
       <div className="min-h-screen bg-background">
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[70] -translate-y-24 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-xl focus:translate-y-0"
+        >
+          Skip to learning content
+        </a>
         <aside className="fixed inset-y-0 left-0 z-30 hidden w-[228px] flex-col overflow-y-auto border-r border-border bg-card px-5 py-6 lg:flex xl:w-[242px] xl:py-8">
           <Link to="/" className="mb-4 flex items-center gap-3 px-2">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
@@ -1811,7 +1867,11 @@ function Layout() {
               </nav>
             </div>
           )}
-          <main className="mx-auto max-w-[1500px] px-5 py-7 md:px-8 xl:px-10 xl:py-8">
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="mx-auto max-w-[1500px] px-5 py-7 md:px-8 xl:px-10 xl:py-8"
+          >
             <Outlet />
           </main>
           <footer className="mx-5 mt-2 flex flex-col justify-between gap-3 border-t border-border py-6 text-[10px] text-muted-foreground md:mx-8 md:flex-row xl:mx-10">
@@ -2109,6 +2169,9 @@ function WordCard({ word, compact = false }: WordCardProps) {
             </Link>
             <span className="ml-2 text-[9px] text-muted-foreground">
               {word.group}
+            </span>
+            <span className="ml-2 inline-flex align-middle">
+              <CEFRBadge word={word} />
             </span>
             {getVocabularyPhoto(word).kind === "context" && (
               <p className="mt-2 text-[10px] text-muted-foreground">
@@ -3434,8 +3497,17 @@ function TopicVocabulary() {
   const topic = decodeURIComponent(
     useLocation().pathname.split("/").pop() || "Food",
   )
-  const words = vocabulary.filter((word) => word.topic === topic)
-  const groups = getGroups(topic)
+  const requestedCEFR = params.get("cefr")
+  const cefr = resolveCEFRSelection(
+    requestedCEFR,
+    data.preferences.cefrLevel,
+  )
+  const allWords = vocabulary.filter((word) => word.topic === topic)
+  const words =
+    cefr === "All levels"
+      ? allWords
+      : allWords.filter((word) => word.cefr?.level === cefr)
+  const groups = [...new Set(words.map((word) => word.group))]
   const [group, setGroup] = useState(params.get("group") || "All vocabulary")
   const topicScenes = scenes.filter((scene) => scene.topic === topic)
   const selectedScene =
@@ -3463,7 +3535,7 @@ function TopicVocabulary() {
             },
       )
   }, [topic])
-  if (!words.length)
+  if (!allWords.length)
     return (
       <EmptyState
         title="This topic isn't here yet"
@@ -3474,6 +3546,32 @@ function TopicVocabulary() {
           </Link>
         }
       />
+    )
+  if (!words.length)
+    return (
+      <>
+        <PageHeading
+          eyebrow="CEFR vocabulary"
+          title={`No ${cefr} words are ready in ${topic} yet.`}
+          description="This level is available in the learning framework, but this topic still needs educator-reviewed vocabulary for it."
+        />
+        <EmptyState
+          title="Try another CEFR level"
+          description="Existing progress is unchanged. Show every level or choose another level from Dictionary and Settings."
+          action={
+            <button
+              onClick={() => {
+                const next = new URLSearchParams(params)
+                next.set("cefr", "all")
+                setParams(next)
+              }}
+              className={primaryButton}
+            >
+              Show all CEFR levels
+            </button>
+          }
+        />
+      </>
     )
   return (
     <>
@@ -3500,6 +3598,36 @@ function TopicVocabulary() {
         </div>
         <ProgressBar value={(learned / words.length) * 100} />
       </CategoryHero>
+      <div className={`${card} mb-5 flex flex-wrap items-center justify-between gap-4 p-4`}>
+        <div>
+          <p className="text-sm font-semibold">Learn at your CEFR level</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Provisional estimates · filtering never removes saved progress
+          </p>
+        </div>
+        <select
+          aria-label="Topic CEFR level"
+          value={cefr}
+          onChange={(event) => {
+            const next = new URLSearchParams(params)
+            next.set(
+              "cefr",
+              event.target.value === "All levels" ? "all" : event.target.value,
+            )
+            next.delete("group")
+            setGroup("All vocabulary")
+            setParams(next)
+          }}
+          className="rounded-xl border border-border bg-background px-4 py-3 text-xs"
+        >
+          <option value="All levels">All CEFR levels</option>
+          {cefrLevels.map((level) => (
+            <option key={level} value={level}>
+              {level} · {cefrLabels[level]}
+            </option>
+          ))}
+        </select>
+      </div>
       {selectedScene && (
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div className="inline-flex rounded-xl border border-border bg-card p-1">
@@ -3595,7 +3723,7 @@ function TopicVocabulary() {
                     </span>
                   </h2>
                   <Link
-                    to={`/topics/${encodeURIComponent(topic)}?section=practice&group=${encodeURIComponent(name)}`}
+                    to={`/topics/${encodeURIComponent(topic)}?section=practice&group=${encodeURIComponent(name)}&cefr=${cefr === "All levels" ? "all" : cefr}`}
                     className="flex items-center gap-1.5 text-xs font-semibold text-primary"
                   >
                     <Play size={13} />
@@ -3621,7 +3749,7 @@ function TopicVocabulary() {
           </p>
         </div>
         <Link
-          to={`/topics/${encodeURIComponent(topic)}?section=practice`}
+          to={`/topics/${encodeURIComponent(topic)}?section=practice&cefr=${cefr === "All levels" ? "all" : cefr}`}
           className={primaryButton}
         >
           <Play size={15} />
@@ -3656,6 +3784,7 @@ function WordListRow({ word }: { word: Word }) {
           <span className="rounded-md bg-secondary px-2 py-1 text-[10px] text-primary">
             {word.topic} / {word.group}
           </span>
+          <CEFRBadge word={word} />
         </div>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
           {word.definition}
@@ -3698,14 +3827,20 @@ function DictionaryPage() {
   const [params, setParams] = useSearchParams()
   const query = params.get("q") || ""
   const topic = params.get("topic") || "All topics"
-  const level = params.get("level") || "All levels"
+  const requestedLevel = params.get("level")
+  const level = resolveCEFRSelection(
+    requestedLevel,
+    data.preferences.cefrLevel,
+  )
   const group = params.get("group") || "All groups"
   const letter = params.get("letter") || ""
   const status = params.get("status") || "All words"
   const imageFilter =
     params.get("images") ||
     (query || letter || topic !== "All topics" ? "all" : "verified")
-  const verifiedCount = vocabulary.filter((word) => word.image).length
+  const verifiedCount = vocabulary.filter(
+    (word) => word.imageStatus === "verified",
+  ).length
   const view = params.get("view") || "grid"
   const sort = params.get("sort") || "Relevance"
   const setFilter = (key: string, value: string) => {
@@ -3732,11 +3867,13 @@ function DictionaryPage() {
       return (
         tokens.every((token) => text.includes(token)) &&
         (topic === "All topics" || word.topic === topic) &&
-        (level === "All levels" || word.level === level) &&
+        (level === "All levels" || word.cefr?.level === level) &&
         (group === "All groups" || word.group === group) &&
         (!letter || word.word.startsWith(letter.toLowerCase())) &&
         (imageFilter === "all" ||
-          (imageFilter === "verified" ? Boolean(word.image) : !word.image)) &&
+          (imageFilter === "verified"
+            ? word.imageStatus === "verified"
+            : word.imageStatus !== "verified")) &&
         (status === "All words" ||
           (status === "Learned" && data.learned.includes(word.id)) ||
           (status === "Not learned" && !data.learned.includes(word.id)) ||
@@ -3787,7 +3924,7 @@ function DictionaryPage() {
       <PageHeading
         eyebrow="Your visual vocabulary"
         title="Real words. Pictures you can trust."
-        description={`${verifiedCount} photo-backed entries in a ${vocabulary.length}-word dictionary. Each photograph is checked against its word; missing images are clearly marked, never substituted.`}
+        description={`${verifiedCount} entries have a checked word-specific photograph. ${vocabulary.length - verifiedCount} entries currently use a clearly labelled learning-context image while their exact photograph is reviewed.`}
       />
       <div className={`${card} mb-6 p-5`}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -3878,14 +4015,17 @@ function DictionaryPage() {
             onChange={(event) =>
               setFilter(
                 "level",
-                event.target.value === "All levels" ? "" : event.target.value,
+                event.target.value === "All levels" ? "all" : event.target.value,
               )
             }
             className="rounded-xl border border-border bg-background px-3 py-3 text-xs"
           >
-            <option>All levels</option>
-            <option>Beginner</option>
-            <option>Intermediate</option>
+            <option value="All levels">All CEFR levels</option>
+            {cefrLevels.map((item) => (
+              <option key={item} value={item}>
+                {item} · {cefrLabels[item]}
+              </option>
+            ))}
           </select>
           <select
             aria-label="Filter by learning status"
@@ -3907,6 +4047,11 @@ function DictionaryPage() {
             <option>Confident</option>
           </select>
         </div>
+        <p className="mt-3 rounded-xl bg-secondary/60 px-4 py-3 text-xs leading-5 text-muted-foreground">
+          CEFR labels are provisional learning estimates while the vocabulary is
+          reviewed by an educator. They filter content without changing your
+          saved progress.
+        </p>
         <div className="mt-5 flex flex-wrap gap-1">
           <button
             onClick={() => setFilter("letter", "")}
@@ -4088,8 +4233,11 @@ function WordDialog({ word, onClose }: WordDialogProps) {
         <div className="flex items-center justify-between">
           <div>
             <span className="text-[9px] font-semibold uppercase tracking-widest text-primary">
-              {word.topic} / {word.group} • {word.level}
+              {word.topic} / {word.group}
             </span>
+            <div className="mt-2">
+              <CEFRBadge word={word} detailed />
+            </div>
             <h2
               id="word-title"
               className="mt-2 font-display text-3xl font-bold"
@@ -4508,7 +4656,9 @@ function PracticePage() {
   const [selectedGroup, setSelectedGroup] = useState(
     params.get("group") || "All groups",
   )
-  const [selectedLevel, setSelectedLevel] = useState("All levels")
+  const [selectedLevel, setSelectedLevel] = useState<CEFRLevel | "All levels">(
+    resolveCEFRSelection(params.get("level"), data.preferences.cefrLevel),
+  )
   const [sessionTopic, setSessionTopic] = useState("")
   const topic = params.get("topic"),
     wordId = params.get("word"),
@@ -4526,7 +4676,7 @@ function PracticePage() {
     (word) =>
       (selectedTopic === "All topics" || word.topic === selectedTopic) &&
       (selectedGroup === "All groups" || word.group === selectedGroup) &&
-      (selectedLevel === "All levels" || word.level === selectedLevel) &&
+      (selectedLevel === "All levels" || word.cefr?.level === selectedLevel) &&
       (!wordId || word.id === wordId) &&
       (!practiceScene ||
         practiceScene.objects.some((object) => object.id === word.id)) &&
@@ -4865,12 +5015,19 @@ function PracticePage() {
                   aria-label="Practice level"
                   value={selectedLevel}
                   disabled={Boolean(wordId || practiceScene || collection)}
-                  onChange={(event) => setSelectedLevel(event.target.value)}
+                  onChange={(event) =>
+                    setSelectedLevel(
+                      event.target.value as CEFRLevel | "All levels",
+                    )
+                  }
                   className="mt-2 w-full rounded-xl border border-border bg-background px-3 py-3 text-xs disabled:opacity-50"
                 >
-                  <option>All levels</option>
-                  <option>Beginner</option>
-                  <option>Intermediate</option>
+                  <option value="All levels">All CEFR levels</option>
+                  {cefrLevels.map((level) => (
+                    <option key={level} value={level}>
+                      {level} · {cefrLabels[level]}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label className="text-xs text-muted-foreground">
@@ -6159,6 +6316,7 @@ function Toggle({
 }
 function SettingsPage() {
   const { data, update, notify } = useApp()
+  const importInput = useRef<HTMLInputElement>(null)
   const preferences = data.preferences
   const change = <Key extends keyof Preferences,>(
     key: Key,
@@ -6168,6 +6326,39 @@ function SettingsPage() {
       ...previous,
       preferences: { ...previous.preferences, [key]: value },
     }))
+  const exportProgress = () => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `emad-wordlink-backup-${localDay(new Date())}.json`
+    link.click()
+    URL.revokeObjectURL(url)
+    notify("Your learning backup is ready in Downloads.")
+  }
+  const importProgress = async (file?: File) => {
+    if (!file) return
+    try {
+      const parsed = JSON.parse(await file.text())
+      if (
+        !parsed ||
+        typeof parsed !== "object" ||
+        (!Array.isArray(parsed.learned) &&
+          !Array.isArray(parsed.sessions) &&
+          !parsed.preferences)
+      )
+        throw new Error("Invalid backup")
+      const restored = normalizeStore(parsed)
+      update(() => restored)
+      notify("Backup restored. Your learning progress is ready.")
+    } catch {
+      notify("That file is not a valid Emad WordLink backup.")
+    } finally {
+      if (importInput.current) importInput.current.value = ""
+    }
+  }
   return (
     <>
       <PageHeading
@@ -6212,6 +6403,69 @@ function SettingsPage() {
           <p className="mt-2 text-[10px] text-muted-foreground">
             More learning languages are on our wish list.
           </p>
+          <label
+            className="mb-2 mt-6 block text-xs font-medium"
+            htmlFor="cefr-level"
+          >
+            Preferred CEFR level
+          </label>
+          <select
+            id="cefr-level"
+            value={preferences.cefrLevel}
+            onChange={(event) =>
+              change(
+                "cefrLevel",
+                event.target.value as Preferences["cefrLevel"],
+              )
+            }
+            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm"
+          >
+            <option value="All levels">All CEFR levels</option>
+            {cefrLevels.map((level) => (
+              <option key={level} value={level}>
+                {level} · {cefrLabels[level]}
+              </option>
+            ))}
+          </select>
+          <p className="mt-2 text-[10px] leading-5 text-muted-foreground">
+            Used as the default Dictionary and Practice filter. You can change
+            it any time without losing progress.
+          </p>
+          <details className="mt-4 rounded-xl border border-border bg-background p-4">
+            <summary className="cursor-pointer text-xs font-semibold text-primary">
+              Help me choose a starting level
+            </summary>
+            <div className="mt-3 grid gap-2 text-xs leading-5 text-muted-foreground sm:grid-cols-2">
+              {cefrLevels.map((level) => (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => change("cefrLevel", level)}
+                  className="rounded-lg border border-border p-3 text-left hover:bg-secondary"
+                >
+                  <span className="font-semibold text-foreground">
+                    {level} · {cefrLabels[level]}
+                  </span>
+                  <span className="mt-1 block">
+                    {level === "A1"
+                      ? "Start with familiar everyday words and short phrases."
+                      : level === "A2"
+                        ? "Build routine vocabulary for home, school, travel, and work."
+                        : level === "B1"
+                          ? "Grow independent vocabulary for common situations and ideas."
+                          : level === "B2"
+                            ? "Explore more precise vocabulary and longer expressions."
+                            : level === "C1"
+                              ? "Work with advanced, academic, and nuanced language."
+                              : "Refine highly precise, flexible, and specialized language."}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <p className="mt-3 text-[10px] leading-5 text-muted-foreground">
+              This is a self-selection guide, not a formal language assessment.
+            </p>
+          </details>
         </section>
         <section className={`${card} p-6`}>
           <SectionTitle title="Listen & learn" />
@@ -6340,6 +6594,42 @@ function SettingsPage() {
               object, and Escape to close word details. Numbered scene words
               remain available below every illustration.
             </p>
+          </div>
+        </section>
+        <section className={`${card} p-6 xl:col-span-2`}>
+          <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+            <div className="max-w-2xl">
+              <SectionTitle title="Backup & portability" />
+              <p className="text-sm leading-6 text-muted-foreground">
+                Your progress stays on this browser. Download a private backup
+                before changing device, clearing browser data, or moving to a
+                new website address.
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Backup version {data.schemaVersion} · {data.learned.length} words
+                learned · {data.sessions.length} practice sessions
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <button onClick={exportProgress} className={primaryButton}>
+                <Download size={16} />
+                Download backup
+              </button>
+              <button
+                onClick={() => importInput.current?.click()}
+                className={secondaryButton}
+              >
+                <Upload size={16} />
+                Restore backup
+              </button>
+              <input
+                ref={importInput}
+                type="file"
+                accept="application/json,.json"
+                className="hidden"
+                onChange={(event) => importProgress(event.target.files?.[0])}
+              />
+            </div>
           </div>
         </section>
       </div>
@@ -6561,9 +6851,44 @@ function CategoryLearningHub() {
   )
 }
 
+function RouteErrorPage() {
+  const error = useRouteError()
+  useEffect(() => {
+    console.error("Emad WordLink route error", error)
+  }, [error])
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-5 py-12 text-foreground">
+      <section className={`${card} w-full max-w-xl p-7 text-center md:p-10`}>
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary text-primary">
+          <BookOpen size={27} />
+        </span>
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[.16em] text-primary">
+          A small pause
+        </p>
+        <h1 className="mt-3 font-display text-2xl font-bold md:text-3xl">
+          This activity could not open.
+        </h1>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-muted-foreground">
+          Your saved learning progress is safe. Return home or refresh the page
+          and try the activity again.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link to="/" className={primaryButton}>
+            Back home
+          </Link>
+          <button onClick={() => window.location.reload()} className={secondaryButton}>
+            Refresh page
+          </button>
+        </div>
+      </section>
+    </main>
+  )
+}
+
 const router = createBrowserRouter([
   {
     Component: Layout,
+    ErrorBoundary: RouteErrorPage,
     children: [
       { index: true, Component: HomePage },
       { path: "dictionary", Component: DictionaryPage },

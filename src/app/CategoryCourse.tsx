@@ -31,6 +31,11 @@ import { scenes } from "./SceneCanvas"
 import { CategoryHero } from "./CategoryImagery"
 import { getVocabularyPhoto, visualVocabulary } from "./VocabularyImagery"
 import { topicIntroductions } from "./content"
+import {
+  cefrLabels,
+  cefrLevels,
+  resolveCEFRSelection,
+} from "./cefr"
 
 type Section = "dashboard" | "vocabulary" | "practice" | "write" | "flashcards" | "games" | "progress"
 type LearningSection = "practice" | "write" | "flashcards" | "games"
@@ -319,12 +324,21 @@ export default function CategoryCourse(course: CourseProps) {
     ? requested as Section
     : "dashboard"
   const activity = params.get("activity") || ""
+  const requestedCEFR = params.get("cefr")
+  const cefr = resolveCEFRSelection(
+    requestedCEFR,
+    course.data.preferences.cefrLevel,
+  )
   const group = params.get("group") || "All subcategories"
-  const groups = [...new Set(course.words.map((word) => word.group))]
+  const levelWords =
+    cefr === "All levels"
+      ? course.words
+      : course.words.filter((word) => word.cefr?.level === cefr)
+  const groups = [...new Set(levelWords.map((word) => word.group))]
   const groupWords =
     group === "All subcategories"
-      ? course.words
-      : course.words.filter((word) => word.group === group)
+      ? levelWords
+      : levelWords.filter((word) => word.group === group)
   const scene = scenes.find((item) => item.id === params.get("scene"))
   const sceneWords =
     scene && section !== "flashcards"
@@ -358,6 +372,8 @@ export default function CategoryCourse(course: CourseProps) {
     search.set("section", next)
     if (mode) search.set("activity", mode)
     if (params.get("length")) search.set("length", params.get("length")!)
+    if (next !== "dashboard" && next !== "progress")
+      search.set("cefr", cefr === "All levels" ? "all" : cefr)
     if (next === section && mode) {
       if (params.has("favorites")) search.set("favorites", "true")
       if (params.get("q")) search.set("q", params.get("q")!)
@@ -508,6 +524,33 @@ export default function CategoryCourse(course: CourseProps) {
                   {course.category}.
                 </p>
               </div>
+              <label className="text-xs text-muted-foreground">
+                CEFR level
+                <select
+                  aria-label="Category CEFR level"
+                  value={cefr}
+                  onChange={(event) => {
+                    const next = new URLSearchParams(params)
+                    next.set("section", section)
+                    next.set(
+                      "cefr",
+                      event.target.value === "All levels"
+                        ? "all"
+                        : event.target.value,
+                    )
+                    next.delete("group")
+                    setParams(next)
+                  }}
+                  className="mt-2 block w-full rounded-xl border border-border bg-background px-3 py-2.5 text-xs"
+                >
+                  <option value="All levels">All CEFR levels</option>
+                  {cefrLevels.map((level) => (
+                    <option key={level} value={level}>
+                      {level} · {cefrLabels[level]}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <label className="text-xs text-muted-foreground">
                 Vocabulary subgroup
                 <select
@@ -1057,7 +1100,7 @@ function QuizSession(props: QuizProps) {
   const [questions, setQuestions] = useState(() =>
     shuffled(questionPool).slice(
       0,
-      activityMode === "speed" ? pool.length : questionCount,
+      activityMode === "speed" ? questionPool.length : questionCount,
     ),
   )
   const [index, setIndex] = useState(0)
@@ -1195,7 +1238,7 @@ function QuizSession(props: QuizProps) {
     setQuestions(
       shuffled(questionPool).slice(
         0,
-        activityMode === "speed" ? pool.length : questionCount,
+        activityMode === "speed" ? questionPool.length : questionCount,
       ),
     )
     setIndex(0)
@@ -1643,7 +1686,7 @@ function PairGame(props: PairProps) {
           : "Choose a word, then its picture."}
       </h2>
       <p className="mb-6 mt-2 text-center text-xs text-muted-foreground">
-        {pool.some((word) => word.image)
+        {pairs.some((word) => word.imageStatus === "verified")
           ? "Checked pictures include meaning clues."
           : "These words have no checked photos yet; match their definitions instead."}{" "}
         Every pair belongs to {course.category}.

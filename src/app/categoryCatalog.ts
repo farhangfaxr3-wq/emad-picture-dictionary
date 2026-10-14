@@ -1,6 +1,7 @@
 import type { Word } from "./content"
 import type { Scene } from "./SceneCanvas"
 import { getVocabularyPhoto } from "./VocabularyImagery"
+import { estimateCEFR } from "./cefr"
 
 interface VocabularyGroup {
   category: string
@@ -1313,12 +1314,16 @@ export function completeCategoryCatalog(
       })
     }
   }
-  return words.map((word) => ({
-    ...word,
-    image: getVocabularyPhoto(word).src,
-    visualKind: "photo",
-    audio: { text: word.word, language: "en-US" },
-    related: [
+  return words.map((word) => {
+    const photograph = getVocabularyPhoto(word)
+    return {
+      ...word,
+      image: photograph.src,
+      imageStatus: photograph.kind === "context" ? "pending" : "verified",
+      cefr: word.cefr || estimateCEFR(word),
+      visualKind: "photo",
+      audio: { text: word.word, language: "en-US" },
+      related: [
       ...new Set([
         ...word.related.filter((id) =>
           words.some((other) => other.id === id && other.topic === word.topic),
@@ -1335,6 +1340,7 @@ export function completeCategoryCatalog(
           .filter((other) => other.topic === word.topic && other.id !== word.id)
           .map((other) => other.id),
       ]),
-    ].slice(0, 5),
-  }))
+      ].slice(0, 5),
+    }
+  })
 }

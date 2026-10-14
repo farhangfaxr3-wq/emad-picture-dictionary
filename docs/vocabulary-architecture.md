@@ -1,0 +1,37 @@
+# Emad WordLink vocabulary architecture
+
+The learner-facing UI and the vocabulary catalogue are intentionally separate.
+This keeps future vocabulary batches reviewable and prevents content work from
+accidentally changing navigation, progress, or practice behavior.
+
+## Source flow
+
+1. `src/app/coreWords.ts` contains the small hand-written starter set.
+2. `src/app/content.ts` expands the established vocabulary records.
+3. `src/app/categoryCatalog.ts` adds category groups, imagery status, audio,
+   relations, and provisional CEFR metadata.
+4. `src/app/vocabulary.ts` assembles the final catalogue and runs structural
+   validation before the UI imports it.
+5. `src/app/App.tsx` consumes the finished, validated catalogue and contains no
+   raw starter vocabulary records.
+
+## Required word fields
+
+Every finished word must have a stable `id`, display `word`, pronunciation,
+topic, subgroup, definition, example, part of speech, related-word list, image
+status, audio metadata, and CEFR metadata. CEFR estimates remain explicitly
+provisional until an educator verifies them.
+
+## Progress compatibility
+
+Learner progress is keyed by the stable word `id`. Existing IDs must not be
+renamed or reused for a different word. New vocabulary may be appended without
+resetting the browser store. The store schema is versioned, normalized on read,
+and can be exported or restored from Settings.
+
+## Adding a vocabulary batch
+
+Add a bounded batch, run TypeScript and the production build, then confirm that
+the Settings catalogue check reports `structure passed`. Review any audit issue
+before publishing. Image and CEFR status must describe the truth; never label a
+context image or an estimated level as verified.

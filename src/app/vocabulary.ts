@@ -5,6 +5,7 @@ import { coreWords } from "./coreWords"
 import { scenes } from "./SceneCanvas"
 import { batch001, batch001Metadata } from "./vocabularyBatches/batch001"
 import { batch002, batch002Metadata } from "./vocabularyBatches/batch002"
+import { batch003, batch003Metadata } from "./vocabularyBatches/batch003"
 
 export interface VocabularyValidationIssue {
   severity: "error" | "warning"
@@ -193,20 +194,27 @@ const legacyVocabulary = completeCategoryCatalog(
   expandVocabulary(coreWords),
   scenes,
 )
-export const batch001Audit = validateVocabularyBatch(
-  batch001Metadata.id,
-  batch001,
-  legacyVocabulary,
-)
-export const batch002Audit = validateVocabularyBatch(
-  batch002Metadata.id,
-  batch002,
-  [...legacyVocabulary, ...batch001],
-)
+const batchDefinitions = [
+  { words: batch001, metadata: batch001Metadata },
+  { words: batch002, metadata: batch002Metadata },
+  { words: batch003, metadata: batch003Metadata },
+]
+const stagedBatchWords: Word[] = []
+export const vocabularyBatches = batchDefinitions.map(({ words, metadata }) => {
+  const audit = validateVocabularyBatch(metadata.id, words, [
+    ...legacyVocabulary,
+    ...stagedBatchWords,
+  ])
+  stagedBatchWords.push(...words)
+  return { ...metadata, audit }
+})
+export const batch001Audit = vocabularyBatches[0].audit
+export const batch002Audit = vocabularyBatches[1].audit
+export const batch003Audit = vocabularyBatches[2].audit
 
-const failedBatchAudits = [batch001Audit, batch002Audit].filter(
-  (audit) => !audit.valid,
-)
+const failedBatchAudits = vocabularyBatches
+  .map((batch) => batch.audit)
+  .filter((audit) => !audit.valid)
 if (failedBatchAudits.length > 0) {
   throw new Error(
     failedBatchAudits
@@ -219,20 +227,10 @@ if (failedBatchAudits.length > 0) {
 }
 
 export const vocabulary = completeCategoryCatalog(
-  [...legacyVocabulary, ...batch001, ...batch002],
+  [...legacyVocabulary, ...stagedBatchWords],
   scenes,
 )
 export const vocabularyAudit = validateVocabulary(vocabulary)
-export const vocabularyBatches = [
-  {
-    ...batch001Metadata,
-    audit: batch001Audit,
-  },
-  {
-    ...batch002Metadata,
-    audit: batch002Audit,
-  },
-]
 
 if (import.meta.env.DEV && vocabularyAudit.issues.length > 0) {
   console.warn("Emad WordLink vocabulary audit", vocabularyAudit)

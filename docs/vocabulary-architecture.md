@@ -45,3 +45,7 @@ labels and image matches remain provisional until educator and asset review.
 Batch 002 adds 100 entries across travel, transportation, public places, food,
 home life, clothing, and sport. It is validated against the legacy catalogue and
 Batch 001 before merging, and its CEFR and image statuses remain provisional.
+
+Batch 003 adds 100 entries across people, family relationships, daily routines,
+classroom learning, and communication. The shared batch pipeline validates it
+against the complete earlier catalogue before it becomes available to learners.

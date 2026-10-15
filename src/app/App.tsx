@@ -6295,6 +6295,23 @@ function SettingsPage() {
                 Expansion progress: {vocabularyAudit.totalWords.toLocaleString()} /{" "}
                 8,000 words · {vocabularyBatches.length} controlled batches
               </p>
+              <div
+                className="mt-3 flex flex-wrap gap-2"
+                aria-label="Vocabulary count by CEFR level"
+              >
+                {cefrLevels.map((level) => (
+                  <span
+                    key={level}
+                    className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] text-muted-foreground"
+                  >
+                    {level} ·{" "}
+                    {
+                      vocabulary.filter((word) => word.cefr?.level === level)
+                        .length
+                    }
+                  </span>
+                ))}
+              </div>
               <p className="mt-2 text-xs text-muted-foreground">
                 Latest controlled batch: {vocabularyBatches.at(-1)?.addedWords}{" "}
                 words · educator review required ·{" "}

@@ -53,3 +53,7 @@ against the complete earlier catalogue before it becomes available to learners.
 Batch 004 adds 100 entries across animals, nature, health, food systems, and
 clothing. It follows the same sequential audit and remains provisional until
 educator and image review are complete.
+
+Batch 005 adds 100 primarily A2-B1 entries across home, school, travel, jobs,
+and public places. Settings displays the catalogue's CEFR distribution so that
+future batches can address level imbalances deliberately.

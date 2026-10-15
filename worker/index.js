@@ -120,6 +120,21 @@ export function validateSubmission(input) {
   }
 }
 
+export function validateEditedSuggestion(payload) {
+  const edited = {
+    word: cleanText(payload?.word, 100),
+    meaning: cleanText(payload?.meaning, 500),
+    suggestedCategory: cleanText(payload?.suggestedCategory, 100),
+    example: cleanText(payload?.example, 500),
+    reason: cleanText(payload?.reason, 750),
+  }
+  const normalizedWord = normalizeWord(edited.word)
+  if (normalizedWord.length < 2) {
+    throw new RequestError(400, "The edited word must contain at least two characters.")
+  }
+  return { edited, normalizedWord }
+}
+
 async function readBody(request) {
   const length = Number(request.headers.get("content-length") || 0)
   if (length > 24_000) throw new RequestError(413, "The submission is too large.")
@@ -343,12 +358,43 @@ async function updateSubmission(request, env, id) {
   const status = cleanText(body.status, 30)
   if (!REVIEW_STATUSES.has(status)) throw new RequestError(400, "Choose a valid review status.")
   const ownerNote = cleanText(body.ownerNote, 1000) || null
-  const result = await env.SUBMISSIONS_DB.prepare(
-    "UPDATE submissions SET status = ?, owner_note = ?, reviewed_at = datetime('now') WHERE id = ?",
+  const existing = await env.SUBMISSIONS_DB.prepare(
+    "SELECT kind, payload_json FROM submissions WHERE id = ? LIMIT 1",
   )
-    .bind(status, ownerNote, id)
+    .bind(id)
+    .first()
+  if (!existing) throw new RequestError(404, "Submission not found.")
+
+  let payloadJson = existing.payload_json
+  let normalizedWord = null
+  if (existing.kind === "suggestion" && body.payload) {
+    const validatedEdit = validateEditedSuggestion(body.payload)
+    const edited = validatedEdit.edited
+    normalizedWord = validatedEdit.normalizedWord
+    const canonical = await env.SUBMISSIONS_DB.prepare(
+      "SELECT word FROM canonical_words WHERE normalized_word = ? LIMIT 1",
+    )
+      .bind(normalizedWord)
+      .first()
+    if (canonical) {
+      throw new RequestError(409, `“${canonical.word}” is already in the dictionary.`)
+    }
+    const otherSuggestion = await env.SUBMISSIONS_DB.prepare(
+      "SELECT id FROM submissions WHERE id != ? AND kind = 'suggestion' AND normalized_word = ? AND status IN ('pending', 'needs-review', 'approved') LIMIT 1",
+    )
+      .bind(id, normalizedWord)
+      .first()
+    if (otherSuggestion) {
+      throw new RequestError(409, "Another active suggestion already uses that word.")
+    }
+    payloadJson = JSON.stringify(edited)
+  }
+  const result = await env.SUBMISSIONS_DB.prepare(
+    "UPDATE submissions SET status = ?, owner_note = ?, payload_json = ?, normalized_word = COALESCE(?, normalized_word), reviewed_at = datetime('now') WHERE id = ?",
+  )
+    .bind(status, ownerNote, payloadJson, normalizedWord, id)
     .run()
-  if (!result.meta?.changes) throw new RequestError(404, "Submission not found.")
+  if (!result.meta?.changes) throw new RequestError(500, "The review was not saved.")
   return json({ message: "Review saved." })
 }
 

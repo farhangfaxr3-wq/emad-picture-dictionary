@@ -1,6 +1,10 @@
 import test from "node:test"
 import assert from "node:assert/strict"
-import { normalizeWord, validateSubmission } from "./index.js"
+import {
+  normalizeWord,
+  validateEditedSuggestion,
+  validateSubmission,
+} from "./index.js"
 
 function startedAt() {
   return new Date(Date.now() - 5000).toISOString()
@@ -68,4 +72,17 @@ test("rejects a form submitted too quickly", () => {
       }),
     /take a moment/,
   )
+})
+
+test("normalizes owner edits before editorial approval", () => {
+  const result = validateEditedSuggestion({
+    word: "  Renewable   energy ",
+    meaning: "Energy from sources that can be naturally replaced.",
+  })
+  assert.equal(result.normalizedWord, "renewable energy")
+  assert.equal(result.edited.word, "Renewable   energy")
+})
+
+test("rejects an empty owner edit", () => {
+  assert.throws(() => validateEditedSuggestion({ word: "!" }), /at least two characters/)
 })

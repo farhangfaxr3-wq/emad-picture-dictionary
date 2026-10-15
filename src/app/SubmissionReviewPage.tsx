@@ -25,6 +25,7 @@ const card = "rounded-2xl border border-border bg-card shadow-sm"
 
 export default function SubmissionReviewPage() {
   const [records, setRecords] = useState<SubmissionRecord[]>([])
+  const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>({})
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading")
   const [message, setMessage] = useState("")
   const [filter, setFilter] = useState("pending")
@@ -38,6 +39,14 @@ export default function SubmissionReviewPage() {
         throw new Error(result.message || "Owner access could not be verified.")
       }
       setRecords(result.submissions)
+      setDrafts(
+        Object.fromEntries(
+          result.submissions.map((record: SubmissionRecord) => [
+            record.id,
+            { ...record.payload },
+          ]),
+        ),
+      )
       setStatus("ready")
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to load submissions.")
@@ -49,12 +58,21 @@ export default function SubmissionReviewPage() {
     void load()
   }, [filter])
 
+  const changeDraft = (id: string, key: string, value: string) =>
+    setDrafts((current) => ({
+      ...current,
+      [id]: { ...current[id], [key]: value },
+    }))
+
   const updateStatus = async (record: SubmissionRecord, nextStatus: SubmissionRecord["status"]) => {
     try {
       const response = await fetch(`/api/admin/submissions/${record.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: nextStatus }),
+        body: JSON.stringify({
+          status: nextStatus,
+          payload: record.kind === "suggestion" ? drafts[record.id] : undefined,
+        }),
       })
       const result = await response.json()
       if (!response.ok) throw new Error(result.message || "The review was not saved.")
@@ -145,6 +163,64 @@ export default function SubmissionReviewPage() {
                     ? record.payload.meaning || record.payload.reason || "No additional explanation."
                     : record.payload.message}
                 </p>
+                {record.kind === "suggestion" && drafts[record.id] && (
+                  <div className="mt-5 grid gap-4 rounded-xl border border-border bg-card p-4 md:grid-cols-2">
+                    <label className="text-xs font-semibold">
+                      Word or phrase
+                      <input
+                        value={drafts[record.id].word || ""}
+                        onChange={(event) =>
+                          changeDraft(record.id, "word", event.target.value)
+                        }
+                        maxLength={100}
+                        className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm"
+                      />
+                    </label>
+                    <label className="text-xs font-semibold">
+                      Category
+                      <input
+                        value={drafts[record.id].suggestedCategory || ""}
+                        onChange={(event) =>
+                          changeDraft(
+                            record.id,
+                            "suggestedCategory",
+                            event.target.value,
+                          )
+                        }
+                        maxLength={100}
+                        className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm"
+                      />
+                    </label>
+                    <label className="text-xs font-semibold md:col-span-2">
+                      Meaning
+                      <textarea
+                        value={drafts[record.id].meaning || ""}
+                        onChange={(event) =>
+                          changeDraft(record.id, "meaning", event.target.value)
+                        }
+                        maxLength={500}
+                        rows={3}
+                        className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm"
+                      />
+                    </label>
+                    <label className="text-xs font-semibold md:col-span-2">
+                      Example sentence
+                      <textarea
+                        value={drafts[record.id].example || ""}
+                        onChange={(event) =>
+                          changeDraft(record.id, "example", event.target.value)
+                        }
+                        maxLength={500}
+                        rows={3}
+                        className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm"
+                      />
+                    </label>
+                    <p className="text-[10px] leading-5 text-muted-foreground md:col-span-2">
+                      Edits are saved together with the next review action.
+                      Approval still does not publish the word automatically.
+                    </p>
+                  </div>
+                )}
                 {record.email && <p className="mt-3 text-xs">Reply email: {record.email}</p>}
                 {filter === "pending" || filter === "needs-review" ? (
                   <div className="mt-5 flex flex-wrap gap-2 border-t border-border pt-4">

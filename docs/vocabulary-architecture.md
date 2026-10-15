@@ -49,3 +49,7 @@ Batch 001 before merging, and its CEFR and image statuses remain provisional.
 Batch 003 adds 100 entries across people, family relationships, daily routines,
 classroom learning, and communication. The shared batch pipeline validates it
 against the complete earlier catalogue before it becomes available to learners.
+
+Batch 004 adds 100 entries across animals, nature, health, food systems, and
+clothing. It follows the same sequential audit and remains provisional until
+educator and image review are complete.

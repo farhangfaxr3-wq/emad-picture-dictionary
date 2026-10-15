@@ -6292,6 +6292,10 @@ function SettingsPage() {
                   : `${vocabularyAudit.issues.length} review notes`}
               </p>
               <p className="mt-2 text-xs text-muted-foreground">
+                Expansion progress: {vocabularyAudit.totalWords.toLocaleString()} /{" "}
+                8,000 words · {vocabularyBatches.length} controlled batches
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
                 Latest controlled batch: {vocabularyBatches.at(-1)?.addedWords}{" "}
                 words · educator review required ·{" "}
                 {vocabularyBatches.at(-1)?.audit.errors.length} errors ·{" "}

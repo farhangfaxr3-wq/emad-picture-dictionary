@@ -4,6 +4,7 @@ import { expandVocabulary, type Word } from "./content"
 import { coreWords } from "./coreWords"
 import { scenes } from "./SceneCanvas"
 import { batch001, batch001Metadata } from "./vocabularyBatches/batch001"
+import { batch002, batch002Metadata } from "./vocabularyBatches/batch002"
 
 export interface VocabularyValidationIssue {
   severity: "error" | "warning"
@@ -197,15 +198,28 @@ export const batch001Audit = validateVocabularyBatch(
   batch001,
   legacyVocabulary,
 )
+export const batch002Audit = validateVocabularyBatch(
+  batch002Metadata.id,
+  batch002,
+  [...legacyVocabulary, ...batch001],
+)
 
-if (!batch001Audit.valid) {
+const failedBatchAudits = [batch001Audit, batch002Audit].filter(
+  (audit) => !audit.valid,
+)
+if (failedBatchAudits.length > 0) {
   throw new Error(
-    `Vocabulary ${batch001Audit.batchId} failed validation: ${batch001Audit.errors.join("; ")}`,
+    failedBatchAudits
+      .map(
+        (audit) =>
+          `Vocabulary ${audit.batchId} failed validation: ${audit.errors.join("; ")}`,
+      )
+      .join(" | "),
   )
 }
 
 export const vocabulary = completeCategoryCatalog(
-  [...legacyVocabulary, ...batch001],
+  [...legacyVocabulary, ...batch001, ...batch002],
   scenes,
 )
 export const vocabularyAudit = validateVocabulary(vocabulary)
@@ -213,6 +227,10 @@ export const vocabularyBatches = [
   {
     ...batch001Metadata,
     audit: batch001Audit,
+  },
+  {
+    ...batch002Metadata,
+    audit: batch002Audit,
   },
 ]
 

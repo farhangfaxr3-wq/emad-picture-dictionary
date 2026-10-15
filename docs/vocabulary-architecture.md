@@ -41,3 +41,7 @@ context image or an estimated level as verified.
 Batch 001 adds 100 entries across university study, digital life, health,
 workplace English, the environment, communication, and community life. Its CEFR
 labels and image matches remain provisional until educator and asset review.
+
+Batch 002 adds 100 entries across travel, transportation, public places, food,
+home life, clothing, and sport. It is validated against the legacy catalogue and
+Batch 001 before merging, and its CEFR and image statuses remain provisional.

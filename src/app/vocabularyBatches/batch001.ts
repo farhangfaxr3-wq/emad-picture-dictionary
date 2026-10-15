@@ -1,16 +1,4 @@
-import type { CEFRLevel } from "../cefr"
-import type { Word } from "../content"
-
-type BatchEntry = readonly [
-  word: string,
-  pronunciation: string,
-  topic: string,
-  group: string,
-  partOfSpeech: string,
-  cefr: CEFRLevel,
-  definition: string,
-  example: string,
-]
+import { createVocabularyBatch, type BatchEntry } from "./batchFactory"
 
 const entries: BatchEntry[] = [
   ["syllabus", "/ˈsɪl.ə.bəs/", "School", "University study", "noun", "B2", "A document that lists a course's subjects, requirements, and schedule.", "The lecturer explained the assessment dates in the syllabus."],
@@ -123,33 +111,11 @@ const entries: BatchEntry[] = [
 
 const source = "Batch 001 editorial classification; awaiting educator review"
 
-export const batch001: Word[] = entries.map(
-  ([word, pronunciation, topic, group, partOfSpeech, level, definition, example]) => ({
-    id: `batch-001--${word
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "")}`,
-    word,
-    pronunciation,
-    topic,
-    group,
-    definition,
-    example,
-    partOfSpeech,
-    level: level === "A1" || level === "A2" ? "Beginner" : "Intermediate",
-    cefr: {
-      level,
-      status: "provisional",
-      confidence: level === "C1" || level === "C2" ? "low" : "medium",
-      source,
-    },
-    related: [],
-    art: word,
-    visualKind: "symbol",
-  }),
-)
+export const batch001 = createVocabularyBatch({
+  id: "batch-001",
+  source,
+  entries,
+})
 
 export const batch001Metadata = {
   id: "batch-001",

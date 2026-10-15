@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test:vocabulary": "node scripts/validate-vocabulary.mjs",
     "test:submissions": "node --test worker/index.test.js",
     "format": "oxfmt"
   },

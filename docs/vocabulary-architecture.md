@@ -33,10 +33,12 @@ and can be exported or restored from Settings.
 
 ## Adding a vocabulary batch
 
-Add a bounded batch, run TypeScript and the production build, then confirm that
-the Settings catalogue check reports `structure passed`. Review any audit issue
-before publishing. Image and CEFR status must describe the truth; never label a
-context image or an estimated level as verified.
+Add a bounded batch, run `pnpm test:vocabulary`, TypeScript, and the production
+build, then confirm that the Settings catalogue check reports `structure passed`.
+Review any audit issue before publishing. Image and CEFR status must describe
+the truth; never label a context image or an estimated level as verified. The
+automated vocabulary test also protects the expected batch sizes, stable IDs,
+required fields, related-word references, topic count, and CEFR coverage.
 
 Batch 001 adds 100 entries across university study, digital life, health,
 workplace English, the environment, communication, and community life. Its CEFR

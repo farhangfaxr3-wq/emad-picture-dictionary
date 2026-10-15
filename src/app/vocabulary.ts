@@ -8,6 +8,7 @@ import { batch002, batch002Metadata } from "./vocabularyBatches/batch002"
 import { batch003, batch003Metadata } from "./vocabularyBatches/batch003"
 import { batch004, batch004Metadata } from "./vocabularyBatches/batch004"
 import { batch005, batch005Metadata } from "./vocabularyBatches/batch005"
+import { batch006, batch006Metadata } from "./vocabularyBatches/batch006"
 
 export interface VocabularyValidationIssue {
   severity: "error" | "warning"
@@ -202,6 +203,7 @@ const batchDefinitions = [
   { words: batch003, metadata: batch003Metadata },
   { words: batch004, metadata: batch004Metadata },
   { words: batch005, metadata: batch005Metadata },
+  { words: batch006, metadata: batch006Metadata },
 ]
 const stagedBatchWords: Word[] = []
 export const vocabularyBatches = batchDefinitions.map(({ words, metadata }) => {
@@ -217,6 +219,7 @@ export const batch002Audit = vocabularyBatches[1].audit
 export const batch003Audit = vocabularyBatches[2].audit
 export const batch004Audit = vocabularyBatches[3].audit
 export const batch005Audit = vocabularyBatches[4].audit
+export const batch006Audit = vocabularyBatches[5].audit
 
 const failedBatchAudits = vocabularyBatches
   .map((batch) => batch.audit)

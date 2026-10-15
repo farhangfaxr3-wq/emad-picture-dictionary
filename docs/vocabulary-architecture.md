@@ -57,3 +57,7 @@ educator and image review are complete.
 Batch 005 adds 100 primarily A2-B1 entries across home, school, travel, jobs,
 and public places. Settings displays the catalogue's CEFR distribution so that
 future batches can address level imbalances deliberately.
+
+Batch 006 adds 100 advanced entries across academic study, technology,
+professional work, civic life, and environmental systems. It deliberately adds
+50 provisional C1 and 50 provisional C2 entries to address the advanced-level gap.

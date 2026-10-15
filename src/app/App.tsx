@@ -70,7 +70,11 @@ import SceneCanvas, { scenes, type Scene } from "./SceneCanvas"
 import CategoryCourse from "./CategoryCourse"
 import FeedbackPage from "./FeedbackPage"
 import SubmissionReviewPage from "./SubmissionReviewPage"
-import { vocabulary, vocabularyAudit } from "./vocabulary"
+import {
+  vocabulary,
+  vocabularyAudit,
+  vocabularyBatches,
+} from "./vocabulary"
 import {
   VocabularyPhoto,
   VocabularyPhotoCredit,
@@ -6286,6 +6290,13 @@ function SettingsPage() {
                 {vocabularyAudit.issues.length === 0
                   ? "0 issues"
                   : `${vocabularyAudit.issues.length} review notes`}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Latest controlled batch: {vocabularyBatches.at(-1)?.addedWords}{" "}
+                words · educator review required ·{" "}
+                {vocabularyBatches.at(-1)?.audit.errors.length} errors ·{" "}
+                {vocabularyBatches.at(-1)?.audit.reviewNotes.length} review
+                notes
               </p>
             </div>
             <div className="flex flex-wrap gap-3">

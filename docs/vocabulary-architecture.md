@@ -12,7 +12,9 @@ accidentally changing navigation, progress, or practice behavior.
    relations, and provisional CEFR metadata.
 4. `src/app/vocabulary.ts` assembles the final catalogue and runs structural
    validation before the UI imports it.
-5. `src/app/App.tsx` consumes the finished, validated catalogue and contains no
+5. `src/app/vocabularyBatches/` contains bounded, source-controlled additions.
+   Each batch is checked against the complete earlier catalogue before merging.
+6. `src/app/App.tsx` consumes the finished, validated catalogue and contains no
    raw starter vocabulary records.
 
 ## Required word fields
@@ -35,3 +37,7 @@ Add a bounded batch, run TypeScript and the production build, then confirm that
 the Settings catalogue check reports `structure passed`. Review any audit issue
 before publishing. Image and CEFR status must describe the truth; never label a
 context image or an estimated level as verified.
+
+Batch 001 adds 100 entries across university study, digital life, health,
+workplace English, the environment, communication, and community life. Its CEFR
+labels and image matches remain provisional until educator and asset review.

@@ -3,6 +3,7 @@ import { completeCategoryCatalog } from "./categoryCatalog"
 import { expandVocabulary, type Word } from "./content"
 import { coreWords } from "./coreWords"
 import { scenes } from "./SceneCanvas"
+import { batch001, batch001Metadata } from "./vocabularyBatches/batch001"
 
 export interface VocabularyValidationIssue {
   severity: "error" | "warning"
@@ -23,6 +24,90 @@ export interface VocabularyAudit {
   verifiedImages: number
   provisionalCEFR: number
   issues: VocabularyValidationIssue[]
+}
+
+export interface VocabularyBatchAudit {
+  valid: boolean
+  batchId: string
+  addedWords: number
+  errors: string[]
+  reviewNotes: string[]
+}
+
+function lexicalKey(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9' -]/g, "")
+    .replace(/\s+/g, " ")
+}
+
+export function validateVocabularyBatch(
+  batchId: string,
+  batch: Word[],
+  existing: Word[],
+): VocabularyBatchAudit {
+  const errors: string[] = []
+  const reviewNotes: string[] = []
+  const existingWords = new Map(
+    existing.map((word) => [lexicalKey(word.word), word]),
+  )
+  const existingCompactWords = new Map(
+    existing.map((word) => [lexicalKey(word.word).replace(/[ -]/g, ""), word]),
+  )
+  const batchIds = new Set<string>()
+  const batchWords = new Set<string>()
+  const batchCompactWords = new Map<string, string>()
+
+  for (const word of batch) {
+    const key = lexicalKey(word.word)
+    const compactKey = key.replace(/[ -]/g, "")
+    if (batchIds.has(word.id)) errors.push(`Duplicate batch id: ${word.id}`)
+    if (batchWords.has(key)) errors.push(`Duplicate batch word: ${word.word}`)
+    if (
+      batchCompactWords.has(compactKey) &&
+      batchCompactWords.get(compactKey) !== key
+    ) {
+      reviewNotes.push(
+        `Possible punctuation or spacing duplicate within batch: ${word.word}`,
+      )
+    }
+    if (existingWords.has(key)) {
+      errors.push(`Word already exists: ${word.word}`)
+    } else if (existingCompactWords.has(compactKey)) {
+      reviewNotes.push(
+        `Possible punctuation or spacing duplicate: ${word.word} / ${existingCompactWords.get(compactKey)!.word}`,
+      )
+    }
+    if (
+      !word.id.trim() ||
+      !word.word.trim() ||
+      !word.pronunciation.trim() ||
+      !word.topic.trim() ||
+      !word.group.trim() ||
+      !word.definition.trim() ||
+      !word.example.trim() ||
+      !word.partOfSpeech.trim()
+    ) {
+      errors.push(`Required content is missing: ${word.id || word.word}`)
+    }
+    if (!word.cefr || word.cefr.status !== "provisional") {
+      errors.push(`Batch CEFR status must remain provisional: ${word.id}`)
+    }
+    batchIds.add(word.id)
+    batchWords.add(key)
+    batchCompactWords.set(compactKey, key)
+  }
+
+  return {
+    valid: errors.length === 0,
+    batchId,
+    addedWords: batch.length,
+    errors,
+    reviewNotes,
+  }
 }
 
 export function validateVocabulary(words: Word[]): VocabularyAudit {
@@ -103,11 +188,33 @@ export function validateVocabulary(words: Word[]): VocabularyAudit {
   }
 }
 
-export const vocabulary = completeCategoryCatalog(
+const legacyVocabulary = completeCategoryCatalog(
   expandVocabulary(coreWords),
   scenes,
 )
+export const batch001Audit = validateVocabularyBatch(
+  batch001Metadata.id,
+  batch001,
+  legacyVocabulary,
+)
+
+if (!batch001Audit.valid) {
+  throw new Error(
+    `Vocabulary ${batch001Audit.batchId} failed validation: ${batch001Audit.errors.join("; ")}`,
+  )
+}
+
+export const vocabulary = completeCategoryCatalog(
+  [...legacyVocabulary, ...batch001],
+  scenes,
+)
 export const vocabularyAudit = validateVocabulary(vocabulary)
+export const vocabularyBatches = [
+  {
+    ...batch001Metadata,
+    audit: batch001Audit,
+  },
+]
 
 if (import.meta.env.DEV && vocabularyAudit.issues.length > 0) {
   console.warn("Emad WordLink vocabulary audit", vocabularyAudit)

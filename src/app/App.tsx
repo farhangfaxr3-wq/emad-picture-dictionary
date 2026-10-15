@@ -43,6 +43,7 @@ import {
   LoaderCircle,
   Mail,
   Menu,
+  MessageSquare,
   Pause,
   PictureInPicture2,
   Play,
@@ -67,6 +68,8 @@ import {
 } from "./content"
 import SceneCanvas, { scenes, type Scene } from "./SceneCanvas"
 import CategoryCourse from "./CategoryCourse"
+import FeedbackPage from "./FeedbackPage"
+import SubmissionReviewPage from "./SubmissionReviewPage"
 import { vocabulary, vocabularyAudit } from "./vocabulary"
 import {
   VocabularyPhoto,
@@ -1117,6 +1120,7 @@ const navigation: {
   { path: "/practice", label: "Practice", icon: AudioLines },
   { path: "/progress", label: "My Progress", icon: TrendingUp },
   { path: "/favorites", label: "Favorites", icon: Heart },
+  { path: "/feedback", label: "Feedback & Ideas", icon: MessageSquare },
   { path: "/about", label: "About Me", icon: UserRound },
   { path: "/settings", label: "Settings", icon: Settings },
 ]
@@ -6571,8 +6575,10 @@ const router = createBrowserRouter([
       { path: "practice", Component: PracticeRoute },
       { path: "progress", Component: ProgressPage },
       { path: "favorites", Component: FavoritesPage },
+      { path: "feedback", Component: FeedbackPage },
       { path: "about", Component: AboutPage },
       { path: "settings", Component: SettingsPage },
+      { path: "review-submissions", Component: SubmissionReviewPage },
       {
         path: "*",
         Component: () => (

@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "emad-picture-dictionary",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-14",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/review-submissions"]
+  },
+  "vars": {
+    "ADMIN_EMAIL": "em20323115@soran.edu.iq",
+    "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_YOUR_TEAM.cloudflareaccess.com",
+    "ACCESS_AUD": "REPLACE_WITH_YOUR_ACCESS_APPLICATION_AUD"
+  },
+  "d1_databases": [
+    {
+      "binding": "SUBMISSIONS_DB",
+      "database_name": "emad-wordlink-submissions",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

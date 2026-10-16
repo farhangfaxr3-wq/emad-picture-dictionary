@@ -2,6 +2,7 @@ import test from "node:test"
 import assert from "node:assert/strict"
 import {
   isTrustedRequestOrigin,
+  isLocalOwnerPreview,
   normalizeWord,
   validateEditedSuggestion,
   validateSubmission,
@@ -115,6 +116,27 @@ test("allows same-origin requests and rejects cross-site requests", () => {
   )
 })
 
+test("allows the owner bypass only on explicit local development hosts", () => {
+  assert.equal(
+    isLocalOwnerPreview(new Request("http://localhost:8787/review-submissions"), {
+      LOCAL_DEV_ADMIN: "true",
+    }),
+    true,
+  )
+  assert.equal(
+    isLocalOwnerPreview(new Request("https://learn.example/review-submissions"), {
+      LOCAL_DEV_ADMIN: "true",
+    }),
+    false,
+  )
+  assert.equal(
+    isLocalOwnerPreview(new Request("http://localhost:8787/review-submissions"), {
+      LOCAL_DEV_ADMIN: "false",
+    }),
+    false,
+  )
+})
+
 test("requires the expected Turnstile action and hostname", () => {
   const request = new Request("https://learn.example/api/submissions")
   const env = { TURNSTILE_HOSTNAMES: "learn.example,preview.example" }
@@ -152,6 +174,30 @@ test("requires the expected Turnstile action and hostname", () => {
         },
         request,
         env,
+      ),
+    /spam protection check failed/i,
+  )
+})
+
+test("accepts Cloudflare's official dummy Turnstile result only on local preview", () => {
+  const localEnv = {
+    TURNSTILE_HOSTNAMES: "localhost,127.0.0.1",
+    TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
+    LOCAL_DEV_ADMIN: "true",
+  }
+  assert.doesNotThrow(() =>
+    validateTurnstileResult(
+      { success: true, action: "", hostname: "" },
+      new Request("http://localhost:8787/api/submissions"),
+      localEnv,
+    ),
+  )
+  assert.throws(
+    () =>
+      validateTurnstileResult(
+        { success: true, action: "", hostname: "" },
+        new Request("https://learn.example/api/submissions"),
+        localEnv,
       ),
     /spam protection check failed/i,
   )

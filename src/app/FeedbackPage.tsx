@@ -26,6 +26,7 @@ interface TurnstileApi {
       sitekey: string
       theme: "auto"
       action: string
+      size: "flexible"
       callback: (token: string) => void
       "expired-callback": () => void
       "error-callback": () => void
@@ -80,6 +81,7 @@ function TurnstileField({ onToken }: { onToken: (token: string) => void }) {
         sitekey: turnstileSiteKey,
         theme: "auto",
         action: "submit_feedback",
+        size: "flexible",
         callback: onToken,
         "expired-callback": () => onToken(""),
         "error-callback": () => onToken(""),
@@ -154,6 +156,7 @@ export default function FeedbackPage() {
   const [rating, setRating] = useState(0)
   const [word, setWord] = useState("")
   const [turnstileToken, setTurnstileToken] = useState("")
+  const [turnstileVersion, setTurnstileVersion] = useState(0)
   const openedAt = useRef(Date.now())
   const form = useRef<HTMLFormElement>(null)
 
@@ -244,6 +247,9 @@ export default function FeedbackPage() {
             ? error.message
             : "The submission could not be saved. Please try again later.",
       })
+    } finally {
+      setTurnstileToken("")
+      setTurnstileVersion((version) => version + 1)
     }
   }
 
@@ -431,7 +437,10 @@ export default function FeedbackPage() {
             </label>
 
             <div className="mt-6">
-              <TurnstileField onToken={setTurnstileToken} />
+              <TurnstileField
+                key={turnstileVersion}
+                onToken={setTurnstileToken}
+              />
             </div>
 
             <div className="mt-6 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
@@ -442,7 +451,12 @@ export default function FeedbackPage() {
               </p>
               <button
                 type="submit"
-                disabled={state.status === "sending" || (kind === "suggestion" && exactDuplicate)}
+                disabled={
+                  state.status === "sending" ||
+                  !turnstileSiteKey ||
+                  !turnstileToken ||
+                  (kind === "suggestion" && exactDuplicate)
+                }
                 className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {state.status === "sending" ? (

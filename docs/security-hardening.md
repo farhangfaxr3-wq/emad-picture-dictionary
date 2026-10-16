@@ -21,6 +21,9 @@ private operations behind Cloudflare controls.
   permissions policy, and safe referrer behavior on all Worker responses.
 - Secrets stay in encrypted Worker secrets. The repository contains only public
   identifiers and placeholders.
+- The owner review queue is never a public dashboard. Production access requires
+  the configured Cloudflare Access identity; the local-only bypass checks both
+  an explicit development flag and a loopback hostname.
 
 ## Required Cloudflare dashboard controls
 

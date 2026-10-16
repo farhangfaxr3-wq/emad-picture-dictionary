@@ -5,11 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:cloudflare": "pnpm build && wrangler dev --local --port 8787",
     "build": "vite build",
     "preview": "vite preview",
     "test:bundle": "vite build && node scripts/check-bundle-size.mjs",
     "test:vocabulary": "node scripts/validate-vocabulary.mjs",
     "export:canonical-words": "node scripts/export-canonical-words.mjs",
+    "db:migrate:local": "wrangler d1 migrations apply emad-wordlink-submissions --local",
+    "db:migrate:remote": "wrangler d1 migrations apply emad-wordlink-submissions --remote",
+    "db:canonical:local": "pnpm export:canonical-words && wrangler d1 execute emad-wordlink-submissions --local --file .tmp-canonical-words.sql",
+    "db:canonical:remote": "pnpm export:canonical-words && wrangler d1 execute emad-wordlink-submissions --remote --file .tmp-canonical-words.sql",
+    "check:cloudflare": "node scripts/check-cloudflare-config.mjs",
+    "deploy:cloudflare": "pnpm check:cloudflare && pnpm build && wrangler deploy",
     "test:submissions": "node --test worker/index.test.js",
     "format": "oxfmt"
   },
@@ -28,6 +35,7 @@
     "oxfmt": "^0.2.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.0",
-    "vite": "^8.0.5"
+    "vite": "^8.0.5",
+    "wrangler": "^4.151.0"
   }
 }

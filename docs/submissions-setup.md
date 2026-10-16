@@ -4,6 +4,23 @@ The website and Worker API are implemented, but production submissions remain
 deliberately disabled until the Cloudflare resources below are configured. This
 prevents the interface from claiming success when nothing was stored.
 
+## Local end-to-end test
+
+`localhost:8443` is the fast Vite interface preview. It does not run the Worker
+API. To test actual feedback storage locally, use the Cloudflare preview instead:
+
+1. Copy `.dev.vars.example` to `.dev.vars` and `.env.example` to `.env.local`.
+   For local testing only, replace the public site key in `.env.local` with
+   Cloudflare's always-pass test site key `1x00000000000000000000AA`.
+2. Run `pnpm db:migrate:local` once.
+3. Run `pnpm dev:cloudflare`.
+4. Open `http://127.0.0.1:8787/feedback`, send a test item, then open
+   `http://127.0.0.1:8787/review-submissions`.
+
+The local review bypass works only when `LOCAL_DEV_ADMIN=true` and the request
+hostname is `localhost`, `127.0.0.1`, or `::1`. It cannot unlock a deployed
+hostname. Official Turnstile test credentials must never be used in production.
+
 ## Storage and cost choice
 
 Cloudflare D1 is the practical fit because the website already deploys to a
@@ -13,7 +30,8 @@ email, account, or authentication service is required for learner submissions.
 
 ## Required Cloudflare configuration
 
-1. Create a D1 database named `emad-wordlink-submissions`.
+1. Run `pnpm exec wrangler login`, then create a D1 database with
+   `pnpm exec wrangler d1 create emad-wordlink-submissions`.
 2. Replace the placeholder `database_id` in `wrangler.jsonc` with the returned
    D1 database ID.
 3. Apply `migrations/0001_submissions.sql` to the remote database.
@@ -32,8 +50,27 @@ email, account, or authentication service is required for learner submissions.
    `/review-submissions*` and `/api/admin/*`. Allow only the owner email.
 9. Replace `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc` with the
    Access team domain and application audience tag.
-10. Run a preview deployment, submit one test feedback item, confirm it appears
+10. Run `pnpm check:cloudflare`. It stops deployment while a public configuration
+    placeholder remains.
+11. Run `pnpm db:migrate:remote`, followed by `pnpm db:canonical:remote`.
+12. Run a preview deployment, submit one test feedback item, confirm it appears
    in the protected review queue, then test approve/reject before production.
+
+Production secrets are added interactively and are never committed:
+
+- `pnpm exec wrangler secret put TURNSTILE_SECRET_KEY`
+- `pnpm exec wrangler secret put SUBMISSION_HASH_SECRET`
+
+After the production checklist passes, `pnpm deploy:cloudflare` builds and
+deploys the Worker plus static assets.
+
+## Where the owner sees feedback
+
+Visitors can use `/feedback`, but submission records are never public. The
+owner opens `/review-submissions` on the deployed hostname and signs in through
+Cloudflare Access with `em20323115@soran.edu.iq`. The page lists up to 100
+records for the selected status and supports Pending, Needs review, Approved,
+and Rejected queues. This protects optional reply emails and private messages.
 
 ## Security behavior
 

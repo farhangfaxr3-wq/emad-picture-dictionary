@@ -4,6 +4,8 @@ const JSON_HEADERS = {
   "x-content-type-options": "nosniff",
 }
 const TURNSTILE_ACTION = "submit_feedback"
+const TURNSTILE_LOCAL_TEST_SECRET =
+  "1x0000000000000000000000000000000AA"
 const SECURITY_HEADERS = {
   "content-security-policy":
     "default-src 'self'; base-uri 'self'; connect-src 'self' https://challenges.cloudflare.com; font-src 'self' data:; form-action 'self'; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; img-src 'self' data:; object-src 'none'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
@@ -203,6 +205,13 @@ export function validateTurnstileResult(result, request, env) {
     )
   }
   if (
+    result?.success &&
+    env.TURNSTILE_SECRET_KEY === TURNSTILE_LOCAL_TEST_SECRET &&
+    isLocalOwnerPreview(request, env)
+  ) {
+    return
+  }
+  if (
     !result?.success ||
     result.action !== TURNSTILE_ACTION ||
     !allowedHostnames.includes(new URL(request.url).hostname.toLowerCase()) ||
@@ -370,7 +379,18 @@ function decodeBase64Url(value) {
 }
 
 let accessKeys
+export function isLocalOwnerPreview(request, env) {
+  const hostname = new URL(request.url).hostname.toLowerCase()
+  return (
+    env.LOCAL_DEV_ADMIN === "true" &&
+    (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1")
+  )
+}
+
 async function verifyOwner(request, env) {
+  if (isLocalOwnerPreview(request, env)) {
+    return { email: env.ADMIN_EMAIL || "local-owner" }
+  }
   if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.ADMIN_EMAIL) {
     throw new RequestError(503, "Owner review access is not configured.")
   }

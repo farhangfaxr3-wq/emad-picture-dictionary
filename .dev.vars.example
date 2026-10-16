@@ -1,0 +1,7 @@
+# Copy this file to .dev.vars for local Cloudflare Worker testing only.
+# The values below use Cloudflare's official dummy credentials and must never
+# be copied into a production Worker.
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+TURNSTILE_HOSTNAMES=localhost,127.0.0.1
+SUBMISSION_HASH_SECRET=local-development-only-change-this-before-production
+LOCAL_DEV_ADMIN=true

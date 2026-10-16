@@ -1,5 +1,7 @@
 import {
   createContext,
+  lazy,
+  Suspense,
   useContext,
   useEffect,
   useRef,
@@ -67,9 +69,6 @@ import {
   type Word,
 } from "./content"
 import SceneCanvas, { scenes, type Scene } from "./SceneCanvas"
-import CategoryCourse from "./CategoryCourse"
-import FeedbackPage from "./FeedbackPage"
-import SubmissionReviewPage from "./SubmissionReviewPage"
 import {
   vocabulary,
   vocabularyAudit,
@@ -97,6 +96,10 @@ import {
   sceneVisuals,
   sceneObjectVisuals,
 } from "./visualAssets"
+
+const CategoryCourse = lazy(() => import("./CategoryCourse"))
+const FeedbackPage = lazy(() => import("./FeedbackPage"))
+const SubmissionReviewPage = lazy(() => import("./SubmissionReviewPage"))
 
 const wordById = new Map(vocabulary.map((word) => [word.id, word]))
 for (const scene of scenes) {
@@ -1546,7 +1549,23 @@ function Layout() {
             tabIndex={-1}
             className="mx-auto max-w-[1500px] px-5 py-7 md:px-8 xl:px-10 xl:py-8"
           >
-            <Outlet />
+            <Suspense
+              fallback={
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="flex min-h-[45vh] items-center justify-center gap-3 text-sm font-medium text-muted-foreground"
+                >
+                  <LoaderCircle
+                    className="animate-spin text-primary"
+                    size={20}
+                  />
+                  Loading your learning space…
+                </div>
+              }
+            >
+              <Outlet />
+            </Suspense>
           </main>
           <footer className="mx-5 mt-2 flex flex-col justify-between gap-3 border-t border-border py-6 text-[10px] text-muted-foreground md:mx-8 md:flex-row xl:mx-10">
             <span>

@@ -10,7 +10,7 @@ const REQUIRED_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
 const server = await createServer({
   appType: "custom",
   logLevel: "error",
-  server: { middlewareMode: true },
+  server: { hmr: false, middlewareMode: true },
 })
 
 try {

@@ -16,6 +16,37 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: emitSourcemaps ? 'inline' : false,
       minify: !emitSourcemaps,
+      rolldownOptions: {
+        output: {
+          codeSplitting: {
+            maxSize: 400 * 1024,
+            groups: [
+              {
+                name: 'framework',
+                test: /node_modules[\\/](?:react|react-dom|react-router)[\\/]/,
+                priority: 40,
+              },
+              {
+                name: 'icons',
+                test: /node_modules[\\/]lucide-react[\\/]/,
+                priority: 30,
+              },
+              {
+                name: 'visuals',
+                test:
+                  /src[\\/]app[\\/](?:SceneCanvas|VocabularyArt|VocabularyImagery|CategoryImagery|WordPicture|visualAssets)\.[jt]sx?$/,
+                priority: 20,
+              },
+              {
+                name: 'vocabulary',
+                test:
+                  /src[\\/]app[\\/](?:vocabulary(?:Batches[\\/].*)?|coreWords|content|categoryCatalog|cefr)\.[jt]sx?$/,
+                priority: 10,
+              },
+            ],
+          },
+        },
+      },
     },
     plugins: [
 react(),

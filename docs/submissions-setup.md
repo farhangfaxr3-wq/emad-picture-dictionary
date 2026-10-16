@@ -48,6 +48,10 @@ email, account, or authentication service is required for learner submissions.
 
 The learner form checks the currently bundled vocabulary immediately. The D1
 API also rejects words already in `canonical_words` and suggestions already in
-the review queue. Before launch, synchronize the validated vocabulary IDs and
-normalized display words into `canonical_words`; this table is an index only and
-does not replace the source-controlled catalogue.
+the review queue. Before launch, run `pnpm export:canonical-words` to generate
+`.tmp-canonical-words.sql`, then apply it with
+`npx wrangler d1 execute emad-wordlink-submissions --remote --file .tmp-canonical-words.sql`.
+This synchronizes the validated vocabulary IDs and normalized display words into
+`canonical_words`; the table is an index only and does not replace the
+source-controlled catalogue. Re-run both commands after an approved vocabulary
+release.

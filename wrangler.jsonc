@@ -29,7 +29,7 @@
     {
       "binding": "SUBMISSIONS_DB",
       "database_name": "emad-wordlink-submissions",
-      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "database_id": "68f3fee6-36ef-4701-8ee4-c8fe2ce9198c",
       "migrations_dir": "migrations"
     }
   ]

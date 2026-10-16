@@ -25,7 +25,9 @@ try {
   }
 
   const rows = [...canonical.values()]
-  const statements = ["BEGIN TRANSACTION;", "DELETE FROM canonical_words;"]
+  // Wrangler uploads remote D1 SQL files atomically. Explicit BEGIN/COMMIT
+  // statements are rejected by the current D1 execution API.
+  const statements = ["DELETE FROM canonical_words;"]
 
   for (let index = 0; index < rows.length; index += 200) {
     const values = rows
@@ -40,7 +42,6 @@ try {
     )
   }
 
-  statements.push("COMMIT;")
   await mkdir(path.dirname(outputPath), { recursive: true })
   await writeFile(outputPath, `${statements.join("\n\n")}\n`, "utf8")
   console.log(

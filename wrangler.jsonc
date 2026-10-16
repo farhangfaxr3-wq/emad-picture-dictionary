@@ -12,8 +12,19 @@
   "vars": {
     "ADMIN_EMAIL": "em20323115@soran.edu.iq",
     "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_YOUR_TEAM.cloudflareaccess.com",
-    "ACCESS_AUD": "REPLACE_WITH_YOUR_ACCESS_APPLICATION_AUD"
+    "ACCESS_AUD": "REPLACE_WITH_YOUR_ACCESS_APPLICATION_AUD",
+    "TURNSTILE_HOSTNAMES": "REPLACE_WITH_YOUR_PRODUCTION_HOSTNAME"
   },
+  "ratelimits": [
+    {
+      "name": "SUBMISSION_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 20,
+        "period": 60
+      }
+    }
+  ],
   "d1_databases": [
     {
       "binding": "SUBMISSIONS_DB",

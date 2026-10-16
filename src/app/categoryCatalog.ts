@@ -1318,10 +1318,10 @@ export function completeCategoryCatalog(
     const photograph = getVocabularyPhoto(word)
     return {
       ...word,
-      image: photograph.src,
+      image: photograph.kind === "context" ? undefined : photograph.src,
       imageStatus: photograph.kind === "context" ? "pending" : "verified",
       cefr: word.cefr || estimateCEFR(word),
-      visualKind: "photo",
+      visualKind: photograph.kind === "context" ? "symbol" : "photo",
       audio: { text: word.word, language: "en-US" },
       related: [
       ...new Set([

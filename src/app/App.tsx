@@ -1868,7 +1868,7 @@ function WordCard({ word, compact = false }: WordCardProps) {
             </span>
             {getVocabularyPhoto(word).kind === "context" && (
               <p className="mt-2 text-[10px] text-muted-foreground">
-                Context photograph · Read the meaning and example.
+                No verified image yet · Learn from the meaning and example.
               </p>
             )}
             <p className="mt-2 text-xs leading-5 text-muted-foreground">
@@ -3617,7 +3617,7 @@ function DictionaryPage() {
       <PageHeading
         eyebrow="Your visual vocabulary"
         title="Real words. Pictures you can trust."
-        description={`${verifiedCount} entries have a checked word-specific photograph. ${vocabulary.length - verifiedCount} entries currently use a clearly labelled learning-context image while their exact photograph is reviewed.`}
+        description={`${verifiedCount} entries have a checked word-specific photograph. ${vocabulary.length - verifiedCount} entries are shown without a substitute image while an accurate photograph is reviewed.`}
       />
       <div className={`${card} mb-6 p-5`}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">

@@ -1,10 +1,13 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import {
+  isTrustedRequestOrigin,
   normalizeWord,
   validateEditedSuggestion,
   validateSubmission,
+  validateTurnstileResult,
 } from "./index.js"
+import worker from "./index.js"
 
 function startedAt() {
   return new Date(Date.now() - 5000).toISOString()
@@ -85,4 +88,85 @@ test("normalizes owner edits before editorial approval", () => {
 
 test("rejects an empty owner edit", () => {
   assert.throws(() => validateEditedSuggestion({ word: "!" }), /at least two characters/)
+})
+
+test("allows same-origin requests and rejects cross-site requests", () => {
+  assert.equal(
+    isTrustedRequestOrigin(
+      new Request("https://example.com/api/submissions", {
+        headers: {
+          Origin: "https://example.com",
+          "Sec-Fetch-Site": "same-origin",
+        },
+      }),
+    ),
+    true,
+  )
+  assert.equal(
+    isTrustedRequestOrigin(
+      new Request("https://example.com/api/submissions", {
+        headers: {
+          Origin: "https://attacker.example",
+          "Sec-Fetch-Site": "cross-site",
+        },
+      }),
+    ),
+    false,
+  )
+})
+
+test("requires the expected Turnstile action and hostname", () => {
+  const request = new Request("https://learn.example/api/submissions")
+  const env = { TURNSTILE_HOSTNAMES: "learn.example,preview.example" }
+  assert.doesNotThrow(() =>
+    validateTurnstileResult(
+      {
+        success: true,
+        action: "submit_feedback",
+        hostname: "learn.example",
+      },
+      request,
+      env,
+    ),
+  )
+  assert.throws(
+    () =>
+      validateTurnstileResult(
+        {
+          success: true,
+          action: "different_action",
+          hostname: "learn.example",
+        },
+        request,
+        env,
+      ),
+    /spam protection check failed/i,
+  )
+  assert.throws(
+    () =>
+      validateTurnstileResult(
+        {
+          success: true,
+          action: "submit_feedback",
+          hostname: "attacker.example",
+        },
+        request,
+        env,
+      ),
+    /spam protection check failed/i,
+  )
+})
+
+test("adds security headers to static responses", async () => {
+  const response = await worker.fetch(new Request("https://learn.example/"), {
+    ASSETS: {
+      fetch: () => new Response("<main>Learning</main>", {
+        headers: { "Content-Type": "text/html" },
+      }),
+    },
+  })
+  assert.equal(response.status, 200)
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff")
+  assert.equal(response.headers.get("x-frame-options"), "DENY")
+  assert.match(response.headers.get("content-security-policy"), /frame-ancestors 'none'/)
 })

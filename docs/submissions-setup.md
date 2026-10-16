@@ -20,19 +20,30 @@ email, account, or authentication service is required for learner submissions.
 4. Create a Turnstile widget for the final production hostname. Add its public
    key as the build variable `VITE_TURNSTILE_SITE_KEY` and its secret key as the
    encrypted Worker secret `TURNSTILE_SECRET_KEY`.
-5. Add a random encrypted Worker secret named `SUBMISSION_HASH_SECRET`. It is
+5. Set `TURNSTILE_HOSTNAMES` to a comma-separated allowlist of the exact
+   production and preview hostnames. Do not include unrelated domains.
+6. Add a random encrypted Worker secret named `SUBMISSION_HASH_SECRET`. It is
    used only to hash temporary rate-limit identifiers; raw IP addresses are not
    stored.
-6. Create a Cloudflare Access self-hosted application protecting
+7. Keep the configured `SUBMISSION_RATE_LIMITER` binding enabled. It rejects
+   bursts before Turnstile or D1 work begins; the D1 limiter separately allows
+   at most five saved attempts per hashed address per hour.
+8. Create a Cloudflare Access self-hosted application protecting
    `/review-submissions*` and `/api/admin/*`. Allow only the owner email.
-7. Replace `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc` with the
+9. Replace `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc` with the
    Access team domain and application audience tag.
-8. Run a preview deployment, submit one test feedback item, confirm it appears
+10. Run a preview deployment, submit one test feedback item, confirm it appears
    in the protected review queue, then test approve/reject before production.
 
 ## Security behavior
 
 - The public API requires a valid Turnstile result.
+- The server validates the Turnstile action and an explicit hostname allowlist;
+  a token generated for another site or form is rejected.
+- Cross-site mutation requests, oversized bodies, and non-JSON submissions are
+  rejected before storage.
+- Cloudflare's edge rate limiter stops short bursts before expensive work, and
+  the D1 limiter provides a stricter long-window limit.
 - Requests are size-limited and all fields are normalized and validated again
   on the server.
 - A honeypot, minimum form time, and hashed rate limit add further protection.
@@ -41,6 +52,8 @@ email, account, or authentication service is required for learner submissions.
   canonical vocabulary automatically.
 - Admin API calls require a valid Cloudflare Access JWT whose audience and email
   match the configured owner.
+- Static and API responses receive CSP, anti-framing, MIME-sniffing,
+  permissions, and referrer-policy headers.
 - If D1, Turnstile, or secrets are missing, the API returns an honest error and
   saves nothing.
 

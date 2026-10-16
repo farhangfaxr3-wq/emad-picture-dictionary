@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type { Word } from "./content"
 import { getWordVisual } from "./visualAssets"
-import { getVocabularyPhoto } from "./VocabularyImagery"
+import { getVerifiedVocabularyPhoto } from "./VocabularyImagery"
 
 interface Props {
   word: string
@@ -12,7 +12,7 @@ export default function WordPicture({ word, topic, className = "" }: Props) {
   const verified = getWordVisual(word, topic)
   const photo = verified
     ? undefined
-    : getVocabularyPhoto({ word, topic } as Word)
+    : getVerifiedVocabularyPhoto({ word, topic } as Word)
   const visual = verified
     ? {
         src: verified.src,
@@ -22,10 +22,7 @@ export default function WordPicture({ word, topic, className = "" }: Props) {
     : photo
       ? {
           src: photo.src,
-          alt:
-            photo.kind === "context"
-              ? `${word}: a real-life ${topic?.toLowerCase() ?? ""} context. ${photo.description}`
-              : `Photograph of ${word}`,
+          alt: `Photograph of ${word}`,
           credit: `${photo.author} · ${photo.license}`,
         }
       : undefined
@@ -51,13 +48,7 @@ export default function WordPicture({ word, topic, className = "" }: Props) {
     )
   return (
     <img
-      data-image-status={
-        verified
-          ? "verified"
-          : photo?.kind === "context"
-            ? "context"
-            : "library"
-      }
+      data-image-status={verified ? "verified" : "library"}
       data-vocabulary-word={word}
       src={visual.src}
       alt={visual.alt}

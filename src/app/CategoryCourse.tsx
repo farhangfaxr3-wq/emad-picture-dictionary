@@ -1350,7 +1350,7 @@ function QuizSession(props: QuizProps) {
             </p>
             {getVocabularyPhoto(word).kind === "context" && (
               <p className="mt-1 text-center text-xs text-muted-foreground">
-                Context photograph · {word.group}
+                No verified image yet · {word.group}
               </p>
             )}
           </div>

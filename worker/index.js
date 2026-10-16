@@ -1,6 +1,16 @@
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
   "cache-control": "no-store",
+  "x-content-type-options": "nosniff",
+}
+const TURNSTILE_ACTION = "submit_feedback"
+const SECURITY_HEADERS = {
+  "content-security-policy":
+    "default-src 'self'; base-uri 'self'; connect-src 'self' https://challenges.cloudflare.com; font-src 'self' data:; form-action 'self'; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; img-src 'self' data:; object-src 'none'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
+  "permissions-policy": "camera=(), geolocation=(), microphone=()",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "DENY",
 }
 const FEEDBACK_CATEGORIES = new Set([
   "General feedback",
@@ -31,6 +41,34 @@ function json(data, status = 200) {
     status,
     headers: JSON_HEADERS,
   })
+}
+
+function secureResponse(response) {
+  const headers = new Headers(response.headers)
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    headers.set(name, value)
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  })
+}
+
+export function isTrustedRequestOrigin(request) {
+  const url = new URL(request.url)
+  const origin = request.headers.get("origin")
+  const fetchSite = request.headers.get("sec-fetch-site")
+  return (
+    fetchSite !== "cross-site" &&
+    (!origin || origin === url.origin)
+  )
+}
+
+function requireTrustedRequestOrigin(request) {
+  if (!isTrustedRequestOrigin(request)) {
+    throw new RequestError(403, "Cross-site submissions are not allowed.")
+  }
 }
 
 function cleanText(value, maxLength) {
@@ -136,6 +174,9 @@ export function validateEditedSuggestion(payload) {
 }
 
 async function readBody(request) {
+  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
+    throw new RequestError(415, "The submission must use JSON.")
+  }
   const length = Number(request.headers.get("content-length") || 0)
   if (length > 24_000) throw new RequestError(413, "The submission is too large.")
   const text = await request.text()
@@ -147,6 +188,30 @@ async function readBody(request) {
   }
 }
 
+export function validateTurnstileResult(result, request, env) {
+  const allowedHostnames = String(env.TURNSTILE_HOSTNAMES || "")
+    .split(",")
+    .map((hostname) => hostname.trim().toLowerCase())
+    .filter(
+      (hostname) =>
+        hostname && !hostname.startsWith("REPLACE_WITH_YOUR_"),
+    )
+  if (!allowedHostnames.length) {
+    throw new RequestError(
+      503,
+      "Secure submissions are not configured yet. Nothing was saved.",
+    )
+  }
+  if (
+    !result?.success ||
+    result.action !== TURNSTILE_ACTION ||
+    !allowedHostnames.includes(new URL(request.url).hostname.toLowerCase()) ||
+    !allowedHostnames.includes(String(result.hostname || "").toLowerCase())
+  ) {
+    throw new RequestError(400, "The spam protection check failed. Please try again.")
+  }
+}
+
 async function verifyTurnstile(token, request, env) {
   if (!env.TURNSTILE_SECRET_KEY) {
     throw new RequestError(
@@ -154,22 +219,28 @@ async function verifyTurnstile(token, request, env) {
       "Secure submissions are not configured yet. Nothing was saved.",
     )
   }
-  if (!cleanText(token, 4096)) {
+  const cleanToken = cleanText(token, 2049)
+  if (!cleanToken || cleanToken.length > 2048) {
     throw new RequestError(400, "Complete the spam protection check and try again.")
   }
   const form = new FormData()
   form.append("secret", env.TURNSTILE_SECRET_KEY)
-  form.append("response", token)
+  form.append("response", cleanToken)
   const ip = request.headers.get("CF-Connecting-IP")
   if (ip) form.append("remoteip", ip)
   const response = await fetch(
     "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    { method: "POST", body: form },
+    {
+      method: "POST",
+      body: form,
+      signal: AbortSignal.timeout(10_000),
+    },
   )
-  const result = await response.json()
-  if (!result.success) {
-    throw new RequestError(400, "The spam protection check failed. Please try again.")
+  if (!response.ok) {
+    throw new RequestError(503, "Spam protection is temporarily unavailable.")
   }
+  const result = await response.json()
+  validateTurnstileResult(result, request, env)
 }
 
 async function hashIdentifier(value, secret) {
@@ -180,7 +251,7 @@ async function hashIdentifier(value, secret) {
   ).join("")
 }
 
-async function applyRateLimit(request, env) {
+async function requesterIdentifier(request, env) {
   if (!env.SUBMISSION_HASH_SECRET) {
     throw new RequestError(
       503,
@@ -188,7 +259,27 @@ async function applyRateLimit(request, env) {
     )
   }
   const address = request.headers.get("CF-Connecting-IP") || "unknown"
-  const identifier = await hashIdentifier(address, env.SUBMISSION_HASH_SECRET)
+  return hashIdentifier(address, env.SUBMISSION_HASH_SECRET)
+}
+
+async function applyEdgeRateLimit(request, env) {
+  if (!env.SUBMISSION_RATE_LIMITER) {
+    throw new RequestError(
+      503,
+      "Secure submissions are not configured yet. Nothing was saved.",
+    )
+  }
+  const identifier = await requesterIdentifier(request, env)
+  const result = await env.SUBMISSION_RATE_LIMITER.limit({
+    key: `submission:${identifier}`,
+  })
+  if (!result.success) {
+    throw new RequestError(429, "Too many requests. Please try again later.")
+  }
+  return identifier
+}
+
+async function applyDurableRateLimit(identifier, env) {
   const recent = await env.SUBMISSIONS_DB.prepare(
     "SELECT COUNT(*) AS count FROM submission_events WHERE identifier_hash = ? AND created_at >= datetime('now', '-1 hour')",
   )
@@ -232,10 +323,12 @@ async function createSubmission(request, env) {
       "Submission storage is not configured yet. Nothing was saved.",
     )
   }
+  requireTrustedRequestOrigin(request)
+  const identifier = await applyEdgeRateLimit(request, env)
   const body = await readBody(request)
   const submission = validateSubmission(body)
   await verifyTurnstile(body.turnstileToken, request, env)
-  await applyRateLimit(request, env)
+  await applyDurableRateLimit(identifier, env)
   const duplicate = await findDuplicate(submission.normalizedWord, env)
   if (duplicate) throw new RequestError(409, duplicate)
 
@@ -353,6 +446,7 @@ async function listSubmissions(request, env) {
 
 async function updateSubmission(request, env, id) {
   await verifyOwner(request, env)
+  requireTrustedRequestOrigin(request)
   if (!env.SUBMISSIONS_DB) throw new RequestError(503, "Submission storage is not configured.")
   const body = await readBody(request)
   const status = cleanText(body.status, 30)
@@ -417,13 +511,24 @@ export default {
   async fetch(request, env) {
     try {
       const url = new URL(request.url)
-      if (url.pathname.startsWith("/api/")) return await handleApi(request, env)
-      if (url.pathname === "/review-submissions") await verifyOwner(request, env)
-      return env.ASSETS.fetch(request)
+      if (url.pathname.startsWith("/api/")) {
+        return secureResponse(await handleApi(request, env))
+      }
+      if (
+        url.pathname === "/review-submissions" ||
+        url.pathname.startsWith("/review-submissions/")
+      ) {
+        await verifyOwner(request, env)
+      }
+      return secureResponse(await env.ASSETS.fetch(request))
     } catch (error) {
-      if (error instanceof RequestError) return json({ message: error.message }, error.status)
+      if (error instanceof RequestError) {
+        return secureResponse(json({ message: error.message }, error.status))
+      }
       console.error("Unhandled submission worker error", error)
-      return json({ message: "The service could not complete the request." }, 500)
+      return secureResponse(
+        json({ message: "The service could not complete the request." }, 500),
+      )
     }
   },
 }

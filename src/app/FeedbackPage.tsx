@@ -25,6 +25,7 @@ interface TurnstileApi {
     options: {
       sitekey: string
       theme: "auto"
+      action: string
       callback: (token: string) => void
       "expired-callback": () => void
       "error-callback": () => void
@@ -78,6 +79,7 @@ function TurnstileField({ onToken }: { onToken: (token: string) => void }) {
       widgetId = window.turnstile.render(container.current, {
         sitekey: turnstileSiteKey,
         theme: "auto",
+        action: "submit_feedback",
         callback: onToken,
         "expired-callback": () => onToken(""),
         "error-callback": () => onToken(""),

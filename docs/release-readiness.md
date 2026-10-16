@@ -21,6 +21,10 @@ listed below are configured.
 - Route-only learning components are lazy loaded. Production code is separated
   into framework, icon, vocabulary, visual, and page chunks, with an automated
   500 KiB maximum JavaScript chunk check.
+- Words without an accurate verified image now remain image-free instead of
+  showing a potentially misleading topic photograph. Their definitions,
+  examples, pronunciation, CEFR filtering, and non-image activities remain
+  available.
 
 ## Verification checklist
 
@@ -45,7 +49,7 @@ release review.
 - The 8,000-word target is a controlled editorial programme, not a finished
   claim. The current catalogue is 1,923 words; 6,077 reviewed additions remain.
 - The current UI reports 1,051 checked word-specific photographs and 872
-  learning-context images awaiting exact-image review.
+  entries without a displayed image while exact-image review is pending.
 - CEFR labels in the controlled batches require educator review before they can
   be described as verified classifications.
 - Production feedback is deliberately unavailable until D1, Turnstile,
@@ -58,7 +62,7 @@ release review.
 1. Create the D1 database and replace `REPLACE_WITH_YOUR_D1_DATABASE_ID` in
    `wrangler.jsonc`.
 2. Replace the Cloudflare Access team-domain and audience placeholders.
-3. Configure `VITE_TURNSTILE_SITE_KEY`, plus encrypted
+3. Configure `VITE_TURNSTILE_SITE_KEY`, `TURNSTILE_HOSTNAMES`, plus encrypted
    `TURNSTILE_SECRET_KEY` and `SUBMISSION_HASH_SECRET` Worker secrets.
 4. Apply `migrations/0001_submissions.sql` to the remote D1 database.
 5. Run `pnpm export:canonical-words`, then apply the generated

@@ -14,6 +14,11 @@ export interface VocabularyImage {
   kind: string
 }
 const photographs: Record<string, VocabularyImage> = library
+export function getVerifiedVocabularyPhoto(
+  word: Pick<Word, "word" | "topic">,
+): VocabularyImage | undefined {
+  return photographs[`${word.topic}|${word.word}`] || photographs[word.word]
+}
 export function contextPhotograph(word: Word): VocabularyImage {
   const category =
     categoryImages.find((image) => image.category === word.topic) ||
@@ -29,11 +34,7 @@ export function contextPhotograph(word: Word): VocabularyImage {
   }
 }
 export function getVocabularyPhoto(word: Word): VocabularyImage {
-  return (
-    photographs[`${word.topic}|${word.word}`] ||
-    photographs[word.word] ||
-    contextPhotograph(word)
-  )
+  return getVerifiedVocabularyPhoto(word) || contextPhotograph(word)
 }
 export function visualVocabulary(words: Word[]): Word[] {
   const seen = new Set<string>()
@@ -56,7 +57,17 @@ export function VocabularyPhoto({
   className?: string
 }) {
   const [failed, setFailed] = useState(false)
-  const image = failed ? contextPhotograph(word) : getVocabularyPhoto(word)
+  const image = failed ? undefined : getVerifiedVocabularyPhoto(word)
+  if (!image)
+    return (
+      <div
+        role="img"
+        aria-label={`No verified image is available for ${word.word}`}
+        className={`flex items-center justify-center rounded-xl border border-dashed border-border bg-background px-4 text-center text-xs font-semibold text-muted-foreground ${className}`}
+      >
+        No verified image available
+      </div>
+    )
   return (
     <img
       src={image.src}
@@ -82,7 +93,14 @@ export function VocabularyPhoto({
   )
 }
 export function VocabularyPhotoCredit({ word }: { word: Word }) {
-  const image = getVocabularyPhoto(word)
+  const image = getVerifiedVocabularyPhoto(word)
+  if (!image)
+    return (
+      <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
+        No verified image is shown for this word. Use its definition, example,
+        pronunciation, and learning activities instead.
+      </div>
+    )
   return (
     <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
       <p>
@@ -133,9 +151,9 @@ export function VocabularyPhotographyCredits() {
       <p className="mt-3 text-xs leading-6 text-muted-foreground">
         Vocabulary photographs come from Wikimedia Commons and Unsplash, with
         individual licenses and creator attribution. Scene object photographs
-        are crops from their credited environment. Abstract terms may use
-        clearly labeled context photographs. Each word detail includes its
-        source and license.
+        are crops from their credited environment. When an accurate image is
+        unavailable, no substitute photograph is shown. Each displayed image
+        includes its source and license.
       </p>
       <label
         className="mt-4 block text-xs font-medium"

@@ -11,8 +11,6 @@
   },
   "vars": {
     "ADMIN_EMAILS": "farhangfaxr3@gmail.com,em20323115@soran.edu.iq",
-    "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_YOUR_TEAM.cloudflareaccess.com",
-    "ACCESS_AUD": "REPLACE_WITH_YOUR_ACCESS_APPLICATION_AUD",
     "TURNSTILE_HOSTNAMES": "emad-picture-dictionary.farhangfaxr3.workers.dev"
   },
   "ratelimits": [

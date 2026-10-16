@@ -1,8 +1,8 @@
 import assert from "node:assert/strict"
 import { createServer } from "vite"
 
-const EXPECTED_TOTAL_WORDS = 1923
-const EXPECTED_BATCHES = 6
+const EXPECTED_TOTAL_WORDS = 2023
+const EXPECTED_BATCHES = 7
 const EXPECTED_BATCH_SIZE = 100
 const EXPECTED_TOPICS = 19
 const REQUIRED_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
@@ -40,7 +40,11 @@ try {
   )
 
   const ids = new Set(vocabulary.map((word) => word.id))
-  assert.equal(ids.size, vocabulary.length, "Every vocabulary ID must be unique")
+  assert.equal(
+    ids.size,
+    vocabulary.length,
+    "Every vocabulary ID must be unique",
+  )
 
   const batchWords = vocabulary.filter((word) => word.id.startsWith("batch-"))
   assert.equal(
@@ -50,9 +54,17 @@ try {
   )
 
   for (const batch of vocabularyBatches) {
-    assert.equal(batch.addedWords, EXPECTED_BATCH_SIZE, `${batch.id} must contain 100 words`)
+    assert.equal(
+      batch.addedWords,
+      EXPECTED_BATCH_SIZE,
+      `${batch.id} must contain 100 words`,
+    )
     assert.equal(batch.audit.valid, true, `${batch.id} audit must pass`)
-    assert.deepEqual(batch.audit.errors, [], `${batch.id} must not contain errors`)
+    assert.deepEqual(
+      batch.audit.errors,
+      [],
+      `${batch.id} must not contain errors`,
+    )
     assert.deepEqual(
       batch.audit.reviewNotes,
       [],
@@ -76,7 +88,10 @@ try {
         "string",
         `${word.id || "unknown word"} has a non-text ${field}`,
       )
-      assert.ok(word[field].trim(), `${word.id || "unknown word"} is missing ${field}`)
+      assert.ok(
+        word[field].trim(),
+        `${word.id || "unknown word"} is missing ${field}`,
+      )
     }
 
     assert.ok(word.cefr, `${word.id} is missing CEFR metadata`)
@@ -85,7 +100,10 @@ try {
       `${word.id} has an invalid CEFR level`,
     )
     for (const relatedId of word.related) {
-      assert.ok(ids.has(relatedId), `${word.id} links to missing word ${relatedId}`)
+      assert.ok(
+        ids.has(relatedId),
+        `${word.id} links to missing word ${relatedId}`,
+      )
     }
   }
 
@@ -111,7 +129,10 @@ try {
   for (const level of REQUIRED_LEVELS) {
     assert.ok(levelCounts[level] > 0, `${level} must contain at least one word`)
   }
-  assert.ok(levelCounts.C2 >= 50, "The advanced catalogue must retain at least 50 C2 words")
+  assert.ok(
+    levelCounts.C2 >= 150,
+    "The advanced catalogue must retain at least 150 C2 words",
+  )
 
   console.log(
     `Vocabulary QA passed: ${vocabulary.length} words, ${vocabularyAudit.totalTopics} topics, ${vocabularyBatches.length} batches.`,

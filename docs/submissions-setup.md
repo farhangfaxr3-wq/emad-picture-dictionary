@@ -46,21 +46,22 @@ email, account, or authentication service is required for learner submissions.
 7. Keep the configured `SUBMISSION_RATE_LIMITER` binding enabled. It rejects
    bursts before Turnstile or D1 work begins; the D1 limiter separately allows
    at most five saved attempts per hashed address per hour.
-8. Create a Cloudflare Access self-hosted application protecting
-   `/review-submissions*` and `/api/admin/*`. Allow exactly the two administrator
-   emails listed in `ADMIN_EMAILS`; do not use an everyone or domain-wide rule.
-9. Replace `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc` with the
-   Access team domain and application audience tag.
-10. Run `pnpm check:cloudflare`. It stops deployment while a public configuration
+8. Run `pnpm admin:configure` in an interactive terminal. Enter a different
+   strong password for each email in `ADMIN_EMAILS`. The command derives salted
+   PBKDF2 hashes in memory and sends only the hashes plus a random session secret
+   to encrypted Worker secrets. It never prints or saves a password locally.
+9. Run `pnpm check:cloudflare`. It stops deployment while a public configuration
     placeholder remains.
-11. Run `pnpm db:migrate:remote`, followed by `pnpm db:canonical:remote`.
-12. Run a preview deployment, submit one test feedback item, confirm it appears
+10. Run `pnpm db:migrate:remote`, followed by `pnpm db:canonical:remote`.
+11. Run a preview deployment, submit one test feedback item, confirm it appears
    in the protected review queue, then test approve/reject before production.
 
 Production secrets are added interactively and are never committed:
 
 - `pnpm exec wrangler secret put TURNSTILE_SECRET_KEY`
 - `pnpm exec wrangler secret put SUBMISSION_HASH_SECRET`
+- `pnpm admin:configure` creates `ADMIN_PASSWORD_HASHES` and
+  `ADMIN_SESSION_SECRET` without exposing either password.
 
 After the production checklist passes, `pnpm deploy:cloudflare` builds and
 deploys the Worker plus static assets.
@@ -69,8 +70,8 @@ deploys the Worker plus static assets.
 
 Visitors can use `/feedback`, but submission records are never public. The
 administrators open `/review-submissions` on the deployed hostname and sign in
-through Cloudflare Access with either `farhangfaxr3@gmail.com` or
-`em20323115@soran.edu.iq`. The page lists up to 100
+with either `farhangfaxr3@gmail.com` or `em20323115@soran.edu.iq` and that
+administrator's password. The page lists up to 100
 records for the selected status and supports Pending, Needs review, Approved,
 and Rejected queues. This protects optional reply emails and private messages.
 
@@ -89,8 +90,11 @@ and Rejected queues. This protects optional reply emails and private messages.
 - Email is optional. Passwords, accounts, and student records are not requested.
 - Suggestions are stored as `pending`; approval never edits or publishes the
   canonical vocabulary automatically.
-- Admin API calls require a valid Cloudflare Access JWT whose audience and email
-  match one of the explicit addresses in `ADMIN_EMAILS`.
+- Admin API calls require a valid HMAC-signed, eight-hour owner session. The
+  session email must match one of the explicit addresses in `ADMIN_EMAILS`.
+- Owner passwords are independently salted and derived with PBKDF2-SHA-256 at
+  210,000 iterations. Only the derived records are stored as encrypted Worker
+  secrets; D1 stores rate-limit events, not credentials.
 - Static and API responses receive CSP, anti-framing, MIME-sniffing,
   permissions, and referrer-policy headers.
 - If D1, Turnstile, or secrets are missing, the API returns an honest error and

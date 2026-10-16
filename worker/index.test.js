@@ -1,6 +1,9 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import {
+  createAdminSession,
+  derivePasswordHash,
+  getAdminCredentialMap,
   getAdminEmails,
   isTrustedRequestOrigin,
   isLocalOwnerPreview,
@@ -8,6 +11,7 @@ import {
   validateEditedSuggestion,
   validateSubmission,
   validateTurnstileResult,
+  verifyAdminSession,
 } from "./index.js"
 import worker from "./index.js"
 
@@ -89,7 +93,10 @@ test("normalizes owner edits before editorial approval", () => {
 })
 
 test("rejects an empty owner edit", () => {
-  assert.throws(() => validateEditedSuggestion({ word: "!" }), /at least two characters/)
+  assert.throws(
+    () => validateEditedSuggestion({ word: "!" }),
+    /at least two characters/,
+  )
 })
 
 test("allows same-origin requests and rejects cross-site requests", () => {
@@ -119,21 +126,30 @@ test("allows same-origin requests and rejects cross-site requests", () => {
 
 test("allows the owner bypass only on explicit local development hosts", () => {
   assert.equal(
-    isLocalOwnerPreview(new Request("http://localhost:8787/review-submissions"), {
-      LOCAL_DEV_ADMIN: "true",
-    }),
+    isLocalOwnerPreview(
+      new Request("http://localhost:8787/review-submissions"),
+      {
+        LOCAL_DEV_ADMIN: "true",
+      },
+    ),
     true,
   )
   assert.equal(
-    isLocalOwnerPreview(new Request("https://learn.example/review-submissions"), {
-      LOCAL_DEV_ADMIN: "true",
-    }),
+    isLocalOwnerPreview(
+      new Request("https://learn.example/review-submissions"),
+      {
+        LOCAL_DEV_ADMIN: "true",
+      },
+    ),
     false,
   )
   assert.equal(
-    isLocalOwnerPreview(new Request("http://localhost:8787/review-submissions"), {
-      LOCAL_DEV_ADMIN: "false",
-    }),
+    isLocalOwnerPreview(
+      new Request("http://localhost:8787/review-submissions"),
+      {
+        LOCAL_DEV_ADMIN: "false",
+      },
+    ),
     false,
   )
 })
@@ -149,6 +165,87 @@ test("parses every configured administrator email safely", () => {
     "legacy@example.com",
   ])
   assert.deepEqual(getAdminEmails({}), [])
+})
+
+test("parses only well-formed administrator password records", () => {
+  assert.deepEqual(
+    getAdminCredentialMap({
+      ADMIN_PASSWORD_HASHES: JSON.stringify({
+        "Owner@Example.com": {
+          salt: "c2FsdA",
+          hash: "aGFzaA",
+          iterations: 210000,
+        },
+        "invalid@example.com": { salt: "missing-fields" },
+      }),
+    }),
+    {
+      "owner@example.com": {
+        salt: "c2FsdA",
+        hash: "aGFzaA",
+        iterations: 210000,
+      },
+    },
+  )
+  assert.deepEqual(getAdminCredentialMap({ ADMIN_PASSWORD_HASHES: "{" }), {})
+})
+
+test("derives stable password hashes", async () => {
+  const first = await derivePasswordHash(
+    "A long test password! 42",
+    "c2FsdC12YWx1ZQ",
+  )
+  const second = await derivePasswordHash(
+    "A long test password! 42",
+    "c2FsdC12YWx1ZQ",
+  )
+  const different = await derivePasswordHash(
+    "A different password! 42",
+    "c2FsdC12YWx1ZQ",
+  )
+  assert.equal(first, second)
+  assert.notEqual(first, different)
+})
+
+test("signs, verifies, expires, and rejects tampered owner sessions", async () => {
+  const env = {
+    ADMIN_SESSION_SECRET:
+      "a-secure-test-session-secret-that-is-at-least-32-characters",
+  }
+  const now = Date.UTC(2026, 9, 16, 12, 0, 0)
+  const token = await createAdminSession("Owner@Example.com", env, now)
+  const session = await verifyAdminSession(token, env, now + 1000)
+  assert.equal(session.email, "owner@example.com")
+  assert.equal(
+    await verifyAdminSession(token, env, now + 8 * 60 * 60 * 1000 + 1000),
+    null,
+  )
+  const [payload, signature] = token.split(".")
+  const changedPayload = `${payload[0] === "A" ? "B" : "A"}${payload.slice(1)}`
+  assert.equal(
+    await verifyAdminSession(`${changedPayload}.${signature}`, env, now),
+    null,
+  )
+})
+
+test("keeps the review data API private without an owner session", async () => {
+  const response = await worker.fetch(
+    new Request("https://learn.example/api/admin/submissions"),
+    {
+      ADMIN_EMAILS: "owner@example.com",
+      ADMIN_PASSWORD_HASHES: JSON.stringify({
+        "owner@example.com": {
+          salt: "c2FsdA",
+          hash: "aGFzaA",
+          iterations: 210000,
+        },
+      }),
+      ADMIN_SESSION_SECRET:
+        "a-secure-test-session-secret-that-is-at-least-32-characters",
+      SUBMISSIONS_DB: {},
+    },
+  )
+  assert.equal(response.status, 401)
 })
 
 test("requires the expected Turnstile action and hostname", () => {
@@ -220,13 +317,17 @@ test("accepts Cloudflare's official dummy Turnstile result only on local preview
 test("adds security headers to static responses", async () => {
   const response = await worker.fetch(new Request("https://learn.example/"), {
     ASSETS: {
-      fetch: () => new Response("<main>Learning</main>", {
-        headers: { "Content-Type": "text/html" },
-      }),
+      fetch: () =>
+        new Response("<main>Learning</main>", {
+          headers: { "Content-Type": "text/html" },
+        }),
     },
   })
   assert.equal(response.status, 200)
   assert.equal(response.headers.get("x-content-type-options"), "nosniff")
   assert.equal(response.headers.get("x-frame-options"), "DENY")
-  assert.match(response.headers.get("content-security-policy"), /frame-ancestors 'none'/)
+  assert.match(
+    response.headers.get("content-security-policy"),
+    /frame-ancestors 'none'/,
+  )
 })

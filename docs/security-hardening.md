@@ -16,14 +16,19 @@ private operations behind Cloudflare controls.
   honeypot, minimum completion time, duplicate checks, and prepared D1
   statements.
 - Same-origin checks for public submissions and owner mutations.
-- Cloudflare Access JWT verification for the private review page and admin API.
+- Per-administrator password hashes derived with PBKDF2-SHA-256 (210,000
+  iterations), stored only as encrypted Worker secrets.
+- Signed, eight-hour, HttpOnly, Secure, SameSite=Strict owner sessions for the
+  private review API. Passwords are never stored in the browser or D1.
+- Separate edge and D1-backed limits for owner sign-in attempts.
 - Content Security Policy, anti-framing, MIME-sniffing protection, a restrictive
   permissions policy, and safe referrer behavior on all Worker responses.
 - Secrets stay in encrypted Worker secrets. The repository contains only public
   identifiers and placeholders.
-- The owner review queue is never a public dashboard. Production access requires
-  the configured Cloudflare Access identity; the local-only bypass checks both
-  an explicit development flag and a loopback hostname.
+- The owner review queue is never a public dashboard. Its page shell contains no
+  records; every production data request requires a valid signed owner session.
+  The local-only bypass checks both an explicit development flag and a loopback
+  hostname.
 
 ## Required Cloudflare dashboard controls
 
@@ -32,8 +37,8 @@ private operations behind Cloudflare controls.
    zone-level WAF rate-limiting rule for `/api/submissions` if the plan supports
    it.
 3. Restrict the Turnstile widget to the exact production and preview hostnames.
-4. Protect `/review-submissions*` and `/api/admin/*` with Cloudflare Access and
-   allow only the exact administrator emails listed in `ADMIN_EMAILS`.
+4. Keep only the exact administrator emails in `ADMIN_EMAILS`. Re-run
+   `pnpm admin:configure` immediately when an administrator or password changes.
 5. Review Worker, Turnstile, WAF, and D1 analytics after launch. Investigate
    repeated 403, 429, Turnstile failure, or unusual geographic traffic spikes.
 6. Rotate secrets immediately if access changes or a credential may have been
@@ -44,7 +49,7 @@ private operations behind Cloudflare controls.
 - During an attack, temporarily challenge or block `/api/submissions` at the
   WAF layer before disabling the learning site.
 - Preserve the static vocabulary experience even when submissions are paused.
-- Revoke compromised Access sessions, rotate secrets, and review submission
-  records before reopening the form.
+- Rotate the affected administrator password and `ADMIN_SESSION_SECRET`, then
+  review submission records before reopening the form.
 - Roll back to the last verified Worker deployment if a release introduced the
   issue.

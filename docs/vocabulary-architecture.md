@@ -63,3 +63,8 @@ future batches can address level imbalances deliberately.
 Batch 006 adds 100 advanced entries across academic study, technology,
 professional work, civic life, and environmental systems. It deliberately adds
 50 provisional C1 and 50 provisional C2 entries to address the advanced-level gap.
+
+Batch 007 adds 100 provisional C2 entries across advanced communication,
+health, travel systems, food systems, and housing. These entries stay
+image-free until an exact, rights-safe illustration is reviewed; their text,
+pronunciation, filtering, and non-image learning activities remain available.

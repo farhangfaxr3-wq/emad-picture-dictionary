@@ -9,15 +9,11 @@ import { batch003, batch003Metadata } from "./vocabularyBatches/batch003"
 import { batch004, batch004Metadata } from "./vocabularyBatches/batch004"
 import { batch005, batch005Metadata } from "./vocabularyBatches/batch005"
 import { batch006, batch006Metadata } from "./vocabularyBatches/batch006"
+import { batch007, batch007Metadata } from "./vocabularyBatches/batch007"
 
 export interface VocabularyValidationIssue {
   severity: "error" | "warning"
-  code:
-    | "duplicate-id"
-    | "duplicate-topic-word"
-    | "missing-field"
-    | "missing-cefr"
-    | "broken-related-word"
+  code: "duplicate-id" | "duplicate-topic-word" | "missing-field" | "missing-cefr" | "broken-related-word"
   wordId: string
   message: string
 }
@@ -187,8 +183,10 @@ export function validateVocabulary(words: Word[]): VocabularyAudit {
     valid: !issues.some((issue) => issue.severity === "error"),
     totalWords: words.length,
     totalTopics: new Set(words.map((word) => word.topic)).size,
-    verifiedImages: words.filter((word) => word.imageStatus === "verified").length,
-    provisionalCEFR: words.filter((word) => word.cefr?.status === "provisional").length,
+    verifiedImages: words.filter((word) => word.imageStatus === "verified")
+      .length,
+    provisionalCEFR: words.filter((word) => word.cefr?.status === "provisional")
+      .length,
     issues,
   }
 }
@@ -204,6 +202,7 @@ const batchDefinitions = [
   { words: batch004, metadata: batch004Metadata },
   { words: batch005, metadata: batch005Metadata },
   { words: batch006, metadata: batch006Metadata },
+  { words: batch007, metadata: batch007Metadata },
 ]
 const stagedBatchWords: Word[] = []
 export const vocabularyBatches = batchDefinitions.map(({ words, metadata }) => {
@@ -220,6 +219,7 @@ export const batch003Audit = vocabularyBatches[2].audit
 export const batch004Audit = vocabularyBatches[3].audit
 export const batch005Audit = vocabularyBatches[4].audit
 export const batch006Audit = vocabularyBatches[5].audit
+export const batch007Audit = vocabularyBatches[6].audit
 
 const failedBatchAudits = vocabularyBatches
   .map((batch) => batch.audit)

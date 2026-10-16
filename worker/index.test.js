@@ -1,6 +1,7 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import {
+  getAdminEmails,
   isTrustedRequestOrigin,
   isLocalOwnerPreview,
   normalizeWord,
@@ -135,6 +136,19 @@ test("allows the owner bypass only on explicit local development hosts", () => {
     }),
     false,
   )
+})
+
+test("parses every configured administrator email safely", () => {
+  assert.deepEqual(
+    getAdminEmails({
+      ADMIN_EMAILS: " FarhangFaxr3@gmail.com, em20323115@soran.edu.iq ",
+    }),
+    ["farhangfaxr3@gmail.com", "em20323115@soran.edu.iq"],
+  )
+  assert.deepEqual(getAdminEmails({ ADMIN_EMAIL: "legacy@example.com" }), [
+    "legacy@example.com",
+  ])
+  assert.deepEqual(getAdminEmails({}), [])
 })
 
 test("requires the expected Turnstile action and hostname", () => {

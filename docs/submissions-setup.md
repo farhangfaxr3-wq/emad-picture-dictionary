@@ -47,7 +47,8 @@ email, account, or authentication service is required for learner submissions.
    bursts before Turnstile or D1 work begins; the D1 limiter separately allows
    at most five saved attempts per hashed address per hour.
 8. Create a Cloudflare Access self-hosted application protecting
-   `/review-submissions*` and `/api/admin/*`. Allow only the owner email.
+   `/review-submissions*` and `/api/admin/*`. Allow exactly the two administrator
+   emails listed in `ADMIN_EMAILS`; do not use an everyone or domain-wide rule.
 9. Replace `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.jsonc` with the
    Access team domain and application audience tag.
 10. Run `pnpm check:cloudflare`. It stops deployment while a public configuration
@@ -67,8 +68,9 @@ deploys the Worker plus static assets.
 ## Where the owner sees feedback
 
 Visitors can use `/feedback`, but submission records are never public. The
-owner opens `/review-submissions` on the deployed hostname and signs in through
-Cloudflare Access with `em20323115@soran.edu.iq`. The page lists up to 100
+administrators open `/review-submissions` on the deployed hostname and sign in
+through Cloudflare Access with either `farhangfaxr3@gmail.com` or
+`em20323115@soran.edu.iq`. The page lists up to 100
 records for the selected status and supports Pending, Needs review, Approved,
 and Rejected queues. This protects optional reply emails and private messages.
 
@@ -88,7 +90,7 @@ and Rejected queues. This protects optional reply emails and private messages.
 - Suggestions are stored as `pending`; approval never edits or publishes the
   canonical vocabulary automatically.
 - Admin API calls require a valid Cloudflare Access JWT whose audience and email
-  match the configured owner.
+  match one of the explicit addresses in `ADMIN_EMAILS`.
 - Static and API responses receive CSP, anti-framing, MIME-sniffing,
   permissions, and referrer-policy headers.
 - If D1, Turnstile, or secrets are missing, the API returns an honest error and

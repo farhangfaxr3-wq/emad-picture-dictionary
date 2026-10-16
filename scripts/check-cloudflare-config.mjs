@@ -20,8 +20,12 @@ if (placeholder(config.vars?.ACCESS_AUD)) {
 if (placeholder(config.vars?.TURNSTILE_HOSTNAMES)) {
   errors.push("Replace TURNSTILE_HOSTNAMES in wrangler.jsonc.")
 }
-if (!config.vars?.ADMIN_EMAIL) {
-  errors.push("Set ADMIN_EMAIL in wrangler.jsonc.")
+const adminEmails = String(config.vars?.ADMIN_EMAILS || "")
+  .split(",")
+  .map((email) => email.trim())
+  .filter(Boolean)
+if (adminEmails.length === 0) {
+  errors.push("Set at least one email in ADMIN_EMAILS in wrangler.jsonc.")
 }
 
 if (errors.length) {

@@ -33,7 +33,7 @@ private operations behind Cloudflare controls.
    it.
 3. Restrict the Turnstile widget to the exact production and preview hostnames.
 4. Protect `/review-submissions*` and `/api/admin/*` with Cloudflare Access and
-   allow only the owner email.
+   allow only the exact administrator emails listed in `ADMIN_EMAILS`.
 5. Review Worker, Turnstile, WAF, and D1 analytics after launch. Investigate
    repeated 403, 429, Turnstile failure, or unusual geographic traffic spikes.
 6. Rotate secrets immediately if access changes or a credential may have been

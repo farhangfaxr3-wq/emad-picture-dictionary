@@ -10,7 +10,7 @@
     "run_worker_first": ["/api/*", "/review-submissions"]
   },
   "vars": {
-    "ADMIN_EMAIL": "em20323115@soran.edu.iq",
+    "ADMIN_EMAILS": "farhangfaxr3@gmail.com,em20323115@soran.edu.iq",
     "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_YOUR_TEAM.cloudflareaccess.com",
     "ACCESS_AUD": "REPLACE_WITH_YOUR_ACCESS_APPLICATION_AUD",
     "TURNSTILE_HOSTNAMES": "REPLACE_WITH_YOUR_PRODUCTION_HOSTNAME"

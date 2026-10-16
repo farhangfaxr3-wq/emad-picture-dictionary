@@ -387,11 +387,20 @@ export function isLocalOwnerPreview(request, env) {
   )
 }
 
+export function getAdminEmails(env) {
+  const configured = env.ADMIN_EMAILS || env.ADMIN_EMAIL || ""
+  return configured
+    .split(",")
+    .map((email) => cleanText(email, 160).toLowerCase())
+    .filter(Boolean)
+}
+
 async function verifyOwner(request, env) {
+  const adminEmails = getAdminEmails(env)
   if (isLocalOwnerPreview(request, env)) {
-    return { email: env.ADMIN_EMAIL || "local-owner" }
+    return { email: adminEmails[0] || "local-owner" }
   }
-  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.ADMIN_EMAIL) {
+  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || adminEmails.length === 0) {
     throw new RequestError(503, "Owner review access is not configured.")
   }
   const token = request.headers.get("Cf-Access-Jwt-Assertion")
@@ -436,7 +445,7 @@ async function verifyOwner(request, env) {
     payload.iss !== `https://${env.ACCESS_TEAM_DOMAIN}` ||
     payload.exp <= now ||
     (payload.nbf && payload.nbf > now) ||
-    cleanText(payload.email, 160).toLowerCase() !== env.ADMIN_EMAIL.toLowerCase()
+    !adminEmails.includes(cleanText(payload.email, 160).toLowerCase())
   ) {
     throw new RequestError(403, "This account is not allowed to review submissions.")
   }

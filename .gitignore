@@ -5,6 +5,7 @@ build/
 .env*
 !.env.example
 !.env.production
+!.env.localqa
 .dev.vars
 .wrangler/
 .pnpm-store/

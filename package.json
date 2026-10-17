@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "dev:cloudflare": "pnpm build && wrangler dev --local --port 8787",
+    "dev:cloudflare:qa": "pnpm build:localqa && wrangler dev --local --port 8787 --var LOCAL_DEV_ADMIN:true",
     "build": "vite build",
+    "build:localqa": "vite build --mode localqa",
     "preview": "vite preview",
     "test:bundle": "vite build && node scripts/check-bundle-size.mjs",
     "test:vocabulary": "node scripts/validate-vocabulary.mjs",

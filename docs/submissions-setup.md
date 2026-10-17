@@ -17,6 +17,10 @@ API. To test actual feedback storage locally, use the Cloudflare preview instead
 4. Open `http://127.0.0.1:8787/feedback`, send a test item, then open
    `http://127.0.0.1:8787/review-submissions`.
 
+Alternatively, run `pnpm dev:cloudflare:qa`. This mode uses Cloudflare's public
+always-pass testing site key and the loopback-only owner bypass; it must never
+be deployed. Run the normal `pnpm build` again before a release.
+
 The local review bypass works only when `LOCAL_DEV_ADMIN=true` and the request
 hostname is `localhost`, `127.0.0.1`, or `::1`. It cannot unlock a deployed
 hostname. Official Turnstile test credentials must never be used in production.

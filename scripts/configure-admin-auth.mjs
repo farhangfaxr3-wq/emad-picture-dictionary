@@ -1,5 +1,6 @@
 import { pbkdf2Sync, randomBytes } from "node:crypto"
 import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import { spawnSync } from "node:child_process"
 
 const ITERATIONS = 210_000
@@ -100,10 +101,9 @@ async function choosePassword(email) {
 }
 
 function putSecret(name, value) {
-  const executable = process.platform === "win32" ? "pnpm.cmd" : "pnpm"
   const result = spawnSync(
-    executable,
-    ["exec", "wrangler", "secret", "put", name],
+    process.execPath,
+    [resolve("node_modules/wrangler/bin/wrangler.js"), "secret", "put", name],
     {
       cwd: process.cwd(),
       input: `${value}\n`,

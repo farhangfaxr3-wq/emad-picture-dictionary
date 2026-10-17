@@ -450,7 +450,11 @@ export function getAdminEmails(env) {
 
 export function getAdminCredentialMap(env) {
   try {
-    const parsed = JSON.parse(env.ADMIN_PASSWORD_HASHES || "{}")
+    const storedValue = String(env.ADMIN_PASSWORD_HASHES || "{}")
+    const serialized = storedValue.startsWith("v1.")
+      ? new TextDecoder().decode(decodeBase64Url(storedValue.slice(3)))
+      : storedValue
+    const parsed = JSON.parse(serialized)
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
       return {}
     return Object.fromEntries(

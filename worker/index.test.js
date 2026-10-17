@@ -188,6 +188,28 @@ test("parses only well-formed administrator password records", () => {
     },
   )
   assert.deepEqual(getAdminCredentialMap({ ADMIN_PASSWORD_HASHES: "{" }), {})
+
+  const encodedCredentials = Buffer.from(
+    JSON.stringify({
+      "encoded@example.com": {
+        salt: "c2FsdA",
+        hash: "aGFzaA",
+        iterations: 210000,
+      },
+    }),
+  ).toString("base64url")
+  assert.deepEqual(
+    getAdminCredentialMap({
+      ADMIN_PASSWORD_HASHES: `v1.${encodedCredentials}`,
+    }),
+    {
+      "encoded@example.com": {
+        salt: "c2FsdA",
+        hash: "aGFzaA",
+        iterations: 210000,
+      },
+    },
+  )
 })
 
 test("derives stable password hashes", async () => {

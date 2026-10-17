@@ -5,6 +5,10 @@ import { spawnSync } from "node:child_process"
 
 const ITERATIONS = 210_000
 const config = JSON.parse(readFileSync("wrangler.jsonc", "utf8"))
+const productionHostname = String(config.vars?.TURNSTILE_HOSTNAMES || "")
+  .split(",")
+  .map((hostname) => hostname.trim())
+  .find(Boolean)
 const adminEmails = String(config.vars?.ADMIN_EMAILS || "")
   .split(",")
   .map((email) => email.trim().toLowerCase())
@@ -73,6 +77,9 @@ function validatePassword(password, email) {
   if (password.length < 14 || password.length > 128) {
     return "Use 14 to 128 characters."
   }
+  if (password !== password.trim()) {
+    return "Do not put a space at the beginning or end of the password."
+  }
   if (password.toLowerCase().includes(email.split("@")[0])) {
     return "Do not include the email username in the password."
   }
@@ -100,25 +107,68 @@ async function choosePassword(email) {
   }
 }
 
-function putSecret(name, value) {
+function putSecrets(secrets) {
   const result = spawnSync(
     process.execPath,
-    [resolve("node_modules/wrangler/bin/wrangler.js"), "secret", "put", name],
+    [resolve("node_modules/wrangler/bin/wrangler.js"), "secret", "bulk"],
     {
       cwd: process.cwd(),
-      input: `${value}\n`,
+      input: `${JSON.stringify(secrets)}\n`,
       stdio: ["pipe", "inherit", "inherit"],
     },
   )
   if (result.error) throw result.error
   if (result.status !== 0) {
-    throw new Error(`Cloudflare did not save ${name}.`)
+    throw new Error("Cloudflare did not save the authentication secrets.")
   }
 }
 
+const wait = (milliseconds) =>
+  new Promise((resolvePromise) => setTimeout(resolvePromise, milliseconds))
+
+async function verifyProductionPassword(email, password) {
+  if (!productionHostname) {
+    console.warn(
+      "TURNSTILE_HOSTNAMES is empty, so production sign-in was not checked.",
+    )
+    return
+  }
+
+  const origin = `https://${productionHostname}`
+  let lastStatus = "no response"
+  for (const delay of [2500, 5000]) {
+    await wait(delay)
+    try {
+      const response = await fetch(`${origin}/api/admin/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: origin,
+        },
+        body: JSON.stringify({ email, password }),
+      })
+      if (response.ok) {
+        console.log(`Production sign-in verified for ${email}.`)
+        return
+      }
+      const result = await response.json().catch(() => ({}))
+      lastStatus = `${response.status}${result.message ? `: ${result.message}` : ""}`
+      if (response.status === 429) break
+    } catch (error) {
+      lastStatus = error instanceof Error ? error.message : String(error)
+    }
+  }
+
+  throw new Error(
+    `Production sign-in verification failed for ${email} (${lastStatus}). Run this command again after checking Caps Lock and the keyboard language.`,
+  )
+}
+
 const credentials = {}
+const plaintextPasswords = new Map()
 for (const email of adminEmails) {
   const password = await choosePassword(email)
+  plaintextPasswords.set(email, password)
   const salt = randomBytes(16)
   credentials[email] = {
     salt: base64Url(salt),
@@ -128,8 +178,16 @@ for (const email of adminEmails) {
 }
 
 console.log("Saving encrypted authentication secrets in Cloudflare...")
-putSecret("ADMIN_PASSWORD_HASHES", JSON.stringify(credentials))
-putSecret("ADMIN_SESSION_SECRET", base64Url(randomBytes(32)))
+putSecrets({
+  ADMIN_PASSWORD_HASHES: `v1.${base64Url(JSON.stringify(credentials))}`,
+  ADMIN_SESSION_SECRET: base64Url(randomBytes(32)),
+})
+
+console.log("Checking the new passwords against the public website...")
+for (const [email, password] of plaintextPasswords) {
+  await verifyProductionPassword(email, password)
+}
+plaintextPasswords.clear()
 console.log(
-  "Admin authentication is configured. No password was printed or saved locally.",
+  "Admin authentication is configured and verified. No password was printed or saved locally.",
 )

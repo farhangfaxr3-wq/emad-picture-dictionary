@@ -68,3 +68,7 @@ Batch 007 adds 100 provisional C2 entries across advanced communication,
 health, travel systems, food systems, and housing. These entries stay
 image-free until an exact, rights-safe illustration is reviewed; their text,
 pronunciation, filtering, and non-image learning activities remain available.
+
+Batch 008 adds 100 provisional A2-B2 entries across sports, people, family,
+animals, and transportation. It targets the five smallest topic collections
+and follows the same exact-image review requirement.

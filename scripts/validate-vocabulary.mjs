@@ -1,8 +1,8 @@
 import assert from "node:assert/strict"
 import { createServer } from "vite"
 
-const EXPECTED_TOTAL_WORDS = 2023
-const EXPECTED_BATCHES = 7
+const EXPECTED_TOTAL_WORDS = 2123
+const EXPECTED_BATCHES = 8
 const EXPECTED_BATCH_SIZE = 100
 const EXPECTED_TOPICS = 19
 const REQUIRED_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]

@@ -248,6 +248,108 @@ test("keeps the review data API private without an owner session", async () => {
   assert.equal(response.status, 401)
 })
 
+test("completes the owner sign-in, private queue, and sign-out flow", async () => {
+  const password = "Strong owner password! 42"
+  const salt = "c2VjdXJlLXRlc3Qtc2FsdA"
+  const credential = {
+    salt,
+    hash: await derivePasswordHash(password, salt),
+    iterations: 210000,
+  }
+  const database = {
+    prepare(statement) {
+      return {
+        bind() {
+          return this
+        },
+        async first() {
+          if (statement.includes("COUNT(*)")) return { count: 0 }
+          return null
+        },
+        async run() {
+          return { meta: { changes: 1 } }
+        },
+        async all() {
+          return { results: [] }
+        },
+      }
+    },
+  }
+  const env = {
+    ADMIN_EMAILS: "owner@example.com",
+    ADMIN_PASSWORD_HASHES: JSON.stringify({
+      "owner@example.com": credential,
+    }),
+    ADMIN_SESSION_SECRET:
+      "a-secure-test-session-secret-that-is-at-least-32-characters",
+    SUBMISSION_HASH_SECRET:
+      "a-secure-test-hash-secret-that-is-at-least-32-characters",
+    SUBMISSION_RATE_LIMITER: { limit: async () => ({ success: true }) },
+    SUBMISSIONS_DB: database,
+  }
+  const headers = {
+    "Content-Type": "application/json",
+    Origin: "https://learn.example",
+    "Sec-Fetch-Site": "same-origin",
+    "CF-Connecting-IP": "192.0.2.10",
+  }
+
+  const rejected = await worker.fetch(
+    new Request("https://learn.example/api/admin/login", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        email: "owner@example.com",
+        password: "incorrect password",
+      }),
+    }),
+    env,
+  )
+  assert.equal(rejected.status, 401)
+  assert.equal(
+    (await rejected.json()).message,
+    "Email or password is incorrect.",
+  )
+
+  const login = await worker.fetch(
+    new Request("https://learn.example/api/admin/login", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ email: "owner@example.com", password }),
+    }),
+    env,
+  )
+  assert.equal(login.status, 200)
+  const setCookie = login.headers.get("set-cookie")
+  assert.match(setCookie, /^__Host-emad_admin=/)
+  assert.match(setCookie, /HttpOnly/)
+  assert.match(setCookie, /Secure/)
+  assert.match(setCookie, /SameSite=Strict/)
+
+  const sessionCookie = setCookie.split(";")[0]
+  const queue = await worker.fetch(
+    new Request("https://learn.example/api/admin/submissions?status=pending", {
+      headers: { Cookie: sessionCookie },
+    }),
+    env,
+  )
+  assert.equal(queue.status, 200)
+  assert.deepEqual(await queue.json(), {
+    reviewer: "owner@example.com",
+    submissions: [],
+  })
+
+  const logout = await worker.fetch(
+    new Request("https://learn.example/api/admin/logout", {
+      method: "POST",
+      headers,
+    }),
+    env,
+  )
+  assert.equal(logout.status, 200)
+  assert.match(logout.headers.get("set-cookie"), /Max-Age=0/)
+})
+
 test("requires the expected Turnstile action and hostname", () => {
   const request = new Request("https://learn.example/api/submissions")
   const env = { TURNSTILE_HOSTNAMES: "learn.example,preview.example" }

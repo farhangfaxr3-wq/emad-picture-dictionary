@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "test:bundle": "vite build && node scripts/check-bundle-size.mjs",
     "test:vocabulary": "node scripts/validate-vocabulary.mjs",
+    "test:imagery": "node scripts/validate-imagery.mjs",
     "export:canonical-words": "node scripts/export-canonical-words.mjs",
     "db:migrate:local": "wrangler d1 migrations apply emad-wordlink-submissions --local",
     "db:migrate:remote": "wrangler d1 migrations apply emad-wordlink-submissions --remote",

@@ -17,7 +17,9 @@ const photographs: Record<string, VocabularyImage> = library
 export function getVerifiedVocabularyPhoto(
   word: Pick<Word, "word" | "topic">,
 ): VocabularyImage | undefined {
-  return photographs[`${word.topic}|${word.word}`] || photographs[word.word]
+  const photograph =
+    photographs[`${word.topic}|${word.word}`] || photographs[word.word]
+  return photograph?.kind === "context" ? undefined : photograph
 }
 export function contextPhotograph(word: Word): VocabularyImage {
   const category =

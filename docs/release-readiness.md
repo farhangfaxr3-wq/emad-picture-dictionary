@@ -30,10 +30,11 @@ interactive creation of the two administrator passwords.
 Run these commands from the project directory before every release:
 
 1. `pnpm test:vocabulary`
-2. `pnpm test:submissions`
-3. `pnpm exec tsc --noEmit`
-4. `pnpm test:bundle`
-5. Open the local site and smoke-test Home, Dictionary, one topic course,
+2. `pnpm test:imagery`
+3. `pnpm test:submissions`
+4. `pnpm exec tsc --noEmit`
+5. `pnpm test:bundle`
+6. Open the local site and smoke-test Home, Dictionary, one topic course,
    Practice, Feedback, Settings, and the protected review route at mobile,
    tablet, and desktop widths.
 

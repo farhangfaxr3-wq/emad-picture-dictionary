@@ -341,8 +341,8 @@
     "source": "https://commons.wikimedia.org/wiki/File:Cheese_platter.jpg",
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "description": "",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "description": "A platter displaying several varieties of cheese",
     "filename": "File:Cheese platter.jpg",
     "src": "/images/vocabulary/37ede8ee909c731b.jpg",
     "kind": "object"
@@ -470,7 +470,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 3.0 us",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/us/deed.en",
-    "description": "",
+    "description": "An assortment of dining forks in different styles",
     "filename": "File:Assorted forks.jpg",
     "src": "/images/vocabulary/482b73595988163d.jpg",
     "kind": "object"
@@ -1564,7 +1564,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "Public domain",
     "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "",
+    "description": "A stainless-steel frying pan with a long handle",
     "filename": "File:Pfanne (Edelstahl).jpg",
     "src": "/images/vocabulary/c2e49dd835bec9e6.jpg",
     "kind": "object"
@@ -1924,7 +1924,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "Public domain",
     "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "",
+    "description": "A fence marking the boundary of a property",
     "filename": "File:Westtown.jpg",
     "src": "/images/vocabulary/6d157d51ae092f6d.jpg",
     "kind": "object"
@@ -2004,7 +2004,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 2.5",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
-    "description": "",
+    "description": "A person wearing hair arranged in a braid",
     "filename": "File:Braid final rot.jpg",
     "src": "/images/vocabulary/cd7bfa863c560bba.jpg",
     "kind": "context"
@@ -2114,7 +2114,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "description": "",
+    "description": "Several generations of a family together",
     "filename": "File:Doddy4GenerationsAug1931A.jpg",
     "src": "/images/vocabulary/2e21b4a9b862631b.jpg",
     "kind": "context"
@@ -2373,7 +2373,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "Public domain",
     "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "",
+    "description": "A travel adapter for connecting an electrical plug",
     "filename": "File:Mains plug travel adaptor.jpg",
     "src": "/images/vocabulary/8302a25465b2d50a.jpg",
     "kind": "object"
@@ -2463,7 +2463,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "Public domain",
     "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "",
+    "description": "A candlestick telephone used to make a phone call",
     "filename": "File:CandlestickTelephoneGal.jpg",
     "src": "/images/vocabulary/b0a63dbcd6156e48.jpg",
     "kind": "context"
@@ -2512,7 +2512,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "Public domain",
     "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "",
+    "description": "A paper envelope with a handwritten address",
     "filename": "File:Envelope - Boonville Address-000.jpg",
     "src": "/images/vocabulary/82d43de3d606833b.jpg",
     "kind": "context"
@@ -2572,7 +2572,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "Public domain",
     "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "",
+    "description": "A travel adapter for connecting an electrical plug",
     "filename": "File:Mains plug travel adaptor.jpg",
     "src": "/images/vocabulary/8302a25465b2d50a.jpg",
     "kind": "object"
@@ -2664,7 +2664,7 @@
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
     "description": "~360 square feet studio condo layout. Heat pump on the balcony feeds into the wall unit above the window. 15 gallon electric water heater on metal platform with splash pan that feeds off into the sewer line if there are leaks (could have a seperate 10 gallon water heater under the kitchen sink). No natural gas, it is all electric. Bathroom and laun",
     "filename": "File:Studio apartment.webp",
-    "src": "/images/vocabulary/a88b2dfc3079d6c7.jpg",
+    "src": "/images/vocabulary/a88b2dfc3079d6c7.webp",
     "kind": "object"
   },
   "baggage claim": {
@@ -3369,7 +3369,7 @@
     "author": "Europeana staff photographer",
     "license": "Public domain",
     "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "",
+    "description": "A collection of spare uniform buttons",
     "filename": "File:Reserveknapper til Hans' uniform.jpg",
     "src": "/images/vocabulary/1b14aad55471c676.jpg",
     "kind": "object"
@@ -3409,7 +3409,7 @@
     "author": "Wikimedia Commons contributor",
     "license": "Public domain",
     "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "",
+    "description": "A cotton plant with white cotton bolls",
     "filename": "File:CottonPlant.JPG",
     "src": "/images/vocabulary/156195a3646b0e0a.jpg",
     "kind": "object"
@@ -3479,7 +3479,7 @@
     "author": "Genusfotografen (Tommas Gunnarsson) / Wikimedia Sverige",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "description": "",
+    "description": "A bent human elbow against a plain background",
     "filename": "File:Elbow on gray background.jpg",
     "src": "/images/vocabulary/de62998538d5a55e.jpg",
     "kind": "object"
@@ -4006,8 +4006,8 @@
     "source": "https://commons.wikimedia.org/wiki/File:Disc_brake.jpg",
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "description": "",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "description": "A vehicle disc brake and its metal rotor",
     "filename": "File:Disc brake.jpg",
     "src": "/images/vocabulary/de7e54497dd6e445.jpg",
     "kind": "object"
@@ -4584,8 +4584,8 @@
     "source": "https://commons.wikimedia.org/wiki/File:Salta-VallesCalchaquies-P3140151.JPG",
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "description": "",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "description": "A broad valley between rocky mountain slopes",
     "filename": "File:Salta-VallesCalchaquies-P3140151.JPG",
     "src": "/images/vocabulary/839bfa0257c3a7e4.jpg",
     "kind": "object"
@@ -4754,8 +4754,8 @@
     "source": "https://commons.wikimedia.org/wiki/File:Lake_Idro_Italy_2005-08-16.jpg",
     "author": "No machine-readable author provided. Marius~commonswiki assumed (based on copyright claims).",
     "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "description": "",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "description": "Lake Idro surrounded by mountains in Italy",
     "filename": "File:Lake Idro Italy 2005-08-16.jpg",
     "src": "/images/vocabulary/bab7609108682085.jpg",
     "kind": "object"
@@ -4844,8 +4844,8 @@
     "source": "https://commons.wikimedia.org/wiki/File:Cytisus_scoparius2.jpg",
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "description": "",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "description": "A flowering shrub growing outdoors",
     "filename": "File:Cytisus scoparius2.jpg",
     "src": "/images/vocabulary/4690dce7401ebada.jpg",
     "kind": "object"
@@ -5054,8 +5054,8 @@
     "source": "https://commons.wikimedia.org/wiki/File:George_the_amazing_guinea_pig.jpg",
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "description": "",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "description": "A guinea pig standing on a flat surface",
     "filename": "File:George the amazing guinea pig.jpg",
     "src": "/images/vocabulary/be1a67b64a08b003.jpg",
     "kind": "object"
@@ -5434,8 +5434,8 @@
     "source": "https://commons.wikimedia.org/wiki/File:Bombina_bombina_1_(Marek_Szczepanek).jpg",
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "description": "",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "description": "A fire-bellied toad seen from above",
     "filename": "File:Bombina bombina 1 (Marek Szczepanek).jpg",
     "src": "/images/vocabulary/36918cf9b2b8cf45.jpg",
     "kind": "object"
@@ -5764,8 +5764,8 @@
     "source": "https://commons.wikimedia.org/wiki/File:Trail_between_two_fields_(Slovenia,_Selo_pri_Mirni).jpg",
     "author": "Wikimedia Commons contributor",
     "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "description": "",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "description": "A walking trail running between two green fields",
     "filename": "File:Trail between two fields (Slovenia, Selo pri Mirni).jpg",
     "src": "/images/vocabulary/baecf8da78a6ce0c.jpg",
     "kind": "object"
@@ -5857,7 +5857,7 @@
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "description": "Apartment complex in California",
     "filename": "File:2019.07.10 metro California-housing Blog-post related.webp",
-    "src": "/images/vocabulary/e91fdb207da36143.jpg",
+    "src": "/images/vocabulary/e91fdb207da36143.webp",
     "kind": "object"
   },
   "housing": {
@@ -7434,15 +7434,6 @@
     "description": "A clear drinking glass containing water",
     "kind": "object"
   },
-  "mug": {
-    "src": "/images/vocabulary/stock-1616241673111-508b4662c707.jpg",
-    "source": "https://unsplash.com/@mediamodifier",
-    "author": "Mediamodifier",
-    "license": "Unsplash License",
-    "licenseUrl": "https://unsplash.com/license",
-    "description": "A white ceramic mug",
-    "kind": "object"
-  },
   "butter": {
     "src": "/images/vocabulary/stock-1588467850695-a898367ce465.jpg",
     "source": "https://unsplash.com/@laurenagray",
@@ -7492,7 +7483,7 @@
     "kind": "object"
   },
   "windbreaker": {
-    "src": "/images/vocabulary/4a3d72e1d5afd8a0.jpg",
+    "src": "/images/vocabulary/4a3d72e1d5afd8a0.webp",
     "source": "https://commons.wikimedia.org/wiki/File:%22Wikipedia%22_Windbreaker.webp",
     "author": "Potatochip08",
     "license": "CC0",
@@ -7807,7 +7798,7 @@
     "author": "R. S.",
     "license": "CC BY 2.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "description": "",
+    "description": "A printed luggage tag attached to checked baggage",
     "filename": "File:Germanwings luggage tag.jpg",
     "kind": "object"
   },
@@ -7869,16 +7860,6 @@
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
     "description": "A wireless network router",
     "filename": "File:3Com OfficeConnect ADSL Wireless 11g Firewall Router 2012-10-28-0869.jpg",
-    "kind": "object"
-  },
-  "memory card": {
-    "src": "/images/vocabulary/4e5fdbdd4cabb341.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:SanDisk_Memory_Stick_PRO_256MB.jpg",
-    "author": "Mister rf",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "description": "256MB SanDisk Memory Stick PRO Card.",
-    "filename": "File:SanDisk Memory Stick PRO 256MB.jpg",
     "kind": "object"
   },
   "accessible entrance": {
@@ -8019,16 +8000,6 @@
     "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
     "description": "Source: Peng 15:15, 15 May 2005 (UTC) selbst fotografiert am 24.9.04, GNU-fdl, Bild :einf. Zirkel + Schneidezirkel Lizent:",
     "filename": "File:Zirkel.jpg",
-    "kind": "object"
-  },
-  "ground": {
-    "src": "/images/vocabulary/7deb229f08d2fff5.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Stagnogley.JPG",
-    "author": "HolgerK at English Wikipedia",
-    "license": "Public domain",
-    "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
-    "description": "This picture of a stagnogley soil was taken by me and I make it avaiable to everyone to use",
-    "filename": "File:Stagnogley.JPG",
     "kind": "object"
   },
   "tape": {

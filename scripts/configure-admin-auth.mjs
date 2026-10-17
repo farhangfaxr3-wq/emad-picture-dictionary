@@ -136,7 +136,10 @@ async function verifyProductionPassword(email, password) {
 
   const origin = `https://${productionHostname}`
   let lastStatus = "no response"
-  for (const delay of [2500, 5000]) {
+  for (const delay of [30_000, 30_000]) {
+    console.log(
+      `Waiting ${delay / 1000} seconds for Cloudflare to activate the new secrets...`,
+    )
     await wait(delay)
     try {
       const response = await fetch(`${origin}/api/admin/login`, {

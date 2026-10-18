@@ -1,4 +1,4 @@
-import { pbkdf2Sync, randomBytes } from "node:crypto"
+import { randomBytes, webcrypto } from "node:crypto"
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { spawnSync } from "node:child_process"
@@ -25,6 +25,27 @@ if (!process.stdin.isTTY || !process.stdout.isTTY) {
 
 function base64Url(value) {
   return Buffer.from(value).toString("base64url")
+}
+
+async function derivePasswordHash(password, salt) {
+  const material = await webcrypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"],
+  )
+  const bits = await webcrypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      hash: "SHA-256",
+      salt,
+      iterations: ITERATIONS,
+    },
+    material,
+    256,
+  )
+  return base64Url(new Uint8Array(bits))
 }
 
 function readHidden(prompt) {
@@ -136,7 +157,7 @@ async function verifyProductionPassword(email, password, setupProof) {
 
   const origin = `https://${productionHostname}`
   let lastStatus = "no response"
-  for (const delay of [30_000, 30_000]) {
+  for (const delay of [15_000, 15_000, 30_000, 30_000]) {
     console.log(
       `Waiting ${delay / 1000} seconds for Cloudflare to activate the new secrets...`,
     )
@@ -176,7 +197,7 @@ for (const email of adminEmails) {
   const salt = randomBytes(16)
   credentials[email] = {
     salt: base64Url(salt),
-    hash: base64Url(pbkdf2Sync(password, salt, ITERATIONS, 32, "sha256")),
+    hash: await derivePasswordHash(password, salt),
     iterations: ITERATIONS,
   }
 }

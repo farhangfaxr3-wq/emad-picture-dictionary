@@ -1175,6 +1175,23 @@ function Layout() {
   const navigate = useNavigate()
   const location = useLocation()
   useEffect(() => {
+    const openFeedbackReview = (event: KeyboardEvent) => {
+      if (
+        location.pathname !== "/" ||
+        !event.ctrlKey ||
+        !event.altKey ||
+        event.code !== "KeyF"
+      )
+        return
+
+      event.preventDefault()
+      navigate("/review-submissions?login=access-code")
+    }
+
+    window.addEventListener("keydown", openFeedbackReview)
+    return () => window.removeEventListener("keydown", openFeedbackReview)
+  }, [location.pathname, navigate])
+  useEffect(() => {
     const category = topicNames.find(
       (topic) => location.pathname === `/topics/${encodeURIComponent(topic)}`,
     )

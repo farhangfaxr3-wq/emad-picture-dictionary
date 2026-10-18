@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from "react"
 import {
@@ -1172,17 +1173,47 @@ function Layout() {
   const [audioState, setAudioState] =
     useState<AppContextType["audioState"]>(null)
   const activeSpeech = useRef<SpeechSynthesisUtterance | null>(null)
+  const hiddenAdminShortcut = useRef({
+    keyCount: 0,
+    lastKeyAt: 0,
+    logoTapCount: 0,
+    lastLogoTapAt: 0,
+  })
   const navigate = useNavigate()
   const location = useLocation()
   useEffect(() => {
     const openFeedbackReview = (event: KeyboardEvent) => {
-      if (
-        location.pathname !== "/" ||
-        !event.ctrlKey ||
-        !event.altKey ||
-        event.code !== "KeyF"
-      )
-        return
+      if (location.pathname !== "/") return
+
+      const isTyping =
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement ||
+        (event.target instanceof HTMLElement && event.target.isContentEditable)
+      const usesOriginalShortcut =
+        event.ctrlKey &&
+        event.altKey &&
+        (event.code === "KeyF" || event.key.toLowerCase() === "f")
+
+      if (!usesOriginalShortcut) {
+        if (
+          isTyping ||
+          event.repeat ||
+          event.ctrlKey ||
+          event.altKey ||
+          event.metaKey ||
+          event.shiftKey ||
+          event.code !== "KeyF"
+        )
+          return
+
+        const now = Date.now()
+        const shortcut = hiddenAdminShortcut.current
+        shortcut.keyCount =
+          now - shortcut.lastKeyAt <= 1800 ? shortcut.keyCount + 1 : 1
+        shortcut.lastKeyAt = now
+        if (shortcut.keyCount < 3) return
+        shortcut.keyCount = 0
+      }
 
       event.preventDefault()
       navigate("/review-submissions?login=access-code")
@@ -1191,6 +1222,22 @@ function Layout() {
     window.addEventListener("keydown", openFeedbackReview)
     return () => window.removeEventListener("keydown", openFeedbackReview)
   }, [location.pathname, navigate])
+  const handleHiddenAdminLogo = (
+    event: ReactMouseEvent<HTMLAnchorElement>,
+  ) => {
+    if (location.pathname !== "/") return
+
+    const now = Date.now()
+    const shortcut = hiddenAdminShortcut.current
+    shortcut.logoTapCount =
+      now - shortcut.lastLogoTapAt <= 4000 ? shortcut.logoTapCount + 1 : 1
+    shortcut.lastLogoTapAt = now
+    if (shortcut.logoTapCount < 5) return
+
+    event.preventDefault()
+    shortcut.logoTapCount = 0
+    navigate("/review-submissions?login=access-code")
+  }
   useEffect(() => {
     const category = topicNames.find(
       (topic) => location.pathname === `/topics/${encodeURIComponent(topic)}`,
@@ -1438,7 +1485,11 @@ function Layout() {
           Skip to learning content
         </a>
         <aside className="fixed inset-y-0 left-0 z-30 hidden w-[228px] flex-col overflow-y-auto border-r border-border bg-card px-5 py-6 lg:flex xl:w-[242px] xl:py-8">
-          <Link to="/" className="mb-4 flex items-center gap-3 px-2">
+          <Link
+            to="/"
+            className="mb-4 flex items-center gap-3 px-2"
+            onClick={handleHiddenAdminLogo}
+          >
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <BookOpen size={23} />
             </span>
@@ -1514,6 +1565,7 @@ function Layout() {
               <Link
                 to="/"
                 className="font-display text-xl font-extrabold md:hidden"
+                onClick={handleHiddenAdminLogo}
               >
                 emad<span className="text-primary">.</span>
               </Link>

@@ -19,6 +19,7 @@
     "db:canonical:local": "pnpm export:canonical-words && wrangler d1 execute emad-wordlink-submissions --local --file .tmp-canonical-words.sql",
     "db:canonical:remote": "pnpm export:canonical-words && wrangler d1 execute emad-wordlink-submissions --remote --file .tmp-canonical-words.sql",
     "admin:configure": "node scripts/configure-admin-auth.mjs",
+    "admin:codes": "node scripts/configure-admin-access-codes.mjs",
     "check:cloudflare": "node scripts/check-cloudflare-config.mjs",
     "deploy:cloudflare": "pnpm check:cloudflare && pnpm build && wrangler deploy",
     "test:submissions": "node --test worker/index.test.js",

@@ -39,5 +39,5 @@ if (errors.length) {
 
 console.log("Cloudflare public configuration check passed.")
 console.log(
-  "Confirm TURNSTILE_SECRET_KEY, SUBMISSION_HASH_SECRET, ADMIN_PASSWORD_HASHES, and ADMIN_SESSION_SECRET are stored as encrypted Worker secrets before deployment.",
+  "Confirm TURNSTILE_SECRET_KEY, SUBMISSION_HASH_SECRET, one administrator sign-in secret (ADMIN_PASSWORD_HASHES or ADMIN_ACCESS_CODE_HASHES), and ADMIN_SESSION_SECRET are stored as encrypted Worker secrets before deployment.",
 )

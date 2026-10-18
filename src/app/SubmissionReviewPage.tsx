@@ -183,8 +183,9 @@ export default function SubmissionReviewPage() {
               Owner sign-in
             </h2>
             <p className="mt-2 text-xs leading-6 text-muted-foreground">
-              Use one of the two approved administrator emails. Passwords are
-              checked only by the server and are never saved in this browser.
+            Use one of the two approved administrator emails. Passwords and
+            secure access codes are checked only by the server and are never
+            saved in this browser.
             </p>
             {message && (
               <div
@@ -208,7 +209,7 @@ export default function SubmissionReviewPage() {
               />
             </label>
             <label className="mt-4 block text-xs font-semibold">
-              Password
+              Password or secure access code
               <span className="relative mt-2 block">
                 <input
                   type={showPassword ? "text" : "password"}

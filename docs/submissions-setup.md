@@ -53,7 +53,11 @@ email, account, or authentication service is required for learner submissions.
 8. Run `pnpm admin:configure` in an interactive terminal. Enter a different
    strong password for each email in `ADMIN_EMAILS`. The command derives salted
    PBKDF2 hashes in memory and sends only the hashes plus a random session secret
-   to encrypted Worker secrets. It never prints or saves a password locally.
+   to encrypted Worker secrets. It never prints or saves a password locally. If
+   the terminal or platform cannot verify PBKDF2 credentials, run
+   `pnpm admin:codes` instead. It creates a separate high-entropy access code for
+   each administrator, stores only SHA-256 hashes in encrypted Worker secrets,
+   verifies both codes against production, and displays them once.
 9. Run `pnpm check:cloudflare`. It stops deployment while a public configuration
     placeholder remains.
 10. Run `pnpm db:migrate:remote`, followed by `pnpm db:canonical:remote`.
@@ -66,6 +70,9 @@ Production secrets are added interactively and are never committed:
 - `pnpm exec wrangler secret put SUBMISSION_HASH_SECRET`
 - `pnpm admin:configure` creates `ADMIN_PASSWORD_HASHES` and
   `ADMIN_SESSION_SECRET` without exposing either password.
+- `pnpm admin:codes` creates `ADMIN_ACCESS_CODE_HASHES` and rotates
+  `ADMIN_SESSION_SECRET`; save the displayed codes in a password manager because
+  they are not written to a local file and cannot be displayed again.
 
 After the production checklist passes, `pnpm deploy:cloudflare` builds and
 deploys the Worker plus static assets.
@@ -75,7 +82,7 @@ deploys the Worker plus static assets.
 Visitors can use `/feedback`, but submission records are never public. The
 administrators open `/review-submissions` on the deployed hostname and sign in
 with either `farhangfaxr3@gmail.com` or `em20323115@soran.edu.iq` and that
-administrator's password. The page lists up to 100
+administrator's password or generated secure access code. The page lists up to 100
 records for the selected status and supports Pending, Needs review, Approved,
 and Rejected queues. This protects optional reply emails and private messages.
 
@@ -99,6 +106,9 @@ and Rejected queues. This protects optional reply emails and private messages.
 - Owner passwords are independently salted and derived with PBKDF2-SHA-256 at
   210,000 iterations. Only the derived records are stored as encrypted Worker
   secrets; D1 stores rate-limit events, not credentials.
+- Generated administrator access codes use 192 bits of randomness. Only their
+  SHA-256 hashes are stored as encrypted Worker secrets, and the codes are shown
+  once after production verification.
 - Static and API responses receive CSP, anti-framing, MIME-sniffing,
   permissions, and referrer-policy headers.
 - If D1, Turnstile, or secrets are missing, the API returns an honest error and

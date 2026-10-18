@@ -3,10 +3,12 @@ import assert from "node:assert/strict"
 import {
   createAdminSession,
   derivePasswordHash,
+  getAdminAccessCodeHashMap,
   getAdminCredentialMap,
   getAdminEmails,
   isTrustedRequestOrigin,
   isLocalOwnerPreview,
+  hashAdminAccessCode,
   normalizeWord,
   validateEditedSuggestion,
   validateSubmission,
@@ -212,6 +214,21 @@ test("parses only well-formed administrator password records", () => {
   )
 })
 
+test("parses and hashes secure administrator access codes", async () => {
+  const code = "EPD-very-long-random-access-code-123456789"
+  const hash = await hashAdminAccessCode(code)
+  const encoded = Buffer.from(
+    JSON.stringify({ "owner@example.com": hash }),
+  ).toString("base64url")
+  assert.deepEqual(
+    getAdminAccessCodeHashMap({
+      ADMIN_ACCESS_CODE_HASHES: `v1.${encoded}`,
+    }),
+    { "owner@example.com": hash },
+  )
+  assert.equal(await hashAdminAccessCode("too-short"), "")
+})
+
 test("derives stable password hashes", async () => {
   const first = await derivePasswordHash(
     "A long test password! 42",
@@ -406,6 +423,49 @@ test("lets the short-lived setup proof verify new credentials without consuming 
     },
   )
   assert.equal(response.status, 200)
+})
+
+test("signs in with a generated access code when password hashing is unavailable", async () => {
+  const code = "EPD-generated-access-code-for-production-123456789"
+  const response = await worker.fetch(
+    new Request("https://learn.example/api/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "https://learn.example",
+        "Sec-Fetch-Site": "same-origin",
+      },
+      body: JSON.stringify({ email: "owner@example.com", password: code }),
+    }),
+    {
+      ADMIN_EMAILS: "owner@example.com",
+      ADMIN_ACCESS_CODE_HASHES: JSON.stringify({
+        "owner@example.com": await hashAdminAccessCode(code),
+      }),
+      ADMIN_SESSION_SECRET:
+        "a-secure-test-session-secret-that-is-at-least-32-characters",
+      SUBMISSION_HASH_SECRET:
+        "a-secure-test-hash-secret-that-is-at-least-32-characters",
+      SUBMISSION_RATE_LIMITER: { limit: async () => ({ success: true }) },
+      SUBMISSIONS_DB: {
+        prepare() {
+          return {
+            bind() {
+              return this
+            },
+            async first() {
+              return { count: 0 }
+            },
+            async run() {
+              return { meta: { changes: 1 } }
+            },
+          }
+        },
+      },
+    },
+  )
+  assert.equal(response.status, 200)
+  assert.match(response.headers.get("set-cookie"), /^__Host-emad_admin=/)
 })
 
 test("requires the expected Turnstile action and hostname", () => {

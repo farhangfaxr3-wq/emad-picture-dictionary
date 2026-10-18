@@ -9,6 +9,8 @@ const ADMIN_SESSION_COOKIE = "__Host-emad_admin"
 const ADMIN_SESSION_SECONDS = 8 * 60 * 60
 const ADMIN_PASSWORD_ITERATIONS = 210_000
 const ADMIN_SETUP_PROOF_HEADER = "x-emad-admin-setup-proof"
+const DUMMY_ADMIN_ACCESS_CODE_HASH =
+  "u4aGqZxB3wJGvCPk6EKBGfZxK1ZfJw7uRk2vK7gMx5M"
 const DUMMY_ADMIN_CREDENTIAL = {
   salt: "Kzh5dHVY5LpM6uEoKYwYPw",
   hash: "UJ67vSdxJgzMa4__vSLzLxoM0p3dsmfLDszcbA7b-kg",
@@ -478,6 +480,41 @@ export function getAdminCredentialMap(env) {
   }
 }
 
+export function getAdminAccessCodeHashMap(env) {
+  try {
+    const storedValue = String(env.ADMIN_ACCESS_CODE_HASHES || "{}")
+    const serialized = storedValue.startsWith("v1.")
+      ? new TextDecoder().decode(decodeBase64Url(storedValue.slice(3)))
+      : storedValue
+    const parsed = JSON.parse(serialized)
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+      return {}
+    return Object.fromEntries(
+      Object.entries(parsed)
+        .map(([email, hash]) => [email.trim().toLowerCase(), hash])
+        .filter(
+          ([email, hash]) =>
+            email &&
+            typeof hash === "string" &&
+            /^[A-Za-z0-9_-]{43}$/.test(hash),
+        ),
+    )
+  } catch {
+    return {}
+  }
+}
+
+export async function hashAdminAccessCode(code) {
+  if (typeof code !== "string" || code.length < 24 || code.length > 128) {
+    return ""
+  }
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(code),
+  )
+  return encodeBase64Url(new Uint8Array(digest))
+}
+
 export async function derivePasswordHash(
   password,
   salt,
@@ -695,9 +732,24 @@ async function loginOwner(request, env) {
     : await applyAdminLoginRateLimit(request, env)
   const adminEmails = getAdminEmails(env)
   const credentials = getAdminCredentialMap(env)
+  const accessCodeHashes = getAdminAccessCodeHashMap(env)
   const credential = credentials[email] || DUMMY_ADMIN_CREDENTIAL
   const passwordMatches = await verifyAdminPassword(password, credential)
-  if (!adminEmails.includes(email) || !credentials[email] || !passwordMatches) {
+  const accessCodeHash =
+    accessCodeHashes[email] || DUMMY_ADMIN_ACCESS_CODE_HASH
+  const submittedAccessCodeHash = await hashAdminAccessCode(password)
+  const accessCodeMatches = await secretsMatch(
+    accessCodeHash,
+    submittedAccessCodeHash,
+  )
+  const hasConfiguredMethod = Boolean(
+    credentials[email] || accessCodeHashes[email],
+  )
+  if (
+    !adminEmails.includes(email) ||
+    !hasConfiguredMethod ||
+    (!passwordMatches && !accessCodeMatches)
+  ) {
     throw new RequestError(401, "Email or password is incorrect.")
   }
   const token = await createAdminSession(email, env)

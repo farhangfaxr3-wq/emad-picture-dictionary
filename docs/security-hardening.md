@@ -18,6 +18,9 @@ private operations behind Cloudflare controls.
 - Same-origin checks for public submissions and owner mutations.
 - Per-administrator password hashes derived with PBKDF2-SHA-256 (210,000
   iterations), stored only as encrypted Worker secrets.
+- Optional per-administrator high-entropy access codes whose SHA-256 hashes are
+  stored only as encrypted Worker secrets and verified using constant-time
+  digest comparison.
 - Signed, eight-hour, HttpOnly, Secure, SameSite=Strict owner sessions for the
   private review API. Passwords are never stored in the browser or D1.
 - Separate edge and D1-backed limits for owner sign-in attempts.
@@ -38,7 +41,8 @@ private operations behind Cloudflare controls.
    it.
 3. Restrict the Turnstile widget to the exact production and preview hostnames.
 4. Keep only the exact administrator emails in `ADMIN_EMAILS`. Re-run
-   `pnpm admin:configure` immediately when an administrator or password changes.
+   `pnpm admin:configure` when an administrator or password changes, or
+   `pnpm admin:codes` to rotate generated access codes.
 5. Review Worker, Turnstile, WAF, and D1 analytics after launch. Investigate
    repeated 403, 429, Turnstile failure, or unusual geographic traffic spikes.
 6. Rotate secrets immediately if access changes or a credential may have been

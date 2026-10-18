@@ -117,7 +117,13 @@ function TurnstileField({ onToken }: { onToken: (token: string) => void }) {
       </div>
     )
   }
-  return <div ref={container} aria-label="Spam protection check" />
+  return (
+    <div
+      ref={container}
+      aria-label="Spam protection check"
+      className="turnstile-shell"
+    />
+  )
 }
 
 function StatusMessage({ state }: { state: SubmitState }) {
@@ -270,7 +276,7 @@ export default function FeedbackPage() {
       </header>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-        <section className={`${card} p-5 sm:p-7`}>
+        <section className={`${card} min-w-0 p-5 sm:p-7`}>
           <div className="grid grid-cols-2 gap-2 rounded-xl bg-secondary/70 p-1.5">
             {(
               [
@@ -471,7 +477,7 @@ export default function FeedbackPage() {
           </form>
         </section>
 
-        <aside className="space-y-5">
+        <aside className="min-w-0 space-y-5">
           <section className={`${card} p-5`}>
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-primary">
               <ShieldCheck size={21} />

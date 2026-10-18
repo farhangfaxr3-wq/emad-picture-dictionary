@@ -2,6 +2,50 @@
 @import 'tailwindcss';
 @import './styles/theme.css';
 
+/* Cloudflare Turnstile has a 300px intrinsic width. Keep the security check
+   usable without forcing horizontal scrolling on narrow phone screens. */
+.turnstile-shell {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 72px;
+  overflow: hidden;
+  --turnstile-scale: 1;
+}
+
+.turnstile-shell > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  transform: scale(var(--turnstile-scale));
+  transform-origin: top left;
+}
+
+@media (max-width: 399px) {
+  .turnstile-shell { --turnstile-scale: .94; }
+}
+
+@media (max-width: 379px) {
+  .turnstile-shell { --turnstile-scale: .86; }
+}
+
+@media (max-width: 359px) {
+  .turnstile-shell { --turnstile-scale: .8; }
+}
+
+@media (max-width: 339px) {
+  .turnstile-shell { --turnstile-scale: .73; }
+}
+
+@media (max-width: 319px) {
+  .turnstile-shell { --turnstile-scale: .66; }
+}
+
+@media (max-width: 299px) {
+  .turnstile-shell { --turnstile-scale: .6; }
+}
+
 @layer base {
   body { @apply bg-background text-foreground font-sans antialiased; }
   button, a, input, select { -webkit-tap-highlight-color: transparent; }

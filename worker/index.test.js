@@ -486,6 +486,10 @@ test("adds security headers to static responses", async () => {
   assert.equal(response.status, 200)
   assert.equal(response.headers.get("x-content-type-options"), "nosniff")
   assert.equal(response.headers.get("x-frame-options"), "DENY")
+  assert.equal(
+    response.headers.get("strict-transport-security"),
+    "max-age=31536000; includeSubDomains",
+  )
   assert.match(
     response.headers.get("content-security-policy"),
     /frame-ancestors 'none'/,

@@ -14,6 +14,14 @@ if (!database || placeholder(database.database_id)) {
 if (placeholder(config.vars?.TURNSTILE_HOSTNAMES)) {
   errors.push("Replace TURNSTILE_HOSTNAMES in wrangler.jsonc.")
 }
+if (
+  !Array.isArray(config.assets?.run_worker_first) ||
+  !config.assets.run_worker_first.includes("/*")
+) {
+  errors.push(
+    'Set assets.run_worker_first to ["/*"] so every page receives security headers.',
+  )
+}
 const adminEmails = String(config.vars?.ADMIN_EMAILS || "")
   .split(",")
   .map((email) => email.trim())

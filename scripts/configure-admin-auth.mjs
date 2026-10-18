@@ -126,7 +126,7 @@ function putSecrets(secrets) {
 const wait = (milliseconds) =>
   new Promise((resolvePromise) => setTimeout(resolvePromise, milliseconds))
 
-async function verifyProductionPassword(email, password) {
+async function verifyProductionPassword(email, password, setupProof) {
   if (!productionHostname) {
     console.warn(
       "TURNSTILE_HOSTNAMES is empty, so production sign-in was not checked.",
@@ -147,6 +147,7 @@ async function verifyProductionPassword(email, password) {
         headers: {
           "Content-Type": "application/json",
           Origin: origin,
+          "X-Emad-Admin-Setup-Proof": setupProof,
         },
         body: JSON.stringify({ email, password }),
       })
@@ -181,14 +182,16 @@ for (const email of adminEmails) {
 }
 
 console.log("Saving encrypted authentication secrets in Cloudflare...")
+const setupProof = `${Date.now() + 10 * 60 * 1000}.${base64Url(randomBytes(32))}`
 putSecrets({
   ADMIN_PASSWORD_HASHES: `v1.${base64Url(JSON.stringify(credentials))}`,
   ADMIN_SESSION_SECRET: base64Url(randomBytes(32)),
+  ADMIN_SETUP_PROOF: setupProof,
 })
 
 console.log("Checking the new passwords against the public website...")
 for (const [email, password] of plaintextPasswords) {
-  await verifyProductionPassword(email, password)
+  await verifyProductionPassword(email, password, setupProof)
 }
 plaintextPasswords.clear()
 console.log(

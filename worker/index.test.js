@@ -372,6 +372,42 @@ test("completes the owner sign-in, private queue, and sign-out flow", async () =
   assert.match(logout.headers.get("set-cookie"), /Max-Age=0/)
 })
 
+test("lets the short-lived setup proof verify new credentials without consuming the login limiter", async () => {
+  const password = "Fresh setup password! 42"
+  const salt = "c2V0dXAtdGVzdC1zYWx0"
+  const setupProof = `${Date.now() + 5 * 60 * 1000}.temporary-setup-proof`
+  const response = await worker.fetch(
+    new Request("https://learn.example/api/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "https://learn.example",
+        "X-Emad-Admin-Setup-Proof": setupProof,
+      },
+      body: JSON.stringify({ email: "owner@example.com", password }),
+    }),
+    {
+      ADMIN_EMAILS: "owner@example.com",
+      ADMIN_PASSWORD_HASHES: JSON.stringify({
+        "owner@example.com": {
+          salt,
+          hash: await derivePasswordHash(password, salt),
+          iterations: 210000,
+        },
+      }),
+      ADMIN_SESSION_SECRET:
+        "a-secure-test-session-secret-that-is-at-least-32-characters",
+      ADMIN_SETUP_PROOF: setupProof,
+      SUBMISSION_RATE_LIMITER: {
+        limit: async () => {
+          throw new Error("The normal limiter must not run during setup.")
+        },
+      },
+    },
+  )
+  assert.equal(response.status, 200)
+})
+
 test("requires the expected Turnstile action and hostname", () => {
   const request = new Request("https://learn.example/api/submissions")
   const env = { TURNSTILE_HOSTNAMES: "learn.example,preview.example" }

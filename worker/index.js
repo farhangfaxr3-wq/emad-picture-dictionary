@@ -8,6 +8,7 @@ const TURNSTILE_LOCAL_TEST_SECRET = "1x0000000000000000000000000000000AA"
 const ADMIN_SESSION_COOKIE = "__Host-emad_admin"
 const ADMIN_SESSION_SECONDS = 8 * 60 * 60
 const ADMIN_PASSWORD_ITERATIONS = 210_000
+const ADMIN_SETUP_PROOF_HEADER = "x-emad-admin-setup-proof"
 const DUMMY_ADMIN_CREDENTIAL = {
   salt: "Kzh5dHVY5LpM6uEoKYwYPw",
   hash: "UJ67vSdxJgzMa4__vSLzLxoM0p3dsmfLDszcbA7b-kg",
@@ -528,6 +529,38 @@ async function verifyAdminPassword(password, credential) {
   }
 }
 
+async function secretsMatch(first, second) {
+  if (typeof first !== "string" || typeof second !== "string") return false
+  const encoder = new TextEncoder()
+  const [firstDigest, secondDigest] = await Promise.all([
+    crypto.subtle.digest("SHA-256", encoder.encode(first)),
+    crypto.subtle.digest("SHA-256", encoder.encode(second)),
+  ])
+  const firstBytes = new Uint8Array(firstDigest)
+  const secondBytes = new Uint8Array(secondDigest)
+  let difference = 0
+  for (let index = 0; index < firstBytes.length; index += 1) {
+    difference |= firstBytes[index] ^ secondBytes[index]
+  }
+  return difference === 0
+}
+
+async function hasValidAdminSetupProof(request, env, now = Date.now()) {
+  const stored = String(env.ADMIN_SETUP_PROOF || "")
+  const supplied = request.headers.get(ADMIN_SETUP_PROOF_HEADER) || ""
+  const separator = stored.indexOf(".")
+  if (separator < 1 || !supplied) return false
+  const expiresAt = Number(stored.slice(0, separator))
+  if (
+    !Number.isFinite(expiresAt) ||
+    expiresAt <= now ||
+    expiresAt > now + 15 * 60 * 1000
+  ) {
+    return false
+  }
+  return secretsMatch(stored, supplied)
+}
+
 function sessionSecret(env) {
   const secret = String(env.ADMIN_SESSION_SECRET || "")
   if (secret.length < 32) {
@@ -655,7 +688,10 @@ async function loginOwner(request, env) {
   const body = await readBody(request)
   const email = cleanText(body?.email, 160).toLowerCase()
   const password = typeof body?.password === "string" ? body.password : ""
-  const identifier = await applyAdminLoginRateLimit(request, env)
+  const setupVerified = await hasValidAdminSetupProof(request, env)
+  const identifier = setupVerified
+    ? null
+    : await applyAdminLoginRateLimit(request, env)
   const adminEmails = getAdminEmails(env)
   const credentials = getAdminCredentialMap(env)
   const credential = credentials[email] || DUMMY_ADMIN_CREDENTIAL
@@ -664,11 +700,13 @@ async function loginOwner(request, env) {
     throw new RequestError(401, "Email or password is incorrect.")
   }
   const token = await createAdminSession(email, env)
-  await env.SUBMISSIONS_DB.prepare(
-    "DELETE FROM admin_login_events WHERE identifier_hash = ?",
-  )
-    .bind(identifier)
-    .run()
+  if (identifier) {
+    await env.SUBMISSIONS_DB.prepare(
+      "DELETE FROM admin_login_events WHERE identifier_hash = ?",
+    )
+      .bind(identifier)
+      .run()
+  }
   return json({ message: "Signed in securely.", email }, 200, {
     "set-cookie": `${ADMIN_SESSION_COOKIE}=${token}; Max-Age=${ADMIN_SESSION_SECONDS}; Path=/; HttpOnly; Secure; SameSite=Strict`,
   })

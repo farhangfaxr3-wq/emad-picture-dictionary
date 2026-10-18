@@ -3,6 +3,8 @@ import {
   AlertCircle,
   CheckCircle2,
   Clock3,
+  Eye,
+  EyeOff,
   KeyRound,
   LoaderCircle,
   LogOut,
@@ -39,6 +41,7 @@ export default function SubmissionReviewPage() {
   const [reviewer, setReviewer] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
 
   const load = async () => {
     setStatus("loading")
@@ -206,16 +209,27 @@ export default function SubmissionReviewPage() {
             </label>
             <label className="mt-4 block text-xs font-semibold">
               Password
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                autoComplete="current-password"
-                minLength={14}
-                maxLength={128}
-                required
-                className="mt-2 w-full rounded-xl border border-border bg-card px-4 py-3 text-sm"
-              />
+              <span className="relative mt-2 block">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  autoComplete="current-password"
+                  minLength={14}
+                  maxLength={128}
+                  required
+                  className="w-full rounded-xl border border-border bg-card py-3 pl-4 pr-12 text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                  className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </span>
             </label>
             <button
               type="submit"

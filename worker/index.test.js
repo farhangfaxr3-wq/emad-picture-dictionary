@@ -85,6 +85,17 @@ test("rejects a form submitted too quickly", () => {
   )
 })
 
+test("accepts valid feedback when the client clock is ahead", () => {
+  const result = validateSubmission({
+    kind: "feedback",
+    category: "Technical problem",
+    message: "The feedback form should work across devices and time zones.",
+    formStartedAt: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString(),
+  })
+  assert.equal(result.kind, "feedback")
+  assert.equal(result.category, "Technical problem")
+})
+
 test("normalizes owner edits before editorial approval", () => {
   const result = validateEditedSuggestion({
     word: "  Renewable   energy ",

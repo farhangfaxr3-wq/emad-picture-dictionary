@@ -5,6 +5,9 @@ const JSON_HEADERS = {
 }
 const TURNSTILE_ACTION = "submit_feedback"
 const TURNSTILE_LOCAL_TEST_SECRET = "1x0000000000000000000000000000000AA"
+const FORM_MINIMUM_REVIEW_MS = 1500
+const FORM_MAX_AGE_MS = 2 * 60 * 60 * 1000
+const CLIENT_CLOCK_SKEW_TOLERANCE_MS = 24 * 60 * 60 * 1000
 const ADMIN_SESSION_COOKIE = "__Host-emad_admin"
 const ADMIN_SESSION_SECONDS = 8 * 60 * 60
 const ADMIN_PASSWORD_ITERATIONS = 210_000
@@ -119,13 +122,21 @@ export function validateSubmission(input) {
     throw new RequestError(400, "The submission could not be verified.")
   }
   const started = Date.parse(input.formStartedAt)
-  if (!Number.isFinite(started) || Date.now() - started < 1500) {
+  const elapsed = Date.now() - started
+  // Browser clocks can differ substantially from Cloudflare's edge clock. A
+  // future client timestamp is therefore not proof of an automated submit;
+  // Turnstile, the honeypot, origin checks, and both rate limiters remain the
+  // authoritative anti-abuse controls.
+  if (
+    !Number.isFinite(started) ||
+    (elapsed >= 0 && elapsed < FORM_MINIMUM_REVIEW_MS)
+  ) {
     throw new RequestError(
       400,
       "Please take a moment to review your submission.",
     )
   }
-  if (Date.now() - started > 2 * 60 * 60 * 1000) {
+  if (elapsed > FORM_MAX_AGE_MS + CLIENT_CLOCK_SKEW_TOLERANCE_MS) {
     throw new RequestError(
       400,
       "This form expired. Refresh the page and try again.",

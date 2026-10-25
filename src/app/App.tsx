@@ -38,6 +38,7 @@ import {
   ChevronRight,
   CircleHelp,
   Flame,
+  GraduationCap,
   Grid2X2,
   Headphones,
   Heart,
@@ -101,6 +102,7 @@ import {
 const CategoryCourse = lazy(() => import("./CategoryCourse"))
 const FeedbackPage = lazy(() => import("./FeedbackPage"))
 const SubmissionReviewPage = lazy(() => import("./SubmissionReviewPage"))
+const AssessmentPage = lazy(() => import("./AssessmentPage"))
 
 const wordById = new Map(vocabulary.map((word) => [word.id, word]))
 for (const scene of scenes) {
@@ -1126,6 +1128,7 @@ const navigation: {
   { path: "/dictionary", label: "Dictionary", icon: BookOpen },
   { path: "/topics", label: "Topics", icon: Grid2X2 },
   { path: "/practice", label: "Practice", icon: AudioLines },
+  { path: "/assessment", label: "Level Test", icon: GraduationCap },
   { path: "/progress", label: "My Progress", icon: TrendingUp },
   { path: "/favorites", label: "Favorites", icon: Heart },
   { path: "/feedback", label: "Feedback & Ideas", icon: MessageSquare },
@@ -1282,6 +1285,19 @@ function Layout() {
       data.preferences.largeText,
     )
   }, [data])
+  useEffect(() => {
+    const useAssessmentLevel = (event: Event) => {
+      const level = (event as CustomEvent<string>).detail
+      if (!isCEFRLevel(level)) return
+      setData((previous) => ({
+        ...previous,
+        preferences: { ...previous.preferences, cefrLevel: level },
+      }))
+    }
+    window.addEventListener("emad:assessment-level", useAssessmentLevel)
+    return () =>
+      window.removeEventListener("emad:assessment-level", useAssessmentLevel)
+  }, [])
   useEffect(() => {
     if (!data.preferences.audio && "speechSynthesis" in window) {
       window.speechSynthesis.cancel()
@@ -2024,6 +2040,30 @@ function HomePage() {
         </Link>
       </div>
       <HomeSearch />
+      <Link
+        to="/assessment"
+        className="group flex flex-col gap-5 overflow-hidden rounded-[20px] border border-[#d5e7e1] bg-[#f0f8f5] p-5 transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:p-6"
+      >
+        <div className="flex min-w-0 items-center gap-4">
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+            <GraduationCap size={27} />
+          </span>
+          <div className="min-w-0">
+            <p className="text-[9px] font-semibold uppercase tracking-[.15em] text-primary">
+              CEFR · A1 to C2
+            </p>
+            <h2 className="mt-1 font-display text-lg font-bold sm:text-xl">
+              Test My English Level
+            </h2>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              Discover Your Level. Improve Your English.
+            </p>
+          </div>
+        </div>
+        <span className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-card px-4 py-3 text-xs font-semibold text-primary shadow-sm group-hover:bg-primary group-hover:text-primary-foreground">
+          Start assessment <ArrowRight size={15} />
+        </span>
+      </Link>
       <section className="relative flex min-h-[253px] overflow-hidden rounded-[20px] bg-[#eaf0e8]">
         <div className="relative z-10 w-full p-7 md:w-[55%] md:p-8 xl:p-9">
           <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/60 px-2.5 py-1 text-[8px] font-semibold tracking-[.12em] text-[#4b7967]">
@@ -6693,6 +6733,7 @@ const router = createBrowserRouter([
       { path: "topics", Component: TopicsPage },
       { path: "topics/:topic", Component: TopicDetail },
       { path: "practice", Component: PracticeRoute },
+      { path: "assessment", Component: AssessmentPage },
       { path: "progress", Component: ProgressPage },
       { path: "favorites", Component: FavoritesPage },
       { path: "feedback", Component: FeedbackPage },

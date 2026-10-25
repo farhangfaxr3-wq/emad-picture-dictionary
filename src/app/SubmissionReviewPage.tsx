@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   XCircle,
 } from "lucide-react"
+import AssessmentReviewPanel from "./AssessmentReviewPanel"
 
 interface SubmissionRecord {
   id: string
@@ -436,6 +437,7 @@ export default function SubmissionReviewPage() {
           </div>
         )}
       </section>
+      <AssessmentReviewPanel active={Boolean(reviewer) && status === "ready"} />
     </>
   )
 }

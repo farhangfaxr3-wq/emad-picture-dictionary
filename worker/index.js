@@ -44,6 +44,24 @@ const REVIEW_STATUSES = new Set([
   "rejected",
   "needs-review",
 ])
+const ASSESSMENT_REVIEW_STATUSES = new Set([
+  "draft",
+  "approved",
+  "rejected",
+  "needs-review",
+])
+const ASSESSMENT_SKILLS = new Set([
+  "vocabulary",
+  "grammar",
+  "reading",
+  "listening",
+])
+const CEFR_LEVELS = new Set(["A1", "A2", "B1", "B2", "C1", "C2"])
+const ASSESSMENT_SELECT = `
+  SELECT id, status, bank_version, skill, cefr_level, prompt, options_json,
+    correct_index, explanation, passage, audio_text, source_id, source_label,
+    source_confidence, created_at, reviewed_at
+  FROM assessment_questions`
 
 class RequestError extends Error {
   constructor(status, message) {
@@ -100,6 +118,68 @@ export function normalizeWord(value) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9' -]/g, "")
     .replace(/\s+/g, " ")
+}
+
+export function validateAssessmentQuestion(input) {
+  if (!input || typeof input !== "object") {
+    throw new RequestError(400, "A valid assessment question is required.")
+  }
+  const id = cleanText(input.id, 180)
+  const bankVersion = cleanText(input.bankVersion, 80)
+  const skill = cleanText(input.skill, 30)
+  const level = cleanText(input.level, 10)
+  const prompt = cleanText(input.prompt, 600)
+  const explanation = cleanText(input.explanation, 1000)
+  const passage = cleanText(input.passage, 3000) || null
+  const audioText = cleanText(input.audioText, 1500) || null
+  const sourceId = cleanText(input.sourceId, 180) || null
+  const sourceLabel = cleanText(input.sourceLabel, 240) || null
+  const sourceConfidence = cleanText(input.sourceConfidence, 20) || null
+  const options = Array.isArray(input.options)
+    ? input.options.map((option) => cleanText(option, 500))
+    : []
+  const correctIndex = Number(input.correctIndex)
+
+  if (!/^[a-z0-9][a-z0-9._-]{2,179}$/i.test(id)) {
+    throw new RequestError(400, "Question id is invalid.")
+  }
+  if (!bankVersion || !ASSESSMENT_SKILLS.has(skill) || !CEFR_LEVELS.has(level)) {
+    throw new RequestError(400, "Question metadata is invalid.")
+  }
+  if (prompt.length < 8 || explanation.length < 8) {
+    throw new RequestError(400, "Question text is incomplete.")
+  }
+  if (
+    options.length !== 4 ||
+    options.some((option) => option.length < 1) ||
+    new Set(options.map((option) => option.toLowerCase())).size !== 4
+  ) {
+    throw new RequestError(400, "Questions require four unique answer options.")
+  }
+  if (!Number.isInteger(correctIndex) || correctIndex < 0 || correctIndex > 3) {
+    throw new RequestError(400, "Question answer key is invalid.")
+  }
+  if (skill === "listening" && !audioText) {
+    throw new RequestError(400, "Listening questions require verified audio text.")
+  }
+  if (sourceConfidence && !["low", "medium", "high"].includes(sourceConfidence)) {
+    throw new RequestError(400, "Question confidence is invalid.")
+  }
+  return {
+    id,
+    bankVersion,
+    skill,
+    level,
+    prompt,
+    options,
+    correctIndex,
+    explanation,
+    passage,
+    audioText,
+    sourceId,
+    sourceLabel,
+    sourceConfidence,
+  }
 }
 
 function validateEmail(value) {
@@ -888,8 +968,174 @@ async function updateSubmission(request, env, id) {
   return json({ message: "Review saved." })
 }
 
+function serializeAssessmentQuestion(record, includeReviewState = false) {
+  let options = []
+  try {
+    options = JSON.parse(record.options_json || "[]")
+  } catch {}
+  return {
+    id: record.id,
+    ...(includeReviewState ? { status: record.status } : {}),
+    bankVersion: record.bank_version,
+    skill: record.skill,
+    level: record.cefr_level,
+    prompt: record.prompt,
+    options,
+    correctIndex: record.correct_index,
+    explanation: record.explanation,
+    passage: record.passage || undefined,
+    audioText: record.audio_text || undefined,
+    sourceId: record.source_id || undefined,
+    sourceLabel: record.source_label || undefined,
+    sourceConfidence: record.source_confidence || undefined,
+    ...(includeReviewState
+      ? {
+          createdAt: record.created_at,
+          reviewedAt: record.reviewed_at,
+        }
+      : {}),
+  }
+}
+
+async function listApprovedAssessmentQuestions(env) {
+  if (!env.SUBMISSIONS_DB) {
+    return json({ questions: [], bankStatus: "curated-only" })
+  }
+  const result = await env.SUBMISSIONS_DB.prepare(
+    `${ASSESSMENT_SELECT}
+     WHERE status = 'approved'
+     ORDER BY reviewed_at DESC, created_at DESC
+     LIMIT 240`,
+  ).all()
+  return json({
+    questions: (result.results || []).map((record) =>
+      serializeAssessmentQuestion(record),
+    ),
+    bankStatus: "connected",
+  })
+}
+
+async function listAssessmentQuestionsForReview(request, env) {
+  await verifyOwner(request, env)
+  if (!env.SUBMISSIONS_DB) {
+    throw new RequestError(503, "Assessment storage is not configured.")
+  }
+  const requested = new URL(request.url).searchParams.get("status")
+  const status = ASSESSMENT_REVIEW_STATUSES.has(requested)
+    ? requested
+    : "draft"
+  const result = await env.SUBMISSIONS_DB.prepare(
+    `${ASSESSMENT_SELECT}
+     WHERE status = ?
+     ORDER BY created_at DESC
+     LIMIT 100`,
+  )
+    .bind(status)
+    .all()
+  return json({
+    questions: (result.results || []).map((record) =>
+      serializeAssessmentQuestion(record, true),
+    ),
+  })
+}
+
+async function syncAssessmentQuestions(request, env) {
+  await verifyOwner(request, env)
+  requireTrustedRequestOrigin(request)
+  if (!env.SUBMISSIONS_DB) {
+    throw new RequestError(503, "Assessment storage is not configured.")
+  }
+  const body = await readBody(request)
+  if (!Array.isArray(body?.questions) || body.questions.length < 1) {
+    throw new RequestError(400, "At least one question candidate is required.")
+  }
+  if (body.questions.length > 60) {
+    throw new RequestError(400, "Sync question candidates in batches of 60 or fewer.")
+  }
+  const questions = body.questions.map(validateAssessmentQuestion)
+  const statements = questions.map((item) =>
+    env.SUBMISSIONS_DB.prepare(
+      `INSERT INTO assessment_questions
+        (id, status, bank_version, skill, cefr_level, prompt, options_json,
+         correct_index, explanation, passage, audio_text, source_id,
+         source_label, source_confidence)
+       VALUES (?, 'draft', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT(id) DO UPDATE SET
+         bank_version = excluded.bank_version,
+         skill = excluded.skill,
+         cefr_level = excluded.cefr_level,
+         prompt = excluded.prompt,
+         options_json = excluded.options_json,
+         correct_index = excluded.correct_index,
+         explanation = excluded.explanation,
+         passage = excluded.passage,
+         audio_text = excluded.audio_text,
+         source_id = excluded.source_id,
+         source_label = excluded.source_label,
+         source_confidence = excluded.source_confidence
+       WHERE assessment_questions.status IN ('draft', 'needs-review')`,
+    ).bind(
+      item.id,
+      item.bankVersion,
+      item.skill,
+      item.level,
+      item.prompt,
+      JSON.stringify(item.options),
+      item.correctIndex,
+      item.explanation,
+      item.passage,
+      item.audioText,
+      item.sourceId,
+      item.sourceLabel,
+      item.sourceConfidence,
+    ),
+  )
+  const results = await env.SUBMISSIONS_DB.batch(statements)
+  const created = results.reduce(
+    (total, result) => total + Number(result.meta?.changes || 0),
+    0,
+  )
+  return json({
+    message: "Assessment candidates synchronized for private review.",
+    created,
+    received: questions.length,
+  })
+}
+
+async function updateAssessmentQuestion(request, env, id) {
+  await verifyOwner(request, env)
+  requireTrustedRequestOrigin(request)
+  if (!env.SUBMISSIONS_DB) {
+    throw new RequestError(503, "Assessment storage is not configured.")
+  }
+  const body = await readBody(request)
+  const status = cleanText(body?.status, 30)
+  if (!ASSESSMENT_REVIEW_STATUSES.has(status)) {
+    throw new RequestError(400, "Choose a valid assessment review status.")
+  }
+  const result = await env.SUBMISSIONS_DB.prepare(
+    `UPDATE assessment_questions
+     SET status = ?, reviewed_at = datetime('now')
+     WHERE id = ?`,
+  )
+    .bind(status, id)
+    .run()
+  if (!result.meta?.changes) {
+    throw new RequestError(404, "Assessment question not found.")
+  }
+  return json({
+    message:
+      status === "approved"
+        ? "Question approved for the live assessment pool."
+        : "Assessment review saved.",
+  })
+}
+
 async function handleApi(request, env) {
   const url = new URL(request.url)
+  if (url.pathname === "/api/assessment/questions" && request.method === "GET") {
+    return listApprovedAssessmentQuestions(env)
+  }
   if (url.pathname === "/api/submissions" && request.method === "POST") {
     return createSubmission(request, env)
   }
@@ -901,6 +1147,24 @@ async function handleApi(request, env) {
   }
   if (url.pathname === "/api/admin/submissions" && request.method === "GET") {
     return listSubmissions(request, env)
+  }
+  if (
+    url.pathname === "/api/admin/assessment/questions" &&
+    request.method === "GET"
+  ) {
+    return listAssessmentQuestionsForReview(request, env)
+  }
+  if (
+    url.pathname === "/api/admin/assessment/questions/sync" &&
+    request.method === "POST"
+  ) {
+    return syncAssessmentQuestions(request, env)
+  }
+  const assessmentMatch = url.pathname.match(
+    /^\/api\/admin\/assessment\/questions\/([a-z0-9._-]+)$/i,
+  )
+  if (assessmentMatch && request.method === "PATCH") {
+    return updateAssessmentQuestion(request, env, assessmentMatch[1])
   }
   const match = url.pathname.match(/^\/api\/admin\/submissions\/([0-9a-f-]+)$/i)
   if (match && request.method === "PATCH") {

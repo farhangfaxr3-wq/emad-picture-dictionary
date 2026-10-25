@@ -10,6 +10,7 @@ import {
   isLocalOwnerPreview,
   hashAdminAccessCode,
   normalizeWord,
+  validateAssessmentQuestion,
   validateEditedSuggestion,
   validateSubmission,
   validateTurnstileResult,
@@ -34,6 +35,45 @@ test("accepts valid feedback without collecting an email", () => {
   })
   assert.equal(result.kind, "feedback")
   assert.equal(result.email, null)
+})
+
+test("accepts a complete versioned assessment question", () => {
+  const result = validateAssessmentQuestion({
+    id: "auto-vocabulary-reliable-v1",
+    bankVersion: "auto-vocabulary-v1",
+    skill: "vocabulary",
+    level: "B1",
+    prompt: "Which definition best matches reliable?",
+    options: [
+      "Able to be trusted",
+      "Easy to forget",
+      "Very expensive",
+      "Recently invented",
+    ],
+    correctIndex: 0,
+    explanation: "Reliable means able to be trusted.",
+    sourceId: "reliable",
+    sourceConfidence: "high",
+  })
+  assert.equal(result.level, "B1")
+  assert.equal(result.options.length, 4)
+})
+
+test("rejects ambiguous or incomplete assessment questions", () => {
+  assert.throws(
+    () =>
+      validateAssessmentQuestion({
+        id: "bad-question",
+        bankVersion: "v1",
+        skill: "listening",
+        level: "B2",
+        prompt: "Choose the correct answer.",
+        options: ["Same", "Same", "Third", "Fourth"],
+        correctIndex: 0,
+        explanation: "This question is not valid.",
+      }),
+    /four unique answer options|audio text/i,
+  )
 })
 
 test("accepts a bounded vocabulary suggestion", () => {

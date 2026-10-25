@@ -23,7 +23,7 @@ type ReviewQuestion = AssessmentQuestion & {
   reviewedAt?: string | null
 }
 
-const card = "rounded-2xl border border-border bg-card shadow-sm"
+const card = "rounded-2xl border border-border bg-card text-card-foreground shadow-sm"
 const SYNC_KEY = "emad-assessment-candidate-fingerprint"
 
 function fingerprint(items: AssessmentQuestion[]) {
@@ -129,7 +129,7 @@ export default function AssessmentReviewPanel({ active }: { active: boolean }) {
     <section className={`${card} mt-7 p-5 sm:p-6`}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#edf6f3] text-primary">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary">
             <Database size={21} />
           </span>
           <div>
@@ -167,7 +167,7 @@ export default function AssessmentReviewPanel({ active }: { active: boolean }) {
       </div>
 
       {message && (
-        <div className={`mt-5 flex gap-3 rounded-xl border p-4 text-xs leading-5 ${status === "error" ? "border-[#efc7c1] bg-[#fff3f1] text-[#923e34]" : "border-[#cfe4dc] bg-[#f0f8f5] text-[#376c5a]"}`}>
+        <div className={`mt-5 flex gap-3 rounded-xl border p-4 text-xs leading-5 ${status === "error" ? "border-danger/35 bg-danger/10 text-danger" : "border-primary/30 bg-secondary/70 text-secondary-foreground"}`}>
           {status === "error" ? <AlertCircle className="shrink-0" size={17} /> : <ShieldCheck className="shrink-0" size={17} />}
           <span>{message}</span>
         </div>
@@ -200,7 +200,7 @@ export default function AssessmentReviewPanel({ active }: { active: boolean }) {
               <h3 className="mt-4 font-display text-base font-bold leading-6">{record.prompt}</h3>
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
                 {record.options.map((option, index) => (
-                  <div key={`${record.id}-${index}`} className={`rounded-xl border px-3 py-2.5 text-[11px] leading-5 ${index === record.correctIndex ? "border-[#bcded2] bg-[#edf7f3] font-semibold text-[#356c59]" : "border-border bg-card text-muted-foreground"}`}>
+                  <div key={`${record.id}-${index}`} className={`rounded-xl border px-3 py-2.5 text-[11px] leading-5 ${index === record.correctIndex ? "border-primary/35 bg-secondary font-semibold text-secondary-foreground" : "border-border bg-card text-muted-foreground"}`}>
                     {String.fromCharCode(65 + index)}. {option}
                   </div>
                 ))}
@@ -214,7 +214,7 @@ export default function AssessmentReviewPanel({ active }: { active: boolean }) {
                   <button type="button" onClick={() => void review(record, "needs-review")} className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-xs font-semibold">
                     <Clock3 size={15} /> Needs review
                   </button>
-                  <button type="button" onClick={() => void review(record, "rejected")} className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-xs font-semibold text-[#923e34]">
+                  <button type="button" onClick={() => void review(record, "rejected")} className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-xs font-semibold text-danger hover:border-danger/40 hover:bg-danger/10">
                     <XCircle size={15} /> Reject
                   </button>
                 </div>

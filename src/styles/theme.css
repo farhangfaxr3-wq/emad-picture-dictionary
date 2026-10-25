@@ -11,6 +11,7 @@
   --muted-foreground: #687975;
   --accent: #efab61;
   --accent-foreground: #583916;
+  --danger: #923e34;
   --border: #e8eeeb;
   --input: #e8eeeb;
   --ring: #16796c;
@@ -30,6 +31,7 @@
   --border: #344b44;
   --input: #344b44;
   --ring: #63c7b3;
+  --danger: #ffaaa0;
 }
 @theme inline {
   --color-background: var(--background);
@@ -44,6 +46,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-danger: var(--danger);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

@@ -2042,7 +2042,7 @@ function HomePage() {
       <HomeSearch />
       <Link
         to="/assessment"
-        className="group flex flex-col gap-5 overflow-hidden rounded-[20px] border border-[#d5e7e1] bg-[#f0f8f5] p-5 transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:p-6"
+        className="group flex flex-col gap-5 overflow-hidden rounded-[20px] border border-border bg-secondary/70 p-5 text-foreground transition hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:p-6"
       >
         <div className="flex min-w-0 items-center gap-4">
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
@@ -2060,7 +2060,7 @@ function HomePage() {
             </p>
           </div>
         </div>
-        <span className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-card px-4 py-3 text-xs font-semibold text-primary shadow-sm group-hover:bg-primary group-hover:text-primary-foreground">
+        <span className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-xs font-semibold text-primary shadow-sm group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
           Start assessment <ArrowRight size={15} />
         </span>
       </Link>

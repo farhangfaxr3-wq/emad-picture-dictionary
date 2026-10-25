@@ -33,14 +33,14 @@ import {
 } from "./assessment"
 
 const HISTORY_KEY = "emad-level-assessment-history"
-const card = "rounded-[22px] border border-border bg-card shadow-sm"
+const card = "rounded-[22px] border border-border bg-card text-card-foreground shadow-sm"
 const levelColors: Record<CEFRLevel, string> = {
-  A1: "bg-[#e7f3ed] text-[#306b54]",
-  A2: "bg-[#edf4df] text-[#5b7438]",
-  B1: "bg-[#fff2d9] text-[#8a6229]",
-  B2: "bg-[#f9e8dc] text-[#965e3a]",
-  C1: "bg-[#eee8f7] text-[#665184]",
-  C2: "bg-[#e7edf8] text-[#405d8f]",
+  A1: "border border-primary/20 bg-secondary text-secondary-foreground",
+  A2: "border border-primary/20 bg-secondary text-secondary-foreground",
+  B1: "border border-accent/30 bg-accent/20 text-foreground",
+  B2: "border border-accent/30 bg-accent/20 text-foreground",
+  C1: "border border-primary/25 bg-muted text-foreground",
+  C2: "border border-primary/25 bg-muted text-foreground",
 }
 
 function readHistory(): AssessmentResult[] {
@@ -311,8 +311,8 @@ function AssessmentQuestionView({
       </div>
 
       {item.skill === "listening" && (
-        <div className="mt-6 rounded-2xl border border-[#d6e7e2] bg-[#eef7f4] p-5">
-          <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-[#407666]">
+        <div className="mt-6 rounded-2xl border border-border bg-secondary/70 p-5 text-secondary-foreground">
+          <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-primary">
             Listen before answering
           </p>
           <button
@@ -326,11 +326,11 @@ function AssessmentQuestionView({
           </button>
           <div aria-live="polite">
             {audioState === "error" ? (
-              <p className="mt-3 rounded-lg bg-[#fff2dd] px-3 py-2 text-[10px] leading-5 text-[#8a6229]">
+              <p className="mt-3 rounded-lg border border-accent/30 bg-accent/15 px-3 py-2 text-[10px] leading-5 text-foreground">
                 Audio could not play. Check your device volume, then try again or use another browser.
               </p>
             ) : (
-              <p className="mt-3 text-[10px] leading-5 text-[#64847a]">
+              <p className="mt-3 text-[10px] leading-5 text-muted-foreground">
                 You may replay the recording. The transcript is intentionally hidden during the assessment.
               </p>
             )}
@@ -339,8 +339,8 @@ function AssessmentQuestionView({
       )}
 
       {item.passage && (
-        <div className="mt-6 rounded-2xl border border-[#eee0c8] bg-[#fdf8ef] p-5 text-sm leading-7 text-[#675842]">
-          <p className="mb-2 text-[9px] font-bold uppercase tracking-[.16em] text-[#9b7845]">Reading passage</p>
+        <div className="mt-6 rounded-2xl border border-border bg-muted/70 p-5 text-sm leading-7 text-foreground">
+          <p className="mb-2 text-[9px] font-bold uppercase tracking-[.16em] text-primary">Reading passage</p>
           {item.passage}
         </div>
       )}
@@ -359,7 +359,7 @@ function AssessmentQuestionView({
               aria-pressed={active}
               className={`flex min-h-14 items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm transition sm:px-5 ${
                 active
-                  ? "border-primary bg-[#edf6f3] text-foreground shadow-sm"
+                  ? "border-primary bg-secondary text-foreground shadow-sm"
                   : "border-border bg-background hover:border-primary/40 hover:bg-secondary/40"
               }`}
             >
@@ -441,13 +441,13 @@ function ResultScreen({
           ))}
         </div>
         <div className="mt-7 grid gap-4 border-t border-border pt-6 sm:grid-cols-2">
-          <div className="rounded-2xl bg-[#edf6f3] p-5">
+          <div className="rounded-2xl border border-border bg-secondary/70 p-5">
             <p className="text-[10px] font-semibold uppercase tracking-[.12em] text-primary">Your strength</p>
             <p className="mt-2 text-sm font-semibold">{assessmentSkillLabels[strongest[0]]}</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">This was your strongest assessed skill at {strongest[1].percent}%.</p>
           </div>
-          <div className="rounded-2xl bg-[#fdf6e9] p-5">
-            <p className="text-[10px] font-semibold uppercase tracking-[.12em] text-[#9b7040]">Next focus</p>
+          <div className="rounded-2xl border border-border bg-muted/70 p-5">
+            <p className="text-[10px] font-semibold uppercase tracking-[.12em] text-primary">Next focus</p>
             <p className="mt-2 text-sm font-semibold">{assessmentSkillLabels[focus[0]]}</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">Regular practice here will give you the clearest next improvement.</p>
           </div>
@@ -494,7 +494,7 @@ function ResultScreen({
         </section>
       </div>
 
-      <section className="rounded-2xl border border-[#e8dfce] bg-[#fdf9f1] p-5 text-[11px] leading-6 text-[#746651]">
+      <section className="rounded-2xl border border-border bg-card p-5 text-[11px] leading-6 text-muted-foreground">
         <strong>How the estimate works:</strong> correct answers receive more weight at higher CEFR difficulties. The estimate is capped to one band above the highest level where at least half of the sampled questions were answered correctly. Bank version {result.bankVersion} preserves the meaning of this result over time. This is not an official CEFR certificate and does not assess speaking or writing.
       </section>
     </div>
@@ -651,7 +651,7 @@ export default function AssessmentPage() {
       {confirmSubmit && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#132f2b]/55 p-3 sm:items-center" role="dialog" aria-modal="true" aria-labelledby="submit-title">
           <section className="w-full max-w-md rounded-[22px] bg-card p-6 shadow-2xl sm:p-7">
-            <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${unanswered ? "bg-[#fff2dd] text-[#a16e2d]" : "bg-secondary text-primary"}`}>
+            <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${unanswered ? "bg-accent/20 text-foreground" : "bg-secondary text-primary"}`}>
               {unanswered ? <CircleAlert size={23} /> : <Check size={23} />}
             </span>
             <h2 id="submit-title" className="mt-5 font-display text-xl font-bold">Submit your assessment?</h2>

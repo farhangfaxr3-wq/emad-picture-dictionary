@@ -222,28 +222,82 @@ function AssessmentQuestionView({
   selected: number | undefined
   onSelect: (index: number) => void
 }) {
-  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [audioState, setAudioState] = useState<"idle" | "loading" | "playing" | "error">("idle")
+  const audio = useRef<HTMLAudioElement | null>(null)
   const utterance = useRef<SpeechSynthesisUtterance | null>(null)
 
   useEffect(
     () => () => {
+      if (audio.current) {
+        audio.current.pause()
+        audio.current.src = ""
+        audio.current = null
+      }
       if ("speechSynthesis" in window) window.speechSynthesis.cancel()
     },
     [item.id],
   )
 
-  const play = () => {
-    if (!("speechSynthesis" in window) || !item.audioText) return
-    window.speechSynthesis.cancel()
+  const playSpeechFallback = () => {
+    if (!("speechSynthesis" in window) || !item.audioText) {
+      setAudioState("error")
+      return
+    }
+    const synthesis = window.speechSynthesis
+    synthesis.cancel()
     const next = new SpeechSynthesisUtterance(item.audioText)
     next.lang = "en-GB"
     next.rate = 0.88
-    next.onend = () => setIsSpeaking(false)
-    next.onerror = () => setIsSpeaking(false)
+    next.volume = 1
+    const voices = synthesis.getVoices()
+    next.voice =
+      voices.find((voice) => voice.lang.toLowerCase() === "en-gb") ||
+      voices.find((voice) => voice.lang.toLowerCase().startsWith("en")) ||
+      null
+    next.onstart = () => setAudioState("playing")
+    next.onend = () => setAudioState("idle")
+    next.onerror = () => setAudioState("error")
     utterance.current = next
-    setIsSpeaking(true)
-    window.speechSynthesis.speak(next)
+    setAudioState("loading")
+    synthesis.speak(next)
+    window.setTimeout(() => synthesis.resume(), 80)
   }
+
+  const play = async () => {
+    if (audio.current) {
+      audio.current.pause()
+      audio.current.currentTime = 0
+    }
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel()
+
+    if (!item.audioSrc) {
+      playSpeechFallback()
+      return
+    }
+
+    setAudioState("loading")
+    const next = new Audio(item.audioSrc)
+    next.preload = "auto"
+    next.volume = 1
+    audio.current = next
+    let usedFallback = false
+    const fallback = () => {
+      if (usedFallback) return
+      usedFallback = true
+      audio.current = null
+      playSpeechFallback()
+    }
+    next.onplaying = () => setAudioState("playing")
+    next.onended = () => setAudioState("idle")
+    next.onerror = fallback
+    try {
+      await next.play()
+    } catch {
+      fallback()
+    }
+  }
+
+  const audioBusy = audioState === "loading" || audioState === "playing"
 
   return (
     <>
@@ -263,16 +317,24 @@ function AssessmentQuestionView({
           </p>
           <button
             type="button"
-            onClick={play}
-            disabled={isSpeaking || !("speechSynthesis" in window)}
+            onClick={() => void play()}
+            disabled={audioBusy}
             className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {isSpeaking ? <Volume2 className="animate-pulse" size={18} /> : <Headphones size={18} />}
-            {isSpeaking ? "Playing audio…" : "Play audio"}
+            {audioBusy ? <Volume2 className="animate-pulse" size={18} /> : <Headphones size={18} />}
+            {audioState === "loading" ? "Loading audio…" : audioState === "playing" ? "Playing audio…" : "Play audio"}
           </button>
-          <p className="mt-3 text-[10px] leading-5 text-[#64847a]">
-            You may replay the recording. The transcript is intentionally hidden during the assessment.
-          </p>
+          <div aria-live="polite">
+            {audioState === "error" ? (
+              <p className="mt-3 rounded-lg bg-[#fff2dd] px-3 py-2 text-[10px] leading-5 text-[#8a6229]">
+                Audio could not play. Check your device volume, then try again or use another browser.
+              </p>
+            ) : (
+              <p className="mt-3 text-[10px] leading-5 text-[#64847a]">
+                You may replay the recording. The transcript is intentionally hidden during the assessment.
+              </p>
+            )}
+          </div>
         </div>
       )}
 

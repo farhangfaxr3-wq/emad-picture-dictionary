@@ -18,6 +18,7 @@ export interface AssessmentQuestion {
   explanation: string
   passage?: string
   audioText?: string
+  audioSrc?: string
   sourceId?: string
   sourceLabel?: string
   sourceConfidence?: "low" | "medium" | "high"
@@ -49,7 +50,7 @@ const question = (
   options: string[],
   correctIndex: number,
   explanation: string,
-  extra: Pick<AssessmentQuestion, "passage" | "audioText"> = {},
+  extra: Pick<AssessmentQuestion, "passage" | "audioText" | "audioSrc"> = {},
 ): AssessmentQuestion => ({
   id,
   bankVersion: ASSESSMENT_BANK_VERSION,
@@ -386,7 +387,10 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     ["Under the chair", "On the teacher's desk", "Inside the bag", "Beside the window"],
     1,
     "The recording says the blue notebook is on the teacher's desk.",
-    { audioText: "The blue notebook is on the teacher's desk." },
+    {
+      audioText: "The blue notebook is on the teacher's desk.",
+      audioSrc: "/audio/assessment/l-a1-notebook.wav",
+    },
   ),
   question(
     "l-a2-train",
@@ -399,6 +403,7 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     {
       audioText:
         "Maya planned to take the nine o'clock train, but a delay means it will now leave at half past nine.",
+      audioSrc: "/audio/assessment/l-a2-train.wav",
     },
   ),
   question(
@@ -417,6 +422,7 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     {
       audioText:
         "Please submit your written assignment by Thursday afternoon. We will begin the short presentations next Monday.",
+      audioSrc: "/audio/assessment/l-b1-assignment.wav",
     },
   ),
   question(
@@ -435,6 +441,7 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     {
       audioText:
         "Although the workshop has been postponed until next Wednesday, participants will receive the online materials this Friday so they can prepare in advance.",
+      audioSrc: "/audio/assessment/l-b2-workshop.wav",
     },
   ),
   question(
@@ -453,6 +460,7 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     {
       audioText:
         "The committee did not reject the proposal outright. Instead, it commissioned an independent review to determine whether the projected long-term savings justified the substantial initial cost.",
+      audioSrc: "/audio/assessment/l-c1-committee.wav",
     },
   ),
 ]

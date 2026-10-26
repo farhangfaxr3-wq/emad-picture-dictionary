@@ -2,9 +2,9 @@ import assert from "node:assert/strict"
 import fs from "node:fs"
 import { createServer } from "vite"
 
-const EXPECTED_TOTAL_WORDS = 2123
-const EXPECTED_BATCHES = 8
-const EXPECTED_BATCH_SIZE = 100
+const EXPECTED_TOTAL_WORDS = 4000
+const EXPECTED_BATCHES = 27
+const EXPECTED_BATCH_WORDS = 2677
 const EXPECTED_TOPICS = 19
 const REQUIRED_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
 
@@ -50,15 +50,16 @@ try {
   const batchWords = vocabulary.filter((word) => word.id.startsWith("batch-"))
   assert.equal(
     batchWords.length,
-    EXPECTED_BATCHES * EXPECTED_BATCH_SIZE,
+    EXPECTED_BATCH_WORDS,
     "The merged catalogue must contain every controlled batch word",
   )
 
-  for (const batch of vocabularyBatches) {
+  for (const [index, batch] of vocabularyBatches.entries()) {
+    const expectedSize = index === vocabularyBatches.length - 1 ? 77 : 100
     assert.equal(
       batch.addedWords,
-      EXPECTED_BATCH_SIZE,
-      `${batch.id} must contain 100 words`,
+      expectedSize,
+      `${batch.id} must contain ${expectedSize} words`,
     )
     assert.equal(batch.audit.valid, true, `${batch.id} audit must pass`)
     assert.deepEqual(

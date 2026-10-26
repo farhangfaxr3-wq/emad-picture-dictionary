@@ -11,6 +11,26 @@ import { batch005, batch005Metadata } from "./vocabularyBatches/batch005"
 import { batch006, batch006Metadata } from "./vocabularyBatches/batch006"
 import { batch007, batch007Metadata } from "./vocabularyBatches/batch007"
 import { batch008, batch008Metadata } from "./vocabularyBatches/batch008"
+import { batch009, batch009Metadata } from "./vocabularyBatches/batch009"
+import { batch010, batch010Metadata } from "./vocabularyBatches/batch010"
+import { batch011, batch011Metadata } from "./vocabularyBatches/batch011"
+import { batch012, batch012Metadata } from "./vocabularyBatches/batch012"
+import { batch013, batch013Metadata } from "./vocabularyBatches/batch013"
+import { batch014, batch014Metadata } from "./vocabularyBatches/batch014"
+import { batch015, batch015Metadata } from "./vocabularyBatches/batch015"
+import { batch016, batch016Metadata } from "./vocabularyBatches/batch016"
+import { batch017, batch017Metadata } from "./vocabularyBatches/batch017"
+import { batch018, batch018Metadata } from "./vocabularyBatches/batch018"
+import { batch019, batch019Metadata } from "./vocabularyBatches/batch019"
+import { batch020, batch020Metadata } from "./vocabularyBatches/batch020"
+import { batch021, batch021Metadata } from "./vocabularyBatches/batch021"
+import { batch022, batch022Metadata } from "./vocabularyBatches/batch022"
+import { batch023, batch023Metadata } from "./vocabularyBatches/batch023"
+import { batch024, batch024Metadata } from "./vocabularyBatches/batch024"
+import { batch025, batch025Metadata } from "./vocabularyBatches/batch025"
+import { batch026, batch026Metadata } from "./vocabularyBatches/batch026"
+import { batch027, batch027Metadata } from "./vocabularyBatches/batch027"
+
 
 export interface VocabularyValidationIssue {
   severity: "error" | "warning"
@@ -205,6 +225,26 @@ const batchDefinitions = [
   { words: batch006, metadata: batch006Metadata },
   { words: batch007, metadata: batch007Metadata },
   { words: batch008, metadata: batch008Metadata },
+  { words: batch009, metadata: batch009Metadata },
+  { words: batch010, metadata: batch010Metadata },
+  { words: batch011, metadata: batch011Metadata },
+  { words: batch012, metadata: batch012Metadata },
+  { words: batch013, metadata: batch013Metadata },
+  { words: batch014, metadata: batch014Metadata },
+  { words: batch015, metadata: batch015Metadata },
+  { words: batch016, metadata: batch016Metadata },
+  { words: batch017, metadata: batch017Metadata },
+  { words: batch018, metadata: batch018Metadata },
+  { words: batch019, metadata: batch019Metadata },
+  { words: batch020, metadata: batch020Metadata },
+  { words: batch021, metadata: batch021Metadata },
+  { words: batch022, metadata: batch022Metadata },
+  { words: batch023, metadata: batch023Metadata },
+  { words: batch024, metadata: batch024Metadata },
+  { words: batch025, metadata: batch025Metadata },
+  { words: batch026, metadata: batch026Metadata },
+  { words: batch027, metadata: batch027Metadata },
+
 ]
 const stagedBatchWords: Word[] = []
 export const vocabularyBatches = batchDefinitions.map(({ words, metadata }) => {
@@ -223,6 +263,26 @@ export const batch005Audit = vocabularyBatches[4].audit
 export const batch006Audit = vocabularyBatches[5].audit
 export const batch007Audit = vocabularyBatches[6].audit
 export const batch008Audit = vocabularyBatches[7].audit
+export const batch009Audit = vocabularyBatches[8].audit
+export const batch010Audit = vocabularyBatches[9].audit
+export const batch011Audit = vocabularyBatches[10].audit
+export const batch012Audit = vocabularyBatches[11].audit
+export const batch013Audit = vocabularyBatches[12].audit
+export const batch014Audit = vocabularyBatches[13].audit
+export const batch015Audit = vocabularyBatches[14].audit
+export const batch016Audit = vocabularyBatches[15].audit
+export const batch017Audit = vocabularyBatches[16].audit
+export const batch018Audit = vocabularyBatches[17].audit
+export const batch019Audit = vocabularyBatches[18].audit
+export const batch020Audit = vocabularyBatches[19].audit
+export const batch021Audit = vocabularyBatches[20].audit
+export const batch022Audit = vocabularyBatches[21].audit
+export const batch023Audit = vocabularyBatches[22].audit
+export const batch024Audit = vocabularyBatches[23].audit
+export const batch025Audit = vocabularyBatches[24].audit
+export const batch026Audit = vocabularyBatches[25].audit
+export const batch027Audit = vocabularyBatches[26].audit
+
 
 const failedBatchAudits = vocabularyBatches
   .map((batch) => batch.audit)

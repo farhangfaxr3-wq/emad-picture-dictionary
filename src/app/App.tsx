@@ -48,6 +48,7 @@ import {
   Mail,
   Menu,
   MessageSquare,
+  MessageCircleMore,
   Pause,
   PictureInPicture2,
   Play,
@@ -103,6 +104,7 @@ const CategoryCourse = lazy(() => import("./CategoryCourse"))
 const FeedbackPage = lazy(() => import("./FeedbackPage"))
 const SubmissionReviewPage = lazy(() => import("./SubmissionReviewPage"))
 const AssessmentPage = lazy(() => import("./AssessmentPage"))
+const EnglishChatPage = lazy(() => import("./EnglishChatPage"))
 
 const wordById = new Map(vocabulary.map((word) => [word.id, word]))
 for (const scene of scenes) {
@@ -1129,6 +1131,7 @@ const navigation: {
   { path: "/topics", label: "Topics", icon: Grid2X2 },
   { path: "/practice", label: "Practice", icon: AudioLines },
   { path: "/assessment", label: "Level Test", icon: GraduationCap },
+  { path: "/chat", label: "English Chat", icon: MessageCircleMore },
   { path: "/progress", label: "My Progress", icon: TrendingUp },
   { path: "/favorites", label: "Favorites", icon: Heart },
   { path: "/feedback", label: "Feedback & Ideas", icon: MessageSquare },
@@ -6420,8 +6423,8 @@ function SettingsPage() {
                   : `${vocabularyAudit.issues.length} review notes`}
               </p>
               <p className="mt-2 text-xs text-muted-foreground">
-                Expansion progress: {vocabularyAudit.totalWords.toLocaleString()} /{" "}
-                8,000 words · {vocabularyBatches.length} controlled batches
+                Vocabulary milestone: {vocabularyAudit.totalWords.toLocaleString()} words ·{" "}
+                {vocabularyBatches.length} controlled batches
               </p>
               <div
                 className="mt-3 flex flex-wrap gap-2"
@@ -6734,6 +6737,7 @@ const router = createBrowserRouter([
       { path: "topics/:topic", Component: TopicDetail },
       { path: "practice", Component: PracticeRoute },
       { path: "assessment", Component: AssessmentPage },
+      { path: "chat", Component: EnglishChatPage },
       { path: "progress", Component: ProgressPage },
       { path: "favorites", Component: FavoritesPage },
       { path: "feedback", Component: FeedbackPage },

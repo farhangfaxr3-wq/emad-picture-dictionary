@@ -1,3 +1,10 @@
+import {
+  generateAuthenticationOptions,
+  generateRegistrationOptions,
+  verifyAuthenticationResponse,
+  verifyRegistrationResponse,
+} from "@simplewebauthn/server"
+
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
   "cache-control": "no-store",
@@ -12,6 +19,11 @@ const ADMIN_SESSION_COOKIE = "__Host-emad_admin"
 const ADMIN_SESSION_SECONDS = 8 * 60 * 60
 const ADMIN_PASSWORD_ITERATIONS = 210_000
 const ADMIN_SETUP_PROOF_HEADER = "x-emad-admin-setup-proof"
+const CHAT_SESSION_COOKIE = "__Host-emad_chat"
+const CHAT_CHALLENGE_COOKIE = "__Host-emad_chat_challenge"
+const CHAT_SESSION_SECONDS = 14 * 24 * 60 * 60
+const CHAT_CHALLENGE_SECONDS = 5 * 60
+const CHAT_MESSAGE_RETENTION_DAYS = 7
 const DUMMY_ADMIN_ACCESS_CODE_HASH =
   "u4aGqZxB3wJGvCPk6EKBGfZxK1ZfJw7uRk2vK7gMx5M"
 const DUMMY_ADMIN_CREDENTIAL = {
@@ -297,7 +309,7 @@ export function validateEditedSuggestion(payload) {
   return { edited, normalizedWord }
 }
 
-async function readBody(request) {
+async function readBody(request, maxLength = 24_000) {
   if (
     !request.headers
       .get("content-type")
@@ -307,10 +319,10 @@ async function readBody(request) {
     throw new RequestError(415, "The submission must use JSON.")
   }
   const length = Number(request.headers.get("content-length") || 0)
-  if (length > 24_000)
+  if (length > maxLength)
     throw new RequestError(413, "The submission is too large.")
   const text = await request.text()
-  if (text.length > 24_000)
+  if (text.length > maxLength)
     throw new RequestError(413, "The submission is too large.")
   try {
     return JSON.parse(text)
@@ -1131,8 +1143,646 @@ async function updateAssessmentQuestion(request, env, id) {
   })
 }
 
+function requireChatDatabase(env) {
+  if (!env.SUBMISSIONS_DB) {
+    throw new RequestError(503, "English Chat storage is not configured yet.")
+  }
+}
+
+function chatCookieNames(request) {
+  const hostname = new URL(request.url).hostname.toLowerCase()
+  const local = hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1"
+  return {
+    challenge: local ? "emad_chat_challenge_local" : CHAT_CHALLENGE_COOKIE,
+    session: local ? "emad_chat_local" : CHAT_SESSION_COOKIE,
+    secure: !local,
+  }
+}
+
+function chatCookie(request, name, value, maxAge) {
+  const { secure } = chatCookieNames(request)
+  return `${name}=${value}; Max-Age=${maxAge}; Path=/; HttpOnly; ${secure ? "Secure; " : ""}SameSite=Strict`
+}
+
+function webAuthnConfiguration(request) {
+  const url = new URL(request.url)
+  return {
+    rpID: url.hostname,
+    expectedOrigin: url.origin,
+  }
+}
+
+export function validateDisplayName(value) {
+  const displayName = cleanText(value, 24).replace(/\s+/g, " ")
+  const key = displayName.toLowerCase()
+  if (!/^[a-z0-9][a-z0-9 ._-]{2,23}$/i.test(displayName)) {
+    throw new RequestError(
+      400,
+      "Use 3–24 English letters, numbers, spaces, dots, hyphens, or underscores.",
+    )
+  }
+  if (
+    /(?:@|https?:|www\.|\d{7,})/i.test(displayName) ||
+    /\b(?:admin|administrator|moderator|support|soran university|emad team)\b/i.test(
+      displayName,
+    )
+  ) {
+    throw new RequestError(400, "Choose a safe display name without contact details or reserved words.")
+  }
+  return { displayName, key }
+}
+
+export function validateChatMessage(value) {
+  const body = cleanText(value, 301).replace(/\s+/g, " ")
+  if (body.length < 1 || body.length > 300) {
+    throw new RequestError(400, "Messages must contain 1–300 characters.")
+  }
+  if (
+    /(?:https?:\/\/|www\.|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b|(?:\+?\d[\d ()-]{6,}\d)|@[a-z0-9_]{2,})/i.test(
+      body,
+    )
+  ) {
+    throw new RequestError(400, "For privacy, do not share links, emails, phone numbers, or social handles.")
+  }
+  if (/\b(?:fuck|shit|bitch|idiot|stupid|hate you|kill yourself)\b/i.test(body)) {
+    throw new RequestError(400, "Please rewrite the message using respectful language.")
+  }
+  const letters = [...body].filter((character) => /\p{L}/u.test(character))
+  const latinLetters = letters.filter((character) => /\p{Script=Latin}/u.test(character))
+  if (!latinLetters.length || latinLetters.length / Math.max(1, letters.length) < 0.85) {
+    throw new RequestError(400, "English Practice Room accepts English messages only.")
+  }
+  return body
+}
+
+async function sha256(value) {
+  const bytes = value instanceof Uint8Array ? value : new TextEncoder().encode(value)
+  const digest = await crypto.subtle.digest("SHA-256", bytes)
+  return Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("")
+}
+
+function randomToken(byteLength = 32) {
+  return encodeBase64Url(crypto.getRandomValues(new Uint8Array(byteLength)))
+}
+
+async function applyChatEdgeLimit(request, env, scope) {
+  if (!env.SUBMISSION_RATE_LIMITER) {
+    throw new RequestError(503, "English Chat rate limiting is not configured yet.")
+  }
+  const identifier = await requesterIdentifier(request, env)
+  const result = await env.SUBMISSION_RATE_LIMITER.limit({
+    key: `chat:${scope}:${identifier}`,
+  })
+  if (!result.success) {
+    throw new RequestError(429, "Too many chat requests. Please wait and try again.")
+  }
+}
+
+async function cleanupChatData(env) {
+  if (!env.SUBMISSIONS_DB) return
+  await env.SUBMISSIONS_DB.batch([
+    env.SUBMISSIONS_DB.prepare(
+      `DELETE FROM chat_messages WHERE created_at < datetime('now', '-${CHAT_MESSAGE_RETENTION_DAYS} days')`,
+    ),
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_challenges WHERE expires_at <= datetime('now')"),
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_sessions WHERE expires_at <= datetime('now')"),
+    env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_accounts SET status = 'active', restricted_until = NULL, updated_at = datetime('now') WHERE status = 'restricted' AND restricted_until IS NOT NULL AND restricted_until <= datetime('now')",
+    ),
+  ])
+}
+
+async function createChatSession(accountId, request, env) {
+  const token = randomToken()
+  const tokenHash = await sha256(token)
+  await env.SUBMISSIONS_DB.prepare(
+    `INSERT INTO chat_sessions (token_hash, account_id, expires_at)
+     VALUES (?, ?, datetime('now', '+14 days'))`,
+  )
+    .bind(tokenHash, accountId)
+    .run()
+  const { session } = chatCookieNames(request)
+  return {
+    token,
+    header: chatCookie(request, session, token, CHAT_SESSION_SECONDS),
+  }
+}
+
+async function getChatSession(request, env, required = true) {
+  requireChatDatabase(env)
+  const { session } = chatCookieNames(request)
+  const token = readCookie(request, session)
+  if (!token) {
+    if (required) throw new RequestError(401, "Sign in with your passkey to use English Chat.")
+    return null
+  }
+  const tokenHash = await sha256(token)
+  const account = await env.SUBMISSIONS_DB.prepare(
+    `SELECT a.id, a.display_name, a.status, a.restricted_until
+     FROM chat_sessions s
+     JOIN chat_accounts a ON a.id = s.account_id
+     WHERE s.token_hash = ? AND s.expires_at > datetime('now')
+     LIMIT 1`,
+  )
+    .bind(tokenHash)
+    .first()
+  if (!account) {
+    if (required) throw new RequestError(401, "Your English Chat session expired. Sign in again.")
+    return null
+  }
+  if (
+    account.status === "restricted" &&
+    account.restricted_until &&
+    account.restricted_until <= new Date().toISOString().replace("T", " ").slice(0, 19)
+  ) {
+    await env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_accounts SET status = 'active', restricted_until = NULL, updated_at = datetime('now') WHERE id = ?",
+    )
+      .bind(account.id)
+      .run()
+    account.status = "active"
+    account.restricted_until = null
+  }
+  return { ...account, tokenHash }
+}
+
+async function beginChatRegistration(request, env) {
+  requireChatDatabase(env)
+  requireTrustedRequestOrigin(request)
+  await applyChatEdgeLimit(request, env, "register")
+  const body = await readBody(request)
+  const { displayName, key } = validateDisplayName(body?.displayName)
+  const existing = await env.SUBMISSIONS_DB.prepare(
+    "SELECT id FROM chat_accounts WHERE display_name_key = ? LIMIT 1",
+  )
+    .bind(key)
+    .first()
+  if (existing) throw new RequestError(409, "That display name is already in use.")
+  const accountId = crypto.randomUUID()
+  const challengeId = crypto.randomUUID()
+  const { rpID } = webAuthnConfiguration(request)
+  const options = await generateRegistrationOptions({
+    rpName: "Emad WordLink English Chat",
+    rpID,
+    userID: new TextEncoder().encode(accountId),
+    userName: displayName,
+    userDisplayName: displayName,
+    timeout: CHAT_CHALLENGE_SECONDS * 1000,
+    attestationType: "none",
+    authenticatorSelection: {
+      residentKey: "preferred",
+      userVerification: "required",
+    },
+  })
+  await env.SUBMISSIONS_DB.prepare(
+    `INSERT INTO chat_challenges
+      (id, purpose, account_id, display_name, challenge, expires_at)
+     VALUES (?, 'register', ?, ?, ?, datetime('now', '+5 minutes'))`,
+  )
+    .bind(challengeId, accountId, displayName, options.challenge)
+    .run()
+  const { challenge } = chatCookieNames(request)
+  return json({ options }, 200, {
+    "set-cookie": chatCookie(request, challenge, challengeId, CHAT_CHALLENGE_SECONDS),
+  })
+}
+
+async function finishChatRegistration(request, env) {
+  requireChatDatabase(env)
+  requireTrustedRequestOrigin(request)
+  const body = await readBody(request, 80_000)
+  const { challenge } = chatCookieNames(request)
+  const challengeId = readCookie(request, challenge)
+  if (!challengeId) throw new RequestError(400, "Passkey registration expired. Start again.")
+  const pending = await env.SUBMISSIONS_DB.prepare(
+    `SELECT id, account_id, display_name, challenge
+     FROM chat_challenges
+     WHERE id = ? AND purpose = 'register' AND expires_at > datetime('now')`,
+  )
+    .bind(challengeId)
+    .first()
+  if (!pending) throw new RequestError(400, "Passkey registration expired. Start again.")
+  const { displayName, key } = validateDisplayName(pending.display_name)
+  const { rpID, expectedOrigin } = webAuthnConfiguration(request)
+  let verification
+  try {
+    verification = await verifyRegistrationResponse({
+      response: body?.response,
+      expectedChallenge: pending.challenge,
+      expectedOrigin,
+      expectedRPID: rpID,
+      requireUserVerification: true,
+    })
+  } catch {
+    throw new RequestError(400, "The passkey could not be verified. Please try again.")
+  }
+  if (!verification.verified || !verification.registrationInfo) {
+    throw new RequestError(400, "The passkey could not be verified. Please try again.")
+  }
+  const info = verification.registrationInfo
+  const credential = info.credential
+  const exists = await env.SUBMISSIONS_DB.prepare(
+    "SELECT id FROM chat_accounts WHERE display_name_key = ? LIMIT 1",
+  )
+    .bind(key)
+    .first()
+  if (exists) throw new RequestError(409, "That display name is already in use.")
+  await env.SUBMISSIONS_DB.batch([
+    env.SUBMISSIONS_DB.prepare(
+      "INSERT INTO chat_accounts (id, display_name, display_name_key) VALUES (?, ?, ?)",
+    ).bind(pending.account_id, displayName, key),
+    env.SUBMISSIONS_DB.prepare(
+      `INSERT INTO chat_credentials
+        (credential_id, account_id, public_key, counter, transports_json, device_type, backed_up)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    ).bind(
+      credential.id,
+      pending.account_id,
+      encodeBase64Url(credential.publicKey),
+      credential.counter,
+      JSON.stringify(credential.transports || body?.response?.response?.transports || []),
+      info.credentialDeviceType,
+      info.credentialBackedUp ? 1 : 0,
+    ),
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_challenges WHERE id = ?").bind(challengeId),
+  ])
+  const session = await createChatSession(pending.account_id, request, env)
+  return json(
+    { account: { id: pending.account_id, displayName, status: "active" } },
+    201,
+    { "set-cookie": session.header },
+  )
+}
+
+async function beginChatLogin(request, env) {
+  requireChatDatabase(env)
+  requireTrustedRequestOrigin(request)
+  await applyChatEdgeLimit(request, env, "login")
+  const body = await readBody(request)
+  const { key } = validateDisplayName(body?.displayName)
+  const account = await env.SUBMISSIONS_DB.prepare(
+    "SELECT id, display_name FROM chat_accounts WHERE display_name_key = ? LIMIT 1",
+  )
+    .bind(key)
+    .first()
+  if (!account) throw new RequestError(404, "No passkey account matches that display name.")
+  const result = await env.SUBMISSIONS_DB.prepare(
+    "SELECT credential_id, transports_json FROM chat_credentials WHERE account_id = ?",
+  )
+    .bind(account.id)
+    .all()
+  const allowCredentials = (result.results || []).map((record) => ({
+    id: record.credential_id,
+    transports: JSON.parse(record.transports_json || "[]"),
+  }))
+  if (!allowCredentials.length) throw new RequestError(409, "This account has no usable passkey.")
+  const challengeId = crypto.randomUUID()
+  const { rpID } = webAuthnConfiguration(request)
+  const options = await generateAuthenticationOptions({
+    rpID,
+    allowCredentials,
+    timeout: CHAT_CHALLENGE_SECONDS * 1000,
+    userVerification: "required",
+  })
+  await env.SUBMISSIONS_DB.prepare(
+    `INSERT INTO chat_challenges
+      (id, purpose, account_id, display_name, challenge, expires_at)
+     VALUES (?, 'login', ?, ?, ?, datetime('now', '+5 minutes'))`,
+  )
+    .bind(challengeId, account.id, account.display_name, options.challenge)
+    .run()
+  const { challenge } = chatCookieNames(request)
+  return json({ options }, 200, {
+    "set-cookie": chatCookie(request, challenge, challengeId, CHAT_CHALLENGE_SECONDS),
+  })
+}
+
+async function finishChatLogin(request, env) {
+  requireChatDatabase(env)
+  requireTrustedRequestOrigin(request)
+  const body = await readBody(request, 80_000)
+  const { challenge } = chatCookieNames(request)
+  const challengeId = readCookie(request, challenge)
+  if (!challengeId) throw new RequestError(400, "Passkey sign-in expired. Start again.")
+  const pending = await env.SUBMISSIONS_DB.prepare(
+    `SELECT c.id, c.account_id, c.display_name, c.challenge,
+      a.status, a.restricted_until
+     FROM chat_challenges c
+     JOIN chat_accounts a ON a.id = c.account_id
+     WHERE c.id = ? AND c.purpose = 'login' AND c.expires_at > datetime('now')`,
+  )
+    .bind(challengeId)
+    .first()
+  if (!pending) throw new RequestError(400, "Passkey sign-in expired. Start again.")
+  const credentialId = cleanText(body?.response?.id, 1500)
+  const record = await env.SUBMISSIONS_DB.prepare(
+    `SELECT credential_id, public_key, counter, transports_json, device_type, backed_up
+     FROM chat_credentials WHERE credential_id = ? AND account_id = ? LIMIT 1`,
+  )
+    .bind(credentialId, pending.account_id)
+    .first()
+  if (!record) throw new RequestError(400, "The passkey is not registered to this account.")
+  const { rpID, expectedOrigin } = webAuthnConfiguration(request)
+  let verification
+  try {
+    verification = await verifyAuthenticationResponse({
+      response: body?.response,
+      expectedChallenge: pending.challenge,
+      expectedOrigin,
+      expectedRPID: rpID,
+      requireUserVerification: true,
+      credential: {
+        id: record.credential_id,
+        publicKey: decodeBase64Url(record.public_key),
+        counter: Number(record.counter || 0),
+        transports: JSON.parse(record.transports_json || "[]"),
+      },
+    })
+  } catch {
+    throw new RequestError(401, "The passkey could not be verified.")
+  }
+  if (!verification.verified) throw new RequestError(401, "The passkey could not be verified.")
+  await env.SUBMISSIONS_DB.batch([
+    env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_credentials SET counter = ?, last_used_at = datetime('now') WHERE credential_id = ?",
+    ).bind(verification.authenticationInfo.newCounter, record.credential_id),
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_challenges WHERE id = ?").bind(challengeId),
+  ])
+  const session = await createChatSession(pending.account_id, request, env)
+  return json(
+    {
+      account: {
+        id: pending.account_id,
+        displayName: pending.display_name,
+        status: pending.status,
+        restrictedUntil: pending.restricted_until,
+      },
+    },
+    200,
+    { "set-cookie": session.header },
+  )
+}
+
+async function chatSessionResponse(request, env) {
+  const account = await getChatSession(request, env, false)
+  return json({
+    account: account
+      ? {
+          id: account.id,
+          displayName: account.display_name,
+          status: account.status,
+          restrictedUntil: account.restricted_until,
+        }
+      : null,
+  })
+}
+
+async function chatLogout(request, env) {
+  requireTrustedRequestOrigin(request)
+  const account = await getChatSession(request, env, false)
+  if (account) {
+    await env.SUBMISSIONS_DB.prepare("DELETE FROM chat_sessions WHERE token_hash = ?")
+      .bind(account.tokenHash)
+      .run()
+  }
+  const { session } = chatCookieNames(request)
+  return json({ message: "Signed out of English Chat." }, 200, {
+    "set-cookie": chatCookie(request, session, "", 0),
+  })
+}
+
+async function deleteChatAccount(request, env) {
+  requireTrustedRequestOrigin(request)
+  const account = await getChatSession(request, env)
+  await env.SUBMISSIONS_DB.batch([
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_reports WHERE reporter_account_id = ?").bind(
+      account.id,
+    ),
+    env.SUBMISSIONS_DB.prepare(
+      "DELETE FROM chat_reports WHERE message_id IN (SELECT id FROM chat_messages WHERE account_id = ?)",
+    ).bind(account.id),
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_messages WHERE account_id = ?").bind(account.id),
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_sessions WHERE account_id = ?").bind(account.id),
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_credentials WHERE account_id = ?").bind(account.id),
+    env.SUBMISSIONS_DB.prepare("DELETE FROM chat_accounts WHERE id = ?").bind(account.id),
+  ])
+  const { session } = chatCookieNames(request)
+  return json({ message: "Your English Chat account and messages were deleted." }, 200, {
+    "set-cookie": chatCookie(request, session, "", 0),
+  })
+}
+
+async function listChatMessages(request, env) {
+  await applyChatEdgeLimit(request, env, "read")
+  const account = await getChatSession(request, env)
+  await cleanupChatData(env)
+  const url = new URL(request.url)
+  const before = cleanText(url.searchParams.get("before"), 40)
+  const limit = Math.min(
+    50,
+    Math.max(10, Math.trunc(Number(url.searchParams.get("limit")) || 30)),
+  )
+  const statement = before
+    ? env.SUBMISSIONS_DB.prepare(
+        `SELECT m.id, m.account_id, m.body, m.created_at, a.display_name
+         FROM chat_messages m JOIN chat_accounts a ON a.id = m.account_id
+         WHERE m.hidden_at IS NULL AND m.created_at < ?
+         ORDER BY m.created_at DESC LIMIT ?`,
+      ).bind(before, limit)
+    : env.SUBMISSIONS_DB.prepare(
+        `SELECT m.id, m.account_id, m.body, m.created_at, a.display_name
+         FROM chat_messages m JOIN chat_accounts a ON a.id = m.account_id
+         WHERE m.hidden_at IS NULL
+         ORDER BY m.created_at DESC LIMIT ?`,
+      ).bind(limit)
+  const result = await statement.all()
+  const messages = (result.results || []).reverse().map((record) => ({
+    id: record.id,
+    displayName: record.display_name,
+    body: record.body,
+    createdAt: record.created_at,
+    own: record.account_id === account.id,
+  }))
+  return json({
+    messages,
+    retentionDays: CHAT_MESSAGE_RETENTION_DAYS,
+    nextBefore: messages.length === limit ? messages[0]?.createdAt : null,
+  })
+}
+
+async function createChatMessage(request, env) {
+  requireTrustedRequestOrigin(request)
+  await applyChatEdgeLimit(request, env, "message")
+  const account = await getChatSession(request, env)
+  if (account.status === "restricted") {
+    throw new RequestError(403, "This account is temporarily restricted from sending messages.")
+  }
+  const body = await readBody(request)
+  const message = validateChatMessage(body?.message)
+  const recent = await env.SUBMISSIONS_DB.prepare(
+    "SELECT created_at FROM chat_messages WHERE account_id = ? ORDER BY created_at DESC LIMIT 1",
+  )
+    .bind(account.id)
+    .first()
+  if (recent && Date.now() - Date.parse(`${recent.created_at}Z`) < 3_000) {
+    throw new RequestError(429, "Please wait a few seconds before sending another message.")
+  }
+  const hourly = await env.SUBMISSIONS_DB.prepare(
+    "SELECT COUNT(*) AS count FROM chat_messages WHERE account_id = ? AND created_at >= datetime('now', '-1 hour')",
+  )
+    .bind(account.id)
+    .first()
+  if (Number(hourly?.count || 0) >= 60) {
+    throw new RequestError(429, "Hourly message limit reached. Please return later.")
+  }
+  const id = crypto.randomUUID()
+  await env.SUBMISSIONS_DB.prepare(
+    "INSERT INTO chat_messages (id, account_id, body) VALUES (?, ?, ?)",
+  )
+    .bind(id, account.id, message)
+    .run()
+  return json(
+    {
+      message: {
+        id,
+        displayName: account.display_name,
+        body: message,
+        createdAt: new Date().toISOString(),
+        own: true,
+      },
+    },
+    201,
+  )
+}
+
+async function reportChatMessage(request, env, messageId) {
+  requireTrustedRequestOrigin(request)
+  const account = await getChatSession(request, env)
+  const body = await readBody(request)
+  const reason = cleanText(body?.reason, 240)
+  if (reason.length < 4) throw new RequestError(400, "Briefly explain why this message needs review.")
+  const message = await env.SUBMISSIONS_DB.prepare(
+    "SELECT account_id FROM chat_messages WHERE id = ? AND hidden_at IS NULL LIMIT 1",
+  )
+    .bind(messageId)
+    .first()
+  if (!message) throw new RequestError(404, "Message not found.")
+  if (message.account_id === account.id) throw new RequestError(400, "You cannot report your own message.")
+  try {
+    await env.SUBMISSIONS_DB.prepare(
+      "INSERT INTO chat_reports (id, message_id, reporter_account_id, reason) VALUES (?, ?, ?, ?)",
+    )
+      .bind(crypto.randomUUID(), messageId, account.id, reason)
+      .run()
+  } catch {
+    throw new RequestError(409, "You already reported this message.")
+  }
+  return json({ message: "Report sent privately to the site owners." }, 201)
+}
+
+async function listChatModeration(request, env) {
+  await verifyOwner(request, env)
+  const reports = await env.SUBMISSIONS_DB.prepare(
+    `SELECT r.id, r.message_id, r.reason, r.status, r.created_at,
+      m.body, author.display_name AS author_name, author.id AS author_id,
+      reporter.display_name AS reporter_name
+     FROM chat_reports r
+     JOIN chat_messages m ON m.id = r.message_id
+     JOIN chat_accounts author ON author.id = m.account_id
+     JOIN chat_accounts reporter ON reporter.id = r.reporter_account_id
+     ORDER BY CASE r.status WHEN 'pending' THEN 0 ELSE 1 END, r.created_at DESC
+     LIMIT 100`,
+  ).all()
+  const accounts = await env.SUBMISSIONS_DB.prepare(
+    `SELECT id, display_name, status, restricted_until, created_at
+     FROM chat_accounts ORDER BY created_at DESC LIMIT 100`,
+  ).all()
+  return json({ reports: reports.results || [], accounts: accounts.results || [] })
+}
+
+async function moderateChatMessage(request, env, messageId) {
+  const owner = await verifyOwner(request, env)
+  requireTrustedRequestOrigin(request)
+  const body = await readBody(request)
+  const action = cleanText(body?.action, 20)
+  if (!['hide', 'restore', 'dismiss-report'].includes(action)) {
+    throw new RequestError(400, "Choose a valid moderation action.")
+  }
+  if (action === "hide") {
+    await env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_messages SET hidden_at = datetime('now'), hidden_by = ? WHERE id = ?",
+    ).bind(owner.email, messageId).run()
+    await env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_reports SET status = 'reviewed', reviewed_at = datetime('now'), reviewed_by = ? WHERE message_id = ?",
+    ).bind(owner.email, messageId).run()
+  } else if (action === "restore") {
+    await env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_messages SET hidden_at = NULL, hidden_by = NULL WHERE id = ?",
+    ).bind(messageId).run()
+  } else {
+    await env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_reports SET status = 'dismissed', reviewed_at = datetime('now'), reviewed_by = ? WHERE message_id = ?",
+    ).bind(owner.email, messageId).run()
+  }
+  return json({ message: "Chat moderation saved." })
+}
+
+async function moderateChatAccount(request, env, accountId) {
+  await verifyOwner(request, env)
+  requireTrustedRequestOrigin(request)
+  const body = await readBody(request)
+  const action = cleanText(body?.action, 20)
+  if (!['restrict', 'unrestrict'].includes(action)) {
+    throw new RequestError(400, "Choose a valid account action.")
+  }
+  if (action === "unrestrict") {
+    await env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_accounts SET status = 'active', restricted_until = NULL, updated_at = datetime('now') WHERE id = ?",
+    ).bind(accountId).run()
+  } else {
+    const minutes = Math.min(10_080, Math.max(10, Number(body?.minutes) || 60))
+    await env.SUBMISSIONS_DB.prepare(
+      "UPDATE chat_accounts SET status = 'restricted', restricted_until = datetime('now', ?), updated_at = datetime('now') WHERE id = ?",
+    ).bind(`+${minutes} minutes`, accountId).run()
+  }
+  return json({ message: "Chat account moderation saved." })
+}
+
 async function handleApi(request, env) {
   const url = new URL(request.url)
+  if (url.pathname === "/api/chat/register/options" && request.method === "POST") {
+    return beginChatRegistration(request, env)
+  }
+  if (url.pathname === "/api/chat/register/verify" && request.method === "POST") {
+    return finishChatRegistration(request, env)
+  }
+  if (url.pathname === "/api/chat/login/options" && request.method === "POST") {
+    return beginChatLogin(request, env)
+  }
+  if (url.pathname === "/api/chat/login/verify" && request.method === "POST") {
+    return finishChatLogin(request, env)
+  }
+  if (url.pathname === "/api/chat/session" && request.method === "GET") {
+    return chatSessionResponse(request, env)
+  }
+  if (url.pathname === "/api/chat/logout" && request.method === "POST") {
+    return chatLogout(request, env)
+  }
+  if (url.pathname === "/api/chat/account" && request.method === "DELETE") {
+    return deleteChatAccount(request, env)
+  }
+  if (url.pathname === "/api/chat/messages" && request.method === "GET") {
+    return listChatMessages(request, env)
+  }
+  if (url.pathname === "/api/chat/messages" && request.method === "POST") {
+    return createChatMessage(request, env)
+  }
+  const chatReportMatch = url.pathname.match(/^\/api\/chat\/messages\/([0-9a-f-]+)\/report$/i)
+  if (chatReportMatch && request.method === "POST") {
+    return reportChatMessage(request, env, chatReportMatch[1])
+  }
   if (url.pathname === "/api/assessment/questions" && request.method === "GET") {
     return listApprovedAssessmentQuestions(env)
   }
@@ -1147,6 +1797,21 @@ async function handleApi(request, env) {
   }
   if (url.pathname === "/api/admin/submissions" && request.method === "GET") {
     return listSubmissions(request, env)
+  }
+  if (url.pathname === "/api/admin/chat" && request.method === "GET") {
+    return listChatModeration(request, env)
+  }
+  const chatModerationMessageMatch = url.pathname.match(
+    /^\/api\/admin\/chat\/messages\/([0-9a-f-]+)$/i,
+  )
+  if (chatModerationMessageMatch && request.method === "PATCH") {
+    return moderateChatMessage(request, env, chatModerationMessageMatch[1])
+  }
+  const chatModerationAccountMatch = url.pathname.match(
+    /^\/api\/admin\/chat\/accounts\/([0-9a-f-]+)$/i,
+  )
+  if (chatModerationAccountMatch && request.method === "PATCH") {
+    return moderateChatAccount(request, env, chatModerationAccountMatch[1])
   }
   if (
     url.pathname === "/api/admin/assessment/questions" &&
@@ -1190,5 +1855,8 @@ export default {
         json({ message: "The service could not complete the request." }, 500),
       )
     }
+  },
+  async scheduled(_controller, env, context) {
+    context.waitUntil(cleanupChatData(env))
   },
 }

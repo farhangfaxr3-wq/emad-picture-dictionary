@@ -13,6 +13,9 @@
     "ADMIN_EMAILS": "farhangfaxr3@gmail.com,em20323115@soran.edu.iq",
     "TURNSTILE_HOSTNAMES": "emad-picture-dictionary.farhangfaxr3.workers.dev"
   },
+  "triggers": {
+    "crons": ["17 * * * *"]
+  },
   "ratelimits": [
     {
       "name": "SUBMISSION_RATE_LIMITER",

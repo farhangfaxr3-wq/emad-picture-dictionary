@@ -12,6 +12,7 @@ import {
   XCircle,
 } from "lucide-react"
 import AssessmentReviewPanel from "./AssessmentReviewPanel"
+import ChatModerationPanel from "./ChatModerationPanel"
 
 interface SubmissionRecord {
   id: string
@@ -438,6 +439,7 @@ export default function SubmissionReviewPage() {
         )}
       </section>
       <AssessmentReviewPanel active={Boolean(reviewer) && status === "ready"} />
+      <ChatModerationPanel active={Boolean(reviewer) && status === "ready"} />
     </>
   )
 }

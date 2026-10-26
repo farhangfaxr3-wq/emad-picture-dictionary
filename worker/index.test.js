@@ -11,6 +11,8 @@ import {
   hashAdminAccessCode,
   normalizeWord,
   validateAssessmentQuestion,
+  validateChatMessage,
+  validateDisplayName,
   validateEditedSuggestion,
   validateSubmission,
   validateTurnstileResult,
@@ -24,6 +26,24 @@ function startedAt() {
 
 test("normalizes suggested words consistently", () => {
   assert.equal(normalizeWord("  Café   Culture!  "), "cafe culture")
+})
+
+test("accepts safe chat identities and English-only messages", () => {
+  assert.deepEqual(validateDisplayName("Emad Learner_24"), {
+    displayName: "Emad Learner_24",
+    key: "emad learner_24",
+  })
+  assert.equal(
+    validateChatMessage("I learned a useful word at university today."),
+    "I learned a useful word at university today.",
+  )
+})
+
+test("protects English Chat from contact sharing, abuse, and non-English messages", () => {
+  assert.throws(() => validateDisplayName("admin"), /safe display name/i)
+  assert.throws(() => validateChatMessage("Email me at learner@example.com"), /privacy/i)
+  assert.throws(() => validateChatMessage("You are stupid"), /respectful/i)
+  assert.throws(() => validateChatMessage("سڵاو چۆنی"), /English messages only/i)
 })
 
 test("accepts valid feedback without collecting an email", () => {

@@ -1,8 +1,9 @@
 import type { Word } from "./content"
 import { cefrLevels, type CEFRLevel } from "./cefr"
+import { createCuratedAssessmentQuestions } from "./curatedAssessmentBank"
 import { vocabulary } from "./vocabulary"
 
-export const ASSESSMENT_BANK_VERSION = "2026.10.1"
+export const ASSESSMENT_BANK_VERSION = "2026.10.2"
 export const ASSESSMENT_QUESTION_COUNT = 30
 
 export type AssessmentSkill = "vocabulary" | "grammar" | "reading" | "listening"
@@ -22,6 +23,17 @@ export interface AssessmentQuestion {
   sourceId?: string
   sourceLabel?: string
   sourceConfidence?: "low" | "medium" | "high"
+  questionType?:
+    | "meaning"
+    | "synonym"
+    | "antonym"
+    | "sentence-completion"
+    | "context"
+    | "collocation"
+    | "usage"
+    | "grammar"
+    | "reading-comprehension"
+    | "listening-comprehension"
 }
 
 export interface SkillScore {
@@ -463,6 +475,7 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
       audioSrc: "/audio/assessment/l-c1-committee.wav",
     },
   ),
+  ...createCuratedAssessmentQuestions(ASSESSMENT_BANK_VERSION),
 ]
 
 const levelWeights: Record<CEFRLevel, number> = {
@@ -497,6 +510,20 @@ function shuffled<T>(items: T[], seed: string) {
     .map(({ item }) => item)
 }
 
+function shuffleAnswerOptions(question: AssessmentQuestion, seed: string): AssessmentQuestion {
+  const shuffledOptions = shuffled(
+    question.options.map((option, originalIndex) => ({ option, originalIndex })),
+    `${seed}:${question.id}:answer-options`,
+  )
+  return {
+    ...question,
+    options: shuffledOptions.map(({ option }) => option),
+    correctIndex: shuffledOptions.findIndex(
+      ({ originalIndex }) => originalIndex === question.correctIndex,
+    ),
+  }
+}
+
 export function selectAssessmentQuestions(
   approvedQuestions: AssessmentQuestion[] = [],
   seed = crypto.randomUUID(),
@@ -514,7 +541,9 @@ export function selectAssessmentQuestions(
       selected.push(...shuffled(candidates, `${seed}:${skill}:${level}`).slice(0, count))
     }
   }
-  return shuffled(selected, `${seed}:question-order`).slice(0, ASSESSMENT_QUESTION_COUNT)
+  return shuffled(selected, `${seed}:question-order`)
+    .slice(0, ASSESSMENT_QUESTION_COUNT)
+    .map((item) => shuffleAnswerOptions(item, seed))
 }
 
 export function validateQuestion(question: AssessmentQuestion) {

@@ -244,6 +244,6 @@ export const vocabulary = completeCategoryCatalog(
 )
 export const vocabularyAudit = validateVocabulary(vocabulary)
 
-if (import.meta.env.DEV && vocabularyAudit.issues.length > 0) {
+if (import.meta.env?.DEV && vocabularyAudit.issues.length > 0) {
   console.warn("Emad WordLink vocabulary audit", vocabularyAudit)
 }

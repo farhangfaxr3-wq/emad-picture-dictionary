@@ -472,6 +472,15 @@ function ResultScreen({
             <Link to={`/practice?level=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold">
               Practice at {result.level}
             </Link>
+            <Link to={`/topics/School?section=flashcards&cefr=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold">
+              School flashcards
+            </Link>
+            <Link to={`/topics/School?section=write&cefr=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold">
+              Writing practice
+            </Link>
+            <Link to={`/topics/School?section=games&cefr=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold">
+              Play a word game
+            </Link>
           </div>
         </section>
 

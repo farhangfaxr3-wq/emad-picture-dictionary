@@ -5,6 +5,7 @@ export type BaseWord = {
   word: string
   pronunciation: string
   topic: string
+  sourceTopic?: string
   definition: string
   example: string
   level: "Beginner" | "Intermediate"
@@ -1637,6 +1638,30 @@ export const topicIntroductions: Record<string, string> = {
     "Discover the places, people, and little acts of kindness that bring a neighborhood together.",
   "Daily Activities":
     "Follow a day from morning to evening: routines, chores, learning, and time for yourself.",
+  "Education & University Life":
+    "Navigate courses, campus services, assessments, and the everyday language of university study.",
+  "Science & Research":
+    "Investigate evidence, methods, experiments, and the language used to explain reliable discoveries.",
+  "Business & Economics":
+    "Understand markets, money, organizations, customers, and the decisions that shape economic life.",
+  "Law & Government":
+    "Explore civic life, public policy, rights, regulation, and the institutions that serve communities.",
+  "Environment & Sustainability":
+    "Discuss climate, ecosystems, conservation, responsible resources, and practical sustainable choices.",
+  "Psychology & Human Behavior":
+    "Describe emotions, personality, motivation, thinking, and the patterns behind how people behave.",
+  "Media & Journalism":
+    "Read, report, publish, and evaluate news and media with precise, responsible vocabulary.",
+  "Art, Literature & Culture":
+    "Explore creative expression, stories, heritage, music, visual art, and cultural traditions.",
+  "Academic Writing & Research":
+    "Build clear academic arguments with evidence, citations, analysis, and careful research language.",
+  "Medicine & Healthcare":
+    "Communicate about patients, diagnosis, treatment, clinical care, and healthcare services.",
+  "Architecture & Construction":
+    "Learn how buildings are designed, constructed, evaluated, maintained, and made accessible.",
+  "IT & Computers":
+    "Work confidently with software, data, digital safety, programming, and everyday computer systems.",
 }
 export function localDay(date = new Date()): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`

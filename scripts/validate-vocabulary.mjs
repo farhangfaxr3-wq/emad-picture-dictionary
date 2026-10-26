@@ -5,7 +5,7 @@ import { createServer } from "vite"
 const EXPECTED_TOTAL_WORDS = 4000
 const EXPECTED_BATCHES = 27
 const EXPECTED_BATCH_WORDS = 2677
-const EXPECTED_TOPICS = 19
+const EXPECTED_TOPICS = 31
 const REQUIRED_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
 
 const server = await createServer({
@@ -17,12 +17,34 @@ const server = await createServer({
 try {
   const { vocabulary, vocabularyAudit, vocabularyBatches } =
     await server.ssrLoadModule("/src/app/vocabulary.ts")
+  const { topicNames, legacyTopicNames, expandedTopicNames } =
+    await server.ssrLoadModule("/src/app/topicCatalog.ts")
+  const { resolveDictionaryImageFilter, resolveDictionaryLevel } =
+    await server.ssrLoadModule("/src/app/dictionaryFilters.ts")
 
   assert.equal(
     vocabulary.length,
     EXPECTED_TOTAL_WORDS,
     `Expected ${EXPECTED_TOTAL_WORDS} words, received ${vocabulary.length}`,
   )
+  assert.deepEqual(
+    [...new Set(vocabulary.map((word) => word.topic))].sort(),
+    [...topicNames].sort(),
+    "The visible topic catalogue must match the topics used by vocabulary records",
+  )
+
+  for (const topic of expandedTopicNames) {
+    assert.ok(
+      vocabulary.filter((word) => word.topic === topic).length >= 15,
+      `${topic} must contain at least 15 relevant vocabulary records`,
+    )
+  }
+  for (const topic of legacyTopicNames) {
+    assert.ok(
+      vocabulary.filter((word) => word.topic === topic).length >= 40,
+      `${topic} must remain a meaningful existing collection after reclassification`,
+    )
+  }
   assert.equal(
     vocabularyBatches.length,
     EXPECTED_BATCHES,
@@ -160,6 +182,38 @@ try {
   for (const level of REQUIRED_LEVELS) {
     assert.ok(levelCounts[level] > 0, `${level} must contain at least one word`)
   }
+  assert.equal(
+    resolveDictionaryLevel(null, "apple", "C2"),
+    "All levels",
+    "A search must not silently inherit a preferred CEFR filter",
+  )
+  assert.equal(
+    resolveDictionaryLevel("C1", "apple", "A1"),
+    "C1",
+    "An explicit CEFR search filter must be preserved",
+  )
+  assert.equal(
+    resolveDictionaryImageFilter({
+      explicitFilter: null,
+      query: "",
+      letter: "",
+      topic: "All topics",
+      level: "C1",
+    }),
+    "all",
+    "Selecting C1 must include accurate entries that are still awaiting an image",
+  )
+  assert.equal(
+    resolveDictionaryImageFilter({
+      explicitFilter: null,
+      query: "",
+      letter: "",
+      topic: "All topics",
+      level: "All levels",
+    }),
+    "verified",
+    "The unfiltered visual dictionary should continue to lead with verified pictures",
+  )
   assert.ok(
     levelCounts.C2 >= 150,
     "The advanced catalogue must retain at least 150 C2 words",
@@ -169,7 +223,11 @@ try {
     fs.readFileSync("src/app/vocabularyPhotos.json", "utf8"),
   )
   const validPhotographKeys = new Set(
-    vocabulary.flatMap((word) => [word.word, `${word.topic}|${word.word}`]),
+    vocabulary.flatMap((word) => [
+      word.word,
+      `${word.topic}|${word.word}`,
+      ...(word.sourceTopic ? [`${word.sourceTopic}|${word.word}`] : []),
+    ]),
   )
   const orphanedPhotographKeys = Object.keys(photographLibrary).filter(
     (key) => !validPhotographKeys.has(key),
@@ -185,6 +243,9 @@ try {
   )
   console.log(
     `CEFR distribution: ${REQUIRED_LEVELS.map((level) => `${level} ${levelCounts[level]}`).join(", ")}.`,
+  )
+  console.log(
+    `Topic coverage: ${topicNames.map((topic) => `${topic} ${vocabulary.filter((word) => word.topic === topic).length}`).join(", ")}.`,
   )
 } finally {
   await server.close()

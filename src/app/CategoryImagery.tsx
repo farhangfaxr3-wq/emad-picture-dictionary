@@ -159,11 +159,22 @@ export function CategoryPhoto({
     return (
       <div
         role="img"
-        aria-label={`${category} photo unavailable`}
-        className={`flex items-center justify-center bg-muted p-6 text-xs text-muted-foreground ${className}`}
+        aria-label={`${category} illustrated category cover`}
+        className={`relative flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,var(--secondary),var(--muted))] p-6 text-primary ${className}`}
       >
-        This category photo is temporarily unavailable. Your vocabulary and
-        activities are ready to explore.
+        <span className="absolute -right-8 -top-10 h-28 w-28 rounded-full border-[18px] border-primary/10" />
+        <span className="absolute -bottom-12 -left-8 h-32 w-32 rounded-full bg-primary/10" />
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 96 96"
+          className="absolute h-28 w-28 opacity-15"
+        >
+          <path d="M20 24h24c8 0 14 6 14 14v38H34c-8 0-14-6-14-14V24Z" fill="currentColor" />
+          <path d="M76 24H52c-8 0-14 6-14 14v38h24c8 0 14-6 14-14V24Z" fill="currentColor" />
+        </svg>
+        <span className="relative max-w-[18rem] text-center font-display text-sm font-bold leading-5">
+          {category}
+        </span>
       </div>
     )
   return (

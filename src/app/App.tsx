@@ -93,6 +93,11 @@ import {
   resolveCEFRSelection,
   type CEFRLevel,
 } from "./cefr"
+import { topicNames } from "./topicCatalog"
+import {
+  resolveDictionaryImageFilter,
+  resolveDictionaryLevel,
+} from "./dictionaryFilters"
 import {
   getWordVisual,
   vocabularyVisuals,
@@ -131,27 +136,6 @@ const getGroups = (topic: string) => [
   ...new Set(
     vocabulary.filter((word) => word.topic === topic).map((word) => word.group),
   ),
-]
-const topicNames = [
-  "Food",
-  "Home",
-  "People",
-  "Daily Activities",
-  "Family",
-  "School",
-  "Classroom",
-  "Clothing",
-  "Health",
-  "Jobs",
-  "Transportation",
-  "Places",
-  "Nature",
-  "Animals",
-  "Sports",
-  "Technology",
-  "Communication",
-  "Travel",
-  "Community",
 ]
 const topicColors = [
   "bg-[#f6ece1]",
@@ -2680,7 +2664,7 @@ function TopicsPage() {
       ) : (
         <>
           <p className="mb-5 text-xs text-muted-foreground">
-            {topics.length} topics • {vocabulary.length} illustrated words •{" "}
+            {topics.length} topics • {vocabulary.length} vocabulary entries •{" "}
             {topicNames.reduce(
               (total, topic) => total + getGroups(topic).length,
               0,
@@ -3633,16 +3617,21 @@ function DictionaryPage() {
   const query = params.get("q") || ""
   const topic = params.get("topic") || "All topics"
   const requestedLevel = params.get("level")
-  const level = resolveCEFRSelection(
+  const level = resolveDictionaryLevel(
     requestedLevel,
+    query,
     data.preferences.cefrLevel,
   )
   const group = params.get("group") || "All groups"
   const letter = params.get("letter") || ""
   const status = params.get("status") || "All words"
-  const imageFilter =
-    params.get("images") ||
-    (query || letter || topic !== "All topics" ? "all" : "verified")
+  const imageFilter = resolveDictionaryImageFilter({
+    explicitFilter: params.get("images"),
+    query,
+    letter,
+    topic,
+    level,
+  })
   const verifiedCount = vocabulary.filter(
     (word) => word.imageStatus === "verified",
   ).length
@@ -6654,7 +6643,7 @@ function CategoryLearningHub() {
       />
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-secondary p-5">
         <p className="text-sm font-semibold">
-          {topicNames.length} categories · 60+ words in every category
+          {topicNames.length} categories · {vocabulary.length} carefully grouped words
         </p>
         <Link to="/practice?collection=due" className={secondaryButton}>
           <Bookmark size={15} />

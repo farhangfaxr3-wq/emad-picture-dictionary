@@ -15,10 +15,14 @@ export interface VocabularyImage {
 }
 const photographs: Record<string, VocabularyImage> = library
 export function getVerifiedVocabularyPhoto(
-  word: Pick<Word, "word" | "topic">,
+  word: Pick<Word, "word" | "topic" | "sourceTopic">,
 ): VocabularyImage | undefined {
   const photograph =
-    photographs[`${word.topic}|${word.word}`] || photographs[word.word]
+    photographs[`${word.topic}|${word.word}`] ||
+    (word.sourceTopic
+      ? photographs[`${word.sourceTopic}|${word.word}`]
+      : undefined) ||
+    photographs[word.word]
   return photograph?.kind === "context" ? undefined : photograph
 }
 export function contextPhotograph(word: Word): VocabularyImage {

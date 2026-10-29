@@ -26,7 +26,11 @@ interface CategoryImage {
 
   photographer: string
 
-  username: string
+  username?: string
+
+  sourceName?: "Pexels" | "Unsplash"
+
+  sourceUrl?: string
 }
 
 export const categoryImages: CategoryImage[] = [
@@ -256,6 +260,186 @@ export const categoryImages: CategoryImage[] = [
     photographer: "Jakub Żerdzicki",
 
     username: "jakubzerdzicki",
+  },
+
+  {
+    category: "Education & University Life",
+
+    photoId: "pexels-8197553",
+
+    alt: "University students listening to a lecturer in a real lecture hall",
+
+    photographer: "Yan Krukau",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/man-teaching-students-in-a-university-8197553/",
+  },
+
+  {
+    category: "Science & Research",
+
+    photoId: "pexels-9243727",
+
+    alt: "Two laboratory scientists examining test tubes beside a microscope",
+
+    photographer: "Mikhail Nilov",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/scientists-experimenting-in-the-laboratory-9243727/",
+  },
+
+  {
+    category: "Business & Economics",
+
+    photoId: "pexels-7433838",
+
+    alt: "Business professionals reviewing charts during an office meeting",
+
+    photographer: "Vlada Karpovich",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/people-having-a-meeting-7433838/",
+  },
+
+  {
+    category: "Law & Government",
+
+    photoId: "pexels-36984937",
+
+    alt: "Front view of the United States Supreme Court beneath a blue sky",
+
+    photographer: "Mark Stebnicki",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/front-view-of-the-united-states-supreme-court-building-36984937/",
+  },
+
+  {
+    category: "Environment & Sustainability",
+
+    photoId: "pexels-35105466",
+
+    alt: "Solar panels and wind turbines producing renewable energy at sunrise",
+
+    photographer: "Quang Nguyen Vinh",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/aerial-view-of-solar-panels-and-wind-turbines-at-sunrise-35105466/",
+  },
+
+  {
+    category: "Psychology & Human Behavior",
+
+    photoId: "pexels-8560221",
+
+    alt: "A therapist listening and taking notes during a counseling session",
+
+    photographer: "Timur Weber",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/a-man-at-a-therapy-session-8560221/",
+  },
+
+  {
+    category: "Media & Journalism",
+
+    photoId: "pexels-10464471",
+
+    alt: "A field reporter speaking into a microphone while a camera records",
+
+    photographer: "cottonbro studio",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/woman-reporting-on-camera-10464471/",
+  },
+
+  {
+    category: "Art, Literature & Culture",
+
+    photoId: "pexels-7976430",
+
+    alt: "Visitors viewing artwork together inside a modern gallery",
+
+    photographer: "Roxanne Minnish",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/people-in-the-museum-7976430/",
+  },
+
+  {
+    category: "Academic Writing & Research",
+
+    photoId: "pexels-16420237",
+
+    alt: "A university student researching with a laptop and books in a library",
+
+    photographer: "Ludovic Delot",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/a-student-sitting-in-a-library-and-with-a-laptop-and-studying-16420237/",
+  },
+
+  {
+    category: "Medicine & Healthcare",
+
+    photoId: "pexels-39192354",
+
+    alt: "A doctor speaking with a patient during a medical consultation",
+
+    photographer: "Vitaly Gariev",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/doctor-and-patient-consultation-in-modern-office-39192354/",
+  },
+
+  {
+    category: "Architecture & Construction",
+
+    photoId: "pexels-15794759",
+
+    alt: "Construction professionals reviewing plans together at a building site",
+
+    photographer: "Emmanuel Codden",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/builders-working-at-construction-site-15794759/",
+  },
+
+  {
+    category: "IT & Computers",
+
+    photoId: "pexels-36706460",
+
+    alt: "A software developer working with code across two computer monitors",
+
+    photographer: "Zayed Hossain",
+
+    sourceName: "Pexels",
+
+    sourceUrl:
+      "https://www.pexels.com/photo/developer-working-on-code-in-a-modern-office-36706460/",
   },
 ]
 
@@ -514,14 +698,17 @@ export function CategoryHero({
           <figcaption className="absolute bottom-3 right-3 max-w-full rounded-lg bg-card/95 px-3 py-1.5 text-xs text-muted-foreground">
             Photo:{" "}
             <a
-              href={`https://unsplash.com/@${image.username}?utm_source=emad_picture_dictionary&utm_medium=referral`}
+              href={
+                image.sourceUrl ||
+                `https://unsplash.com/@${image.username}?utm_source=emad_picture_dictionary&utm_medium=referral`
+              }
               target="_blank"
               rel="noreferrer"
               className="font-medium hover:text-primary hover:underline"
             >
               {image.photographer}
             </a>{" "}
-            / Unsplash
+            / {image.sourceName || "Unsplash"}
           </figcaption>
         )}
       </figure>

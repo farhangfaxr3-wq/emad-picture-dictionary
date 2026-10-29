@@ -6,6 +6,8 @@ import type { Word } from "./content"
 
 import { categoryImages } from "./CategoryImagery"
 
+import { getWordVisual } from "./visualAssets"
+
 import library from "./vocabularyPhotos.json"
 
 export interface VocabularyImage {
@@ -41,6 +43,38 @@ export function getVerifiedVocabularyPhoto(
   return photograph?.kind === "context" ? undefined : photograph
 }
 
+export function getVerifiedVocabularyImage(
+  word: Pick<Word, "word" | "topic" | "sourceTopic">,
+): VocabularyImage | undefined {
+  const visual = getWordVisual(word.word, word.topic)
+
+  if (visual) {
+    return {
+      src: visual.src,
+
+      source: `https://unsplash.com/@${visual.username}`,
+
+      author: visual.photographer,
+
+      license: "Unsplash License",
+
+      licenseUrl: "https://unsplash.com/license",
+
+      description: visual.alt,
+
+      kind: "object",
+    }
+  }
+
+  return getVerifiedVocabularyPhoto(word)
+}
+
+export function hasVerifiedVocabularyImage(
+  word: Pick<Word, "word" | "topic" | "sourceTopic">,
+) {
+  return Boolean(getVerifiedVocabularyImage(word))
+}
+
 export function contextPhotograph(word: Word): VocabularyImage {
   const category =
     categoryImages.find((image) => image.category === word.topic) ||
@@ -49,13 +83,17 @@ export function contextPhotograph(word: Word): VocabularyImage {
   return {
     src: `/images/categories/${category.photoId}.jpg`,
 
-    source: `https://unsplash.com/@${category.username}`,
+    source: category.sourceUrl || `https://unsplash.com/@${category.username}`,
 
     author: category.photographer,
 
-    license: "Unsplash License",
+    license:
+      category.sourceName === "Pexels" ? "Pexels License" : "Unsplash License",
 
-    licenseUrl: "https://unsplash.com/license",
+    licenseUrl:
+      category.sourceName === "Pexels"
+        ? "https://www.pexels.com/license/"
+        : "https://unsplash.com/license",
 
     description: category.alt,
 
@@ -64,14 +102,16 @@ export function contextPhotograph(word: Word): VocabularyImage {
 }
 
 export function getVocabularyPhoto(word: Word): VocabularyImage {
-  return getVerifiedVocabularyPhoto(word) || contextPhotograph(word)
+  return getVerifiedVocabularyImage(word) || contextPhotograph(word)
 }
 
 export function visualVocabulary(words: Word[]): Word[] {
   const seen = new Set<string>()
 
   const distinct = words.filter((word) => {
-    const image = getVocabularyPhoto(word)
+    const image = getVerifiedVocabularyImage(word)
+
+    if (!image) return false
 
     if (seen.has(image.src)) return false
 
@@ -80,11 +120,7 @@ export function visualVocabulary(words: Word[]): Word[] {
     return true
   })
 
-  const recognizable = distinct.filter(
-    (word) => getVocabularyPhoto(word).kind !== "context",
-  )
-
-  return recognizable.length >= 4 ? recognizable : distinct
+  return distinct
 }
 
 export function VocabularyPhoto({
@@ -98,7 +134,7 @@ export function VocabularyPhoto({
 }) {
   const [failed, setFailed] = useState(false)
 
-  const image = failed ? undefined : getVerifiedVocabularyPhoto(word)
+  const image = failed ? undefined : getVerifiedVocabularyImage(word)
 
   if (!image)
     return (
@@ -152,7 +188,7 @@ export function VocabularyPhoto({
 }
 
 export function VocabularyPhotoCredit({ word }: { word: Word }) {
-  const image = getVerifiedVocabularyPhoto(word)
+  const image = getVerifiedVocabularyImage(word)
 
   if (!image)
     return (

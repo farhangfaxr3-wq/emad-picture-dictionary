@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "test:bundle": "vite build && node scripts/check-bundle-size.mjs",
     "test:vocabulary": "node scripts/validate-vocabulary.mjs",
-    "test:imagery": "node scripts/validate-imagery.mjs",
+    "test:imagery": "node scripts/validate-imagery.mjs && tsx scripts/validate-practice-imagery.ts",
     "test:assessment-audio": "node scripts/validate-assessment-audio.mjs",
     "test:assessment": "tsx scripts/validate-assessment-bank.ts",
     "export:canonical-words": "node scripts/export-canonical-words.mjs",

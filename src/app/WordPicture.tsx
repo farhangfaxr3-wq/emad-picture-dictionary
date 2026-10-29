@@ -1,32 +1,22 @@
 import { useState } from "react"
+
 import type { Word } from "./content"
-import { getWordVisual } from "./visualAssets"
-import { getVerifiedVocabularyPhoto } from "./VocabularyImagery"
+
+import { getVerifiedVocabularyImage } from "./VocabularyImagery"
 
 interface Props {
   word: string
+
   topic?: string
+
   className?: string
 }
+
 export default function WordPicture({ word, topic, className = "" }: Props) {
-  const verified = getWordVisual(word, topic)
-  const photo = verified
-    ? undefined
-    : getVerifiedVocabularyPhoto({ word, topic } as Word)
-  const visual = verified
-    ? {
-        src: verified.src,
-        alt: verified.alt,
-        credit: `${verified.photographer} / Unsplash`,
-      }
-    : photo
-      ? {
-          src: photo.src,
-          alt: `Photograph of ${word}`,
-          credit: `${photo.author} · ${photo.license}`,
-        }
-      : undefined
+  const visual = getVerifiedVocabularyImage({ word, topic } as Word)
+
   const [failed, setFailed] = useState(false)
+
   if (!visual || failed)
     return (
       <div
@@ -46,13 +36,14 @@ export default function WordPicture({ word, topic, className = "" }: Props) {
         </span>
       </div>
     )
+
   return (
     <img
-      data-image-status={verified ? "verified" : "library"}
+      data-image-status="verified"
       data-vocabulary-word={word}
       src={visual.src}
-      alt={visual.alt}
-      title={`Photo for ${word} · ${visual.credit}`}
+      alt={visual.description || `Photograph of ${word}`}
+      title={`Photo for ${word} · ${visual.author} · ${visual.license}`}
       width={900}
       height={600}
       loading="lazy"

@@ -83,7 +83,9 @@ import {
   VocabularyPhoto,
   VocabularyPhotoCredit,
   VocabularyPhotographyCredits,
+  getVerifiedVocabularyImage,
   getVocabularyPhoto,
+  hasVerifiedVocabularyImage,
   visualVocabulary,
 } from "./VocabularyImagery"
 
@@ -124,6 +126,8 @@ const AssessmentPage = lazy(() => import("./AssessmentPage"))
 const EnglishChatPage = lazy(() => import("./EnglishChatPage"))
 
 const wordById = new Map(vocabulary.map((word) => [word.id, word]))
+
+const visualPracticeVocabulary = visualVocabulary(vocabulary)
 
 for (const scene of scenes) {
   for (const object of scene.objects) {
@@ -1341,9 +1345,11 @@ const cefrColors: Record<CEFRLevel, string> = {
 
 function CEFRBadge({
   word,
+
   detailed = false,
 }: {
   word: Word
+
   detailed?: boolean
 }) {
   if (!word.cefr) return null
@@ -5271,82 +5277,22 @@ function PracticePage() {
         .includes(params.get("q")!.trim().toLowerCase()),
     )
 
-  const makeOptions = (question: Word) =>
-    shuffled([
+  const makeOptions = (question: Word) => {
+    const questionImage = getVerifiedVocabularyImage(question)
+
+    return shuffled([
       question,
 
       ...shuffled(
-        vocabulary.filter(
+        visualPracticeVocabulary.filter(
           (item) =>
-            [
-              "apple",
-
-              "banana",
-
-              "bread",
-
-              "bicycle",
-
-              "cat",
-
-              "dog",
-
-              "ball",
-
-              "tree",
-
-              "flower",
-
-              "book",
-
-              "laptop",
-
-              "phone",
-
-              "house",
-
-              "chair",
-
-              "sofa",
-
-              "medicine",
-
-              "airplane",
-
-              "shirt",
-
-              "shoe",
-
-              "carrot",
-
-              "refrigerator",
-
-              "clock",
-
-              "table",
-
-              "bed",
-
-              "sun",
-
-              "printer",
-
-              "coffee",
-            ].includes(item.id) &&
             item.id !== question.id &&
-            !(
-              ["reading", "studying", "shelf"].includes(question.id) &&
-              item.id === "book"
-            ) &&
-            getVocabularyPhoto(item).src !== getVocabularyPhoto(question).src &&
-            item.topic !== question.topic &&
-            !(
-              ["house", "school", "library", "market"].includes(question.id) &&
-              ["house", "school", "library", "market"].includes(item.id)
-            ),
+            item.word !== question.word &&
+            getVerifiedVocabularyImage(item)?.src !== questionImage?.src,
         ),
       ).slice(0, 3),
     ])
+  }
 
   function start(nextMode: string) {
     const reviewIds = [
@@ -5383,14 +5329,32 @@ function PracticePage() {
 
     if (!source.length) return
 
-    const count =
-      nextMode === "matching" ? Math.min(4, source.length) : questionCount
+    const imageDependentMode = [
+      "picture",
 
-    const sample = shuffled(
-      ["picture", "word", "matching", "spelling"].includes(nextMode)
-        ? visualVocabulary(source)
-        : source,
-    )
+      "word",
+
+      "matching",
+
+      "spelling",
+    ].includes(nextMode)
+
+    const visualSource = imageDependentMode ? visualVocabulary(source) : []
+
+    const activeMode =
+      imageDependentMode && !visualSource.length ? "multiple" : nextMode
+
+    const sampleSource =
+      imageDependentMode && visualSource.length ? visualSource : source
+
+    const count =
+      activeMode === "matching"
+        ? Math.min(4, sampleSource.length)
+        : imageDependentMode && visualSource.length
+          ? Math.min(questionCount, sampleSource.length)
+          : questionCount
+
+    const sample = shuffled(sampleSource)
 
     const nextQuestions = Array.from(
       { length: count },
@@ -5401,12 +5365,12 @@ function PracticePage() {
     setQuestions(nextQuestions)
 
     setOptions(
-      nextMode === "matching"
+      activeMode === "matching"
         ? shuffled(nextQuestions)
         : makeOptions(nextQuestions[0]),
     )
 
-    setMode(nextMode)
+    setMode(activeMode)
 
     setIndex(0)
 
@@ -5598,7 +5562,9 @@ function PracticePage() {
       : mode
 
   const questionMode =
-    !current?.image && ["picture", "word"].includes(requestedQuestionMode || "")
+    !current ||
+    (!hasVerifiedVocabularyImage(current) &&
+      ["picture", "word", "spelling"].includes(requestedQuestionMode || ""))
       ? "multiple"
       : requestedQuestionMode
 
@@ -6241,7 +6207,13 @@ function PracticeAnswerReview({ outcomes }: PracticeAnswerReviewProps) {
                   aria-label={`Review answer ${index + 1}: ${word.word}`}
                   className="shrink-0 rounded-lg bg-card"
                 >
-                  <Illustration word={word.id} className="h-14 w-16" />
+                  {hasVerifiedVocabularyImage(word) ? (
+                    <Illustration word={word.id} className="h-14 w-16" />
+                  ) : (
+                    <span className="flex h-14 w-16 items-center justify-center text-primary">
+                      <BookOpen aria-hidden="true" size={20} />
+                    </span>
+                  )}
                 </button>
                 <div className="min-w-0 flex-1">
                   <button

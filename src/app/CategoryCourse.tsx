@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react"
+
 import { Link, useSearchParams } from "react-router"
+
 import {
   ArrowRight,
   Award,
@@ -25,247 +27,402 @@ import {
   Trophy,
   Volume2,
 } from "lucide-react"
+
 import type { Word } from "./content"
+
 import type { ReviewOutcome, Stored } from "./App"
+
 import { scenes } from "./SceneCanvas"
+
 import { CategoryHero } from "./CategoryImagery"
-import { getVocabularyPhoto, visualVocabulary } from "./VocabularyImagery"
-import { topicIntroductions } from "./content"
+
 import {
-  cefrLabels,
-  cefrLevels,
-  resolveCEFRSelection,
-} from "./cefr"
+  getVerifiedVocabularyImage,
+  hasVerifiedVocabularyImage,
+  visualVocabulary,
+} from "./VocabularyImagery"
+
+import { topicIntroductions } from "./content"
+
+import { cefrLabels, cefrLevels, resolveCEFRSelection } from "./cefr"
 
 type Section = "dashboard" | "vocabulary" | "practice" | "write" | "flashcards" | "games" | "progress"
+
 type LearningSection = "practice" | "write" | "flashcards" | "games"
+
 interface CourseProps {
   category: string
+
   words: Word[]
+
   data: Stored
+
   update: (fn: (data: Stored) => Stored) => void
+
   openWord: (word: Word) => void
+
   visitWord: (word: Word) => void
+
   favorite: (id: string) => void
+
   art: (word: Word, className?: string) => ReactNode
+
   audio: (text: string) => ReactNode
+
   topicArt: ReactNode
+
   vocabularyContent: ReactNode
+
   sceneWordIds: Record<string, string[]>
+
   complete: (
     section: LearningSection,
+
     mode: string,
+
     outcomes: ReviewOutcome[],
   ) => void
 }
+
 const primary =
   "inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+
 const secondary =
   "inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-40"
+
 const card = "rounded-2xl border border-border bg-card"
+
 const sections = [
   {
     id: "dashboard",
+
     name: "Category Home",
+
     icon: Home,
+
     description: "Your next step, all in one place.",
   },
+
   {
     id: "vocabulary",
+
     name: "Vocabulary",
+
     icon: BookOpen,
+
     description: "See, hear, and explore every word.",
   },
+
   {
     id: "practice",
+
     name: "Practice",
+
     icon: Target,
+
     description: "Picture, listening, meaning, and sentence questions.",
   },
+
   {
     id: "write",
+
     name: "Write",
+
     icon: Pencil,
+
     description: "Build spelling confidence, one word at a time.",
   },
+
   {
     id: "flashcards",
+
     name: "Flashcards",
+
     icon: Layers,
+
     description: "Flip a card. Make a word familiar.",
   },
+
   {
     id: "games",
+
     name: "Games",
+
     icon: Gamepad2,
+
     description: "Match, remember, build, and beat the clock.",
   },
+
   {
     id: "progress",
+
     name: "Category Progress",
+
     icon: TrendingUp,
+
     description: "See how far you've come in this category.",
   },
 ] as const
+
 const practiceActivities = [
   {
     id: "picture",
+
     title: "Picture → Word",
+
     text: "Choose a word from the picture and its clue.",
+
     icon: Grid2X2,
   },
+
   {
     id: "word",
+
     title: "Word → Picture",
+
     text: "Find the picture that represents the word.",
+
     icon: BookOpen,
   },
+
   {
     id: "multiple",
+
     title: "Multiple Choice",
+
     text: "Connect a simple definition to the right word.",
+
     icon: Target,
   },
+
   {
     id: "listening",
+
     title: "Listening",
+
     text: "Listen, then choose the word you hear.",
+
     icon: Headphones,
   },
+
   {
     id: "matching",
+
     title: "Matching",
+
     text: "Connect each word to its illustrated meaning.",
+
     icon: Layers,
   },
+
   {
     id: "identify",
+
     title: "Identify the Picture",
+
     text: "Read a definition and identify its picture.",
+
     icon: Grid2X2,
   },
+
   {
     id: "choose",
+
     title: "Choose the Correct Word",
+
     text: "Use an everyday example to find the word.",
+
     icon: CheckCircle2,
   },
+
   {
     id: "sentence",
+
     title: "Complete the Sentence",
+
     text: "Choose the missing word in a real-world sentence.",
+
     icon: Pencil,
   },
+
   {
     id: "spelling",
+
     title: "Spelling",
+
     text: "Look, listen, and type the whole English word.",
+
     icon: Pencil,
   },
+
   {
     id: "topic-review",
+
     title: "Topic Review",
+
     text: "Mix pictures, listening, spelling, and meanings from this category.",
+
     icon: Shuffle,
   },
+
   {
     id: "review",
+
     title: "Quick Review",
+
     text: "Recall recently studied words, then check what you remembered.",
+
     icon: RotateCcw,
   },
 ]
+
 const writingActivities = [
   {
     id: "spelling",
+
     title: "Picture Spelling",
+
     text: "See the picture, then write the whole word.",
+
     icon: Pencil,
   },
+
   {
     id: "missing",
+
     title: "Missing Letters",
+
     text: "Use the visible letters to recover the word.",
+
     icon: Grid2X2,
   },
+
   {
     id: "complete-word",
+
     title: "Complete the Word",
+
     text: "Start with a few letters and finish the word.",
+
     icon: BookOpen,
   },
+
   {
     id: "dictation",
+
     title: "Type What You Hear",
+
     text: "Listen to the pronunciation, then type it.",
+
     icon: Headphones,
   },
 ]
+
 const gameActivities = [
   {
     id: "picture-match",
+
     title: "Picture Match",
+
     text: "Match four words with their pictures.",
+
     icon: Grid2X2,
   },
+
   {
     id: "word-match",
+
     title: "Word Match",
+
     text: "Discover related words from the same category.",
+
     icon: Layers,
   },
+
   {
     id: "memory",
+
     title: "Memory Game",
+
     text: "Find hidden word and picture pairs.",
+
     icon: Sparkles,
   },
+
   {
     id: "speed",
+
     title: "Speed Round",
+
     text: "How many can you answer in 60 seconds?",
+
     icon: Clock,
   },
+
   {
     id: "listen-choose",
+
     title: "Listen & Choose",
+
     text: "Listen to a word and pick its picture.",
+
     icon: Headphones,
   },
+
   {
     id: "builder",
+
     title: "Word Builder",
+
     text: "Arrange letter tiles to build a word.",
+
     icon: Pencil,
   },
+
   {
     id: "picture-challenge",
+
     title: "Picture Challenge",
+
     text: "Identify an illustrated word and its meaning.",
+
     icon: Target,
   },
 ]
+
 function shuffled<Item>(items: Item[]): Item[] {
   const next = [...items]
+
   for (let index = next.length - 1; index > 0; index--) {
     const swap = Math.floor(Math.random() * (index + 1))
     ;[next[index], next[swap]] = [next[swap], next[index]]
   }
+
   return next
 }
+
 function normalized(value: string) {
   return value
+
     .toLowerCase()
+
     .normalize("NFD")
+
     .replace(/[\u0300-\u036f]/g, "")
+
     .replace(/[’']/g, "")
+
     .replace(/[-\s]+/g, " ")
+
     .trim()
 }
+
 interface MeterProps {
   value: number
+
   label: string
 }
+
 function Meter({ value, label }: MeterProps) {
   return (
     <div
@@ -283,17 +440,23 @@ function Meter({ value, label }: MeterProps) {
     </div>
   )
 }
+
 function courseStats(course: CourseProps) {
   const { data, category, words } = course
+
   const learned = words.filter((word) => data.learned.includes(word.id)).length
+
   const cards = data.categoryCards[category] || {}
+
   const sessions = data.sessions.filter((session) => session.topic === category)
+
   const accuracy = (section: LearningSection) => {
     const relevant = sessions.filter(
       (session) =>
         session.section === section ||
         (!session.section && section === "practice"),
     )
+
     return relevant.length
       ? Math.round(
           (relevant.reduce((sum, item) => sum + item.score, 0) /
@@ -302,9 +465,13 @@ function courseStats(course: CourseProps) {
         )
       : 0
   }
+
   const reviewed = words.filter((word) => cards[word.id]).length
+
   const known = words.filter((word) => cards[word.id] === "known").length
+
   const games = sessions.filter((session) => session.section === "games").length
+
   const overall = Math.round(
     ((learned / words.length) * 100 +
       accuracy("practice") +
@@ -313,98 +480,141 @@ function courseStats(course: CourseProps) {
       Math.min(100, games * 20)) /
       5,
   )
+
   return { learned, reviewed, known, games, overall, accuracy, sessions }
 }
+
 export default function CategoryCourse(course: CourseProps) {
   const [params, setParams] = useSearchParams()
+
   const requested =
     params.get("section") ||
     (params.has("scene") || params.has("view") ? "vocabulary" : "dashboard")
+
   const section: Section = sections.some((item) => item.id === requested)
     ? requested as Section
     : "dashboard"
+
   const activity = params.get("activity") || ""
+
   const requestedCEFR = params.get("cefr")
+
   const cefr = resolveCEFRSelection(
     requestedCEFR,
+
     course.data.preferences.cefrLevel,
   )
+
   const group = params.get("group") || "All subcategories"
+
   const levelWords =
     cefr === "All levels"
       ? course.words
       : course.words.filter((word) => word.cefr?.level === cefr)
+
   const groups = [...new Set(levelWords.map((word) => word.group))]
+
   const groupWords =
     group === "All subcategories"
       ? levelWords
       : levelWords.filter((word) => word.group === group)
+
   const scene = scenes.find((item) => item.id === params.get("scene"))
+
   const sceneWords =
     scene && section !== "flashcards"
       ? groupWords.filter((word) =>
           course.sceneWordIds[scene.id]?.includes(word.id),
         )
       : groupWords
+
   const selectedWords = params.get("word")
     ? sceneWords.filter((word) => word.id === params.get("word"))
     : sceneWords
+
   const scoped = selectedWords.filter(
     (word) =>
       (!params.has("favorites") || course.data.favorites.includes(word.id)) &&
       (!params.get("q") ||
         `${word.word} ${word.definition} ${word.topic}`
+
           .toLowerCase()
+
           .includes(params.get("q")!.trim().toLowerCase())),
   )
+
+  const visualScoped = visualVocabulary(scoped)
+
   const stats = courseStats(course)
+
   const questionCount = [5, 10, 15].includes(Number(params.get("length")))
     ? Number(params.get("length"))
     : 5
+
   const reviewIds = new Set([
     ...course.data.recent,
+
     ...course.data.learned,
+
     ...course.data.reviewed,
   ])
+
   const reviewWords = scoped.filter((word) => reviewIds.has(word.id))
+
   const navigate = (next: Section, mode?: string) => {
     const search = new URLSearchParams()
+
     search.set("section", next)
+
     if (mode) search.set("activity", mode)
+
     if (params.get("length")) search.set("length", params.get("length")!)
+
     if (next !== "dashboard" && next !== "progress")
       search.set("cefr", cefr === "All levels" ? "all" : cefr)
+
     if (next === section && mode) {
       if (params.has("favorites")) search.set("favorites", "true")
+
       if (params.get("q")) search.set("q", params.get("q")!)
     }
+
     if (scene && next === section && mode) search.set("scene", scene.id)
+
     if (
       group !== "All subcategories" &&
       next !== "dashboard" &&
       next !== "progress"
     )
       search.set("group", group)
+
     if (
       params.get("word") &&
       ["practice", "write", "games", "flashcards"].includes(next)
     )
       search.set("word", params.get("word")!)
+
     setParams(search)
   }
+
   const activities =
     section === "write"
       ? writingActivities
       : section === "games"
         ? gameActivities
         : practiceActivities
+
   const active = activities.find((item) => item.id === activity)
+
   const onComplete = (outcomes: ReviewOutcome[]) =>
     course.complete(
       section as LearningSection,
+
       active?.title || activity,
+
       outcomes,
     )
+
   return (
     <>
       <Link
@@ -531,14 +741,19 @@ export default function CategoryCourse(course: CourseProps) {
                   value={cefr}
                   onChange={(event) => {
                     const next = new URLSearchParams(params)
+
                     next.set("section", section)
+
                     next.set(
                       "cefr",
+
                       event.target.value === "All levels"
                         ? "all"
                         : event.target.value,
                     )
+
                     next.delete("group")
+
                     setParams(next)
                   }}
                   className="mt-2 block w-full rounded-xl border border-border bg-background px-3 py-2.5 text-xs"
@@ -558,10 +773,13 @@ export default function CategoryCourse(course: CourseProps) {
                   value={group}
                   onChange={(event) => {
                     const next = new URLSearchParams(params)
+
                     next.set("section", section)
+
                     event.target.value === "All subcategories"
                       ? next.delete("group")
                       : next.set("group", event.target.value)
+
                     setParams(next)
                   }}
                   className="mt-2 block w-full rounded-xl border border-border bg-background px-3 py-2.5 text-xs"
@@ -580,8 +798,11 @@ export default function CategoryCourse(course: CourseProps) {
                     value={questionCount}
                     onChange={(event) => {
                       const next = new URLSearchParams(params)
+
                       next.set("section", section)
+
                       next.set("length", event.target.value)
+
                       setParams(next)
                     }}
                     className="mt-2 block w-full rounded-xl border border-border bg-background px-3 py-2.5 text-xs"
@@ -627,10 +848,11 @@ export default function CategoryCourse(course: CourseProps) {
                 <ChevronLeft size={14} />
                 All {course.category} {section} activities
               </button>
-              {["matching", "picture-match", "memory"].includes(activity) ? (
+              {["matching", "picture-match", "memory"].includes(activity) &&
+              visualScoped.length ? (
                 <PairGame
                   course={course}
-                  words={scoped}
+                  words={visualScoped}
                   memory={activity === "memory"}
                   title={active.title}
                   onComplete={onComplete}
@@ -644,9 +866,17 @@ export default function CategoryCourse(course: CourseProps) {
                       ? reviewWords
                       : scoped
                   }
-                  mode={activity}
+                  mode={
+                    ["matching", "picture-match", "memory"].includes(activity)
+                      ? "multiple"
+                      : activity
+                  }
                   questionCount={questionCount}
-                  title={active.title}
+                  title={
+                    ["matching", "picture-match", "memory"].includes(activity)
+                      ? `${active.title} · meaning practice`
+                      : active.title
+                  }
                   section={section as LearningSection}
                   onComplete={onComplete}
                   onProgress={() => navigate("progress")}
@@ -690,17 +920,25 @@ export default function CategoryCourse(course: CourseProps) {
 
 interface DashboardProps {
   course: CourseProps
+
   navigate: (section: Section, activity?: string) => void
 }
+
 function CategoryDashboard({ course, navigate }: DashboardProps) {
   const stats = courseStats(course)
+
   const recent = course.data.recent
+
     .map((id) => course.words.find((word) => word.id === id))
+
     .filter((word): word is Word => Boolean(word))
+
     .slice(0, 4)
+
   const favorites = course.words.filter((word) =>
     course.data.favorites.includes(word.id),
   )
+
   const recommendation: Section = !stats.learned
     ? "vocabulary"
     : stats.reviewed < Math.min(10, course.words.length)
@@ -708,21 +946,29 @@ function CategoryDashboard({ course, navigate }: DashboardProps) {
       : !stats.sessions.some((session) => session.section === "write")
         ? "write"
         : "practice"
+
   return (
     <div className="space-y-6">
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {[
           { label: "Words learned", value: stats.learned, icon: CheckCircle2 },
+
           {
             label: "Words remaining",
+
             value: course.words.length - stats.learned,
+
             icon: BookOpen,
           },
+
           {
             label: "Category progress",
+
             value: `${stats.overall}%`,
+
             icon: TrendingUp,
           },
+
           { label: "Favorite words", value: favorites.length, icon: Heart },
         ].map(({ label, value, icon: Icon }) => (
           <section key={label} className={`${card} p-5`}>
@@ -745,7 +991,9 @@ function CategoryDashboard({ course, navigate }: DashboardProps) {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {sections
+
             .filter((item) => item.id !== "dashboard")
+
             .map(({ id, name, icon: Icon, description }) => (
               <button
                 key={id}
@@ -861,40 +1109,62 @@ function CategoryDashboard({ course, navigate }: DashboardProps) {
     </div>
   )
 }
+
 function CategoryProgress({ course, navigate }: DashboardProps) {
   const stats = courseStats(course)
+
   const rows = [
     {
       name: "Vocabulary",
+
       detail: `${stats.learned} / ${course.words.length} learned`,
+
       value: (stats.learned / course.words.length) * 100,
+
       section: "vocabulary" as Section,
     },
+
     {
       name: "Practice",
+
       detail: `${stats.accuracy("practice")}% accuracy`,
+
       value: stats.accuracy("practice"),
+
       section: "practice" as Section,
     },
+
     {
       name: "Write",
+
       detail: `${stats.accuracy("write")}% accuracy`,
+
       value: stats.accuracy("write"),
+
       section: "write" as Section,
     },
+
     {
       name: "Flashcards",
+
       detail: `${stats.reviewed} / ${course.words.length} reviewed · ${stats.known} known`,
+
       value: (stats.reviewed / course.words.length) * 100,
+
       section: "flashcards" as Section,
     },
+
     {
       name: "Games",
+
       detail: `${stats.games} games completed`,
+
       value: Math.min(100, stats.games * 20),
+
       section: "games" as Section,
     },
   ]
+
   return (
     <div className="space-y-5">
       <section className={`${card} p-6`}>
@@ -946,8 +1216,11 @@ function CategoryProgress({ course, navigate }: DashboardProps) {
         {stats.sessions.length ? (
           <div className="mt-4 space-y-3">
             {stats.sessions
+
               .slice(-8)
+
               .reverse()
+
               .map((session, index) => (
                 <div
                   key={`${session.date}-${index}`}
@@ -981,22 +1254,33 @@ function CategoryProgress({ course, navigate }: DashboardProps) {
 
 interface SessionProps {
   course: CourseProps
+
   words: Word[]
+
   title: string
+
   onComplete: (outcomes: ReviewOutcome[]) => void
+
   onProgress: () => void
 }
+
 interface QuizProps extends SessionProps {
   mode: string
+
   section: LearningSection
+
   questionCount: number
 }
+
 interface ResultProps extends SessionProps {
   outcomes: ReviewOutcome[]
+
   retry: () => void
 }
+
 function Result({ course, title, outcomes, retry, onProgress }: ResultProps) {
   const score = outcomes.filter((item) => item.correct).length
+
   return (
     <section className={`${card} mx-auto max-w-2xl p-6 text-center md:p-8`}>
       <span className="inline-flex rounded-full bg-accent/20 p-5 text-accent-foreground">
@@ -1044,6 +1328,7 @@ function Result({ course, title, outcomes, retry, onProgress }: ResultProps) {
         <div className="mt-3 space-y-2">
           {outcomes.map((outcome, index) => {
             const word = course.words.find((item) => item.id === outcome.id)!
+
             return (
               <div
                 key={`${outcome.id}-${index}`}
@@ -1076,70 +1361,120 @@ function Result({ course, title, outcomes, retry, onProgress }: ResultProps) {
     </section>
   )
 }
+
 function QuizSession(props: QuizProps) {
   const {
     course,
+
     words,
+
     mode: activityMode,
+
     title,
+
     section,
+
     questionCount,
+
     onComplete,
   } = props
-  const questionPool = [
+
+  const imageDependentActivity = [
     "picture",
+
     "word",
+
     "identify",
+
     "listen-choose",
+
     "spelling",
+
     "picture-challenge",
   ].includes(activityMode)
-    ? visualVocabulary(words)
-    : words
+
+  const verifiedVisualWords = visualVocabulary(words)
+
+  const questionPool =
+    imageDependentActivity && verifiedVisualWords.length
+      ? verifiedVisualWords
+      : words
+
   const [round, setRound] = useState(0)
+
   const [questions, setQuestions] = useState(() =>
     shuffled(questionPool).slice(
       0,
+
       activityMode === "speed" ? questionPool.length : questionCount,
     ),
   )
+
   const [index, setIndex] = useState(0)
+
   const requestedMode =
     activityMode === "topic-review"
       ? [
           "picture",
+
           "word",
+
           course.data.preferences.audio ? "listening" : "multiple",
+
           "spelling",
+
           "multiple",
+
           "sentence",
         ][index % 6]
       : activityMode
+
   const unavailablePicture =
-    !questions[index].image &&
+    !hasVerifiedVocabularyImage(questions[index]) &&
     [
       "picture",
+
       "word",
+
       "identify",
+
       "listen-choose",
+
       "picture-challenge",
     ].includes(requestedMode)
+
   const mode = unavailablePicture ? "multiple" : requestedMode
+
   const [revealed, setRevealed] = useState(false)
+
   const [input, setInput] = useState("")
+
   const [feedback, setFeedback] = useState<ReviewOutcome | null>(null)
+
   const [outcomes, setOutcomes] = useState<ReviewOutcome[]>([])
+
   const [done, setDone] = useState(false)
+
   const [remaining, setRemaining] = useState(60)
+
   const [tiles, setTiles] = useState<number[]>([])
+
   const completion = useRef(false)
+
   const answers = useRef<ReviewOutcome[]>([])
+
   const word = questions[index]
+
   const [choices, setChoices] = useState<Word[]>([])
+
   const [letters, setLetters] = useState<string[]>([])
+
   const [related, setRelated] = useState<Word | null>(null)
+
   const writing = section === "write" || mode === "spelling"
+
   const isPictureChoice = ["word", "identify", "listen-choose"].includes(mode)
+
   useEffect(() => {
     const relation =
       course.words.find(
@@ -1147,119 +1482,174 @@ function QuizSession(props: QuizProps) {
       ) ||
       course.words.find((item) => item.id !== word.id) ||
       word
+
     setRelated(relation)
+
     const correct = mode === "word-match" ? relation : word
+
+    const correctImage = getVerifiedVocabularyImage(correct)
+
     const distinct = shuffled(
       (isPictureChoice ? visualVocabulary(course.words) : course.words).filter(
         (item) =>
           item.id !== correct.id &&
           item.word !== correct.word &&
           (!isPictureChoice ||
-            getVocabularyPhoto(item).src !== getVocabularyPhoto(correct).src),
+            getVerifiedVocabularyImage(item)?.src !== correctImage?.src),
       ),
     ).slice(0, 3)
+
     const fallback = shuffled(
       course.words.filter(
         (item) =>
           item.id !== correct.id &&
           item.word !== correct.word &&
-          (!isPictureChoice || Boolean(item.image)) &&
+          (!isPictureChoice || hasVerifiedVocabularyImage(item)) &&
           !distinct.some((choice) => choice.id === item.id),
       ),
     )
+
     setChoices(
       shuffled([
         correct,
+
         ...distinct,
+
         ...fallback.slice(0, 3 - distinct.length),
       ]),
     )
+
     setLetters(
       shuffled(
         normalized(word.word)
+
           .replace(/[^a-z]/g, "")
+
           .split(""),
       ),
     )
+
     course.visitWord(word)
   }, [index, round])
+
   function finish(next: ReviewOutcome[]) {
     if (completion.current) return
+
     completion.current = true
+
     setDone(true)
+
     if (next.length) onComplete(next)
   }
+
   useEffect(() => {
     if (mode !== "speed" || done) return
+
     const deadline = Date.now() + 60000
+
     const timer = setInterval(() => {
       const seconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
+
       setRemaining(seconds)
+
       if (!seconds) finish(answers.current)
     }, 250)
+
     return () => clearInterval(timer)
   }, [mode, round, done])
+
   function submit(answer: string, reveal = false) {
     if (feedback || done) return
+
     const correctWord = mode === "word-match" ? related || word : word
+
     const correct =
       !reveal &&
       (mode === "builder"
         ? answer.toLowerCase() ===
           normalized(correctWord.word).replace(/[^a-z]/g, "")
         : normalized(answer) === normalized(correctWord.word))
+
     const result = {
       id: correctWord.id,
+
       correct,
+
       answer: reveal
         ? "Answer revealed"
         : answer === "__review_again__"
           ? "Needs review"
           : answer,
     }
+
     const next = [...answers.current, result]
+
     answers.current = next
+
     setOutcomes(next)
+
     setFeedback(result)
   }
+
   function next() {
     if (index + 1 >= questions.length) finish(answers.current)
     else {
       setIndex((previous) => previous + 1)
+
       setInput("")
+
       setTiles([])
+
       setFeedback(null)
+
       setRevealed(false)
     }
   }
+
   function retry() {
     completion.current = false
+
     answers.current = []
+
     setQuestions(
       shuffled(questionPool).slice(
         0,
+
         activityMode === "speed" ? questionPool.length : questionCount,
       ),
     )
+
     setIndex(0)
+
     setInput("")
+
     setTiles([])
+
     setFeedback(null)
+
     setRevealed(false)
+
     setOutcomes([])
+
     setDone(false)
+
     setRemaining(60)
+
     setRound((previous) => previous + 1)
   }
+
   if (done) return <Result {...props} outcomes={outcomes} retry={retry} />
+
   const blankSentence = word.example.replace(
     new RegExp(word.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"),
+
     "______",
   )
+
   const instruction = writing
     ? mode === "dictation"
       ? "Type the word you hear."
-      : !word.image
+      : !hasVerifiedVocabularyImage(word)
         ? "Use the meaning and audio to write the word."
         : mode === "missing"
           ? "Restore the missing letters. Write the whole word."
@@ -1285,6 +1675,7 @@ function QuizSession(props: QuizProps) {
                     : mode === "builder"
                       ? "Arrange the letters to build the word."
                       : "Which word matches this picture and clue?"
+
   return (
     <section className={`${card} mx-auto max-w-3xl p-5 md:p-7`}>
       <div className="mb-3 flex flex-wrap justify-between gap-3 text-xs">
@@ -1343,12 +1734,18 @@ function QuizSession(props: QuizProps) {
         mode !== "word" && (
           <div className="mb-5 rounded-2xl bg-secondary/50 p-4">
             <div className="flex justify-center">
-              {course.art(word, "h-44 w-52")}
+              {hasVerifiedVocabularyImage(word) ? (
+                course.art(word, "h-44 w-52")
+              ) : (
+                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-card text-primary">
+                  <BookOpen aria-hidden="true" size={30} />
+                </span>
+              )}
             </div>
             <p className="mt-2 text-center text-xs leading-5 text-muted-foreground">
               {word.definition}
             </p>
-            {getVocabularyPhoto(word).kind === "context" && (
+            {!hasVerifiedVocabularyImage(word) && (
               <p className="mt-1 text-center text-xs text-muted-foreground">
                 No verified image yet · {word.group}
               </p>
@@ -1367,10 +1764,13 @@ function QuizSession(props: QuizProps) {
       {mode === "missing" && (
         <p className="mb-4 text-center font-mono text-xl tracking-widest">
           {word.word
+
             .split("")
+
             .map((letter, position) =>
               letter === " " || position % 2 === 0 ? letter : "_",
             )
+
             .join("")}
         </p>
       )}
@@ -1421,6 +1821,7 @@ function QuizSession(props: QuizProps) {
         <form
           onSubmit={(event) => {
             event.preventDefault()
+
             submit(input)
           }}
           className="space-y-3"
@@ -1571,61 +1972,91 @@ function QuizSession(props: QuizProps) {
 interface PairProps extends SessionProps {
   memory: boolean
 }
+
 function PairGame(props: PairProps) {
   const { course, words, memory, onComplete } = props
+
   const [pairs, setPairs] = useState(() =>
     shuffled(visualVocabulary(words)).slice(0, 4),
   )
+
   const [right, setRight] = useState(() => shuffled(pairs))
+
   const [deck, setDeck] = useState(() =>
     shuffled(
       pairs.flatMap((word) => [
         { id: word.id, type: "word" },
+
         { id: word.id, type: "picture" },
       ]),
     ),
   )
+
   const [left, setLeft] = useState<string | null>(null)
+
   const [flipped, setFlipped] = useState<number[]>([])
+
   const [matched, setMatched] = useState<string[]>([])
+
   const [failed, setFailed] = useState<string[]>([])
+
   const [feedback, setFeedback] = useState("")
+
   const [attempts, setAttempts] = useState(0)
+
   const [done, setDone] = useState(false)
+
   const [outcomes, setOutcomes] = useState<ReviewOutcome[]>([])
+
   const delay = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   useEffect(
     () => () => {
       if (delay.current) clearTimeout(delay.current)
     },
+
     [],
   )
+
   function check(first: string, second: string, distinct = true) {
     setAttempts((previous) => previous + 1)
+
     if (first === second && distinct) {
       const next = [...matched, first]
+
       setMatched(next)
+
       setLeft(null)
+
       setFlipped([])
+
       setFeedback("Correct pair! Keep going.")
+
       if (next.length === pairs.length) {
         const results = pairs.map((word) => ({
           id: word.id,
+
           correct: !failed.includes(word.id),
         }))
+
         setOutcomes(results)
+
         setDone(true)
+
         onComplete(results)
       }
     } else {
       setFailed((previous) => [...new Set([...previous, first])])
+
       setFeedback("Not a pair yet. Try again.")
+
       if (memory)
         delay.current = setTimeout(() => {
           setFlipped([])
         }, 900)
     }
   }
+
   function flip(index: number) {
     if (
       flipped.includes(index) ||
@@ -1633,39 +2064,59 @@ function PairGame(props: PairProps) {
       matched.includes(deck[index].id)
     )
       return
+
     const next = [...flipped, index]
+
     setFlipped(next)
+
     if (next.length === 2) {
       const first = deck[next[0]],
         second = deck[next[1]]
+
       if (first.id === second.id && first.type !== second.type)
         check(first.id, second.id)
       else check(first.id, second.id, false)
     }
   }
+
   function retry() {
     if (delay.current) clearTimeout(delay.current)
+
     const next = shuffled(visualVocabulary(words)).slice(0, 4)
+
     setPairs(next)
+
     setRight(shuffled(next))
+
     setDeck(
       shuffled(
         next.flatMap((word) => [
           { id: word.id, type: "word" },
+
           { id: word.id, type: "picture" },
         ]),
       ),
     )
+
     setLeft(null)
+
     setFlipped([])
+
     setMatched([])
+
     setFailed([])
+
     setFeedback("")
+
     setAttempts(0)
+
     setDone(false)
+
     setOutcomes([])
   }
+
   if (done) return <Result {...props} outcomes={outcomes} retry={retry} />
+
   return (
     <section className={`${card} mx-auto max-w-3xl p-5 md:p-7`}>
       <div className="mb-3 flex flex-wrap justify-between gap-2 text-xs">
@@ -1686,16 +2137,16 @@ function PairGame(props: PairProps) {
           : "Choose a word, then its picture."}
       </h2>
       <p className="mb-6 mt-2 text-center text-xs text-muted-foreground">
-        {pairs.some((word) => word.imageStatus === "verified")
-          ? "Checked pictures include meaning clues."
-          : "These words have no checked photos yet; match their definitions instead."}{" "}
-        Every pair belongs to {course.category}.
+        Verified pictures include meaning clues. Every pair belongs to{" "}
+        {course.category}.
       </p>
       {memory ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {deck.map((item, index) => {
             const word = pairs.find((word) => word.id === item.id)!
+
             const visible = flipped.includes(index) || matched.includes(item.id)
+
             return (
               <button
                 key={index}
@@ -1789,78 +2240,118 @@ function PairGame(props: PairProps) {
 
 interface DeckProps {
   course: CourseProps
+
   words: Word[]
+
   onProgress: () => void
 }
+
 function FlashcardDeck({ course, words, onProgress }: DeckProps) {
   const [deck, setDeck] = useState(words)
+
   const [index, setIndex] = useState(() => {
     const last = course.data.recent.find((id) =>
       words.some((word) => word.id === id),
     )
+
     return Math.max(
       0,
+
       words.findIndex((word) => word.id === last),
     )
   })
+
   const [flipped, setFlipped] = useState(false)
+
   const [front, setFront] = useState("Picture")
+
   const [rated, setRated] = useState<Record<string, boolean>>({})
+
   const [done, setDone] = useState(false)
+
   const word = deck[index]
+
   const saved = course.data.categoryCards[course.category] || {}
+
   const reviewed = words.filter((item) => saved[item.id]).length
+
   const known = words.filter((item) => saved[item.id] === "known").length
+
   useEffect(() => {
     course.visitWord(word)
+
     setFlipped(false)
   }, [word.id])
+
   function rate(correct: boolean) {
     course.update((previous) => ({
       ...previous,
+
       categoryCards: {
         ...previous.categoryCards,
+
         [course.category]: {
           ...(previous.categoryCards[course.category] || {}),
+
           [word.id]: correct ? "known" : "review",
         },
       },
+
       learned: correct
         ? [...new Set([...previous.learned, word.id])]
         : previous.learned,
+
       reviewed: [...new Set([...previous.reviewed, word.id])],
+
       activity: [
         ...previous.activity,
+
         {
           date: new Date().toISOString(),
+
           type: "reviewed" as const,
+
           target: word.id,
         },
       ].slice(-100),
     }))
+
     const next = { ...rated, [word.id]: correct }
+
     setRated(next)
+
     if (Object.keys(next).length === deck.length) finish(next)
     else {
       setIndex((index + 1) % deck.length)
+
       setFlipped(false)
     }
   }
+
   function finish(next = rated) {
     if (!Object.keys(next).length || done) return
+
     setDone(true)
+
     course.complete(
       "flashcards",
+
       "Flashcard Deck",
+
       Object.entries(next).map(([id, correct]) => ({ id, correct })),
     )
   }
+
   function retry() {
     setRated({})
+
     setDone(false)
+
     setIndex(0)
+
     setFlipped(false)
   }
+
   if (done)
     return (
       <section className={`${card} mx-auto max-w-2xl p-7 text-center`}>
@@ -1893,6 +2384,7 @@ function FlashcardDeck({ course, words, onProgress }: DeckProps) {
         </div>
       </section>
     )
+
   return (
     <section className={`${card} mx-auto max-w-3xl p-5 md:p-7`}>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -1913,6 +2405,7 @@ function FlashcardDeck({ course, words, onProgress }: DeckProps) {
             value={front}
             onChange={(event) => {
               setFront(event.target.value)
+
               setFlipped(false)
             }}
             className="rounded-xl border border-border bg-background px-3 py-2 text-xs"
@@ -1924,7 +2417,9 @@ function FlashcardDeck({ course, words, onProgress }: DeckProps) {
             aria-label="Shuffle category deck"
             onClick={() => {
               setDeck(shuffled(deck))
+
               setIndex(0)
+
               setFlipped(false)
             }}
             className={secondary}
@@ -1992,10 +2487,13 @@ function FlashcardDeck({ course, words, onProgress }: DeckProps) {
               <p className="mt-4 text-xs text-primary">
                 Related:{" "}
                 {word.related
+
                   .map(
                     (id) => course.words.find((item) => item.id === id)?.word,
                   )
+
                   .filter(Boolean)
+
                   .join(" · ")}
               </p>
             </>
@@ -2004,10 +2502,16 @@ function FlashcardDeck({ course, words, onProgress }: DeckProps) {
           ) : (
             <>
               <div className="flex justify-center">
-                {course.art(word, "h-44 w-52")}
+                {hasVerifiedVocabularyImage(word) ? (
+                  course.art(word, "h-44 w-52")
+                ) : (
+                  <span className="flex h-20 w-20 items-center justify-center rounded-full bg-secondary text-primary">
+                    <BookOpen aria-hidden="true" size={30} />
+                  </span>
+                )}
               </div>
               <p className="mt-3 text-xs leading-5 text-muted-foreground">
-                {getVocabularyPhoto(word).kind === "context"
+                {!hasVerifiedVocabularyImage(word)
                   ? word.definition
                   : word.group}
               </p>
@@ -2022,6 +2526,7 @@ function FlashcardDeck({ course, words, onProgress }: DeckProps) {
         <button
           onClick={() => {
             setIndex(index - 1)
+
             setFlipped(false)
           }}
           disabled={!index}
@@ -2041,6 +2546,7 @@ function FlashcardDeck({ course, words, onProgress }: DeckProps) {
         <button
           onClick={() => {
             setIndex(index + 1)
+
             setFlipped(false)
           }}
           disabled={index + 1 === deck.length}

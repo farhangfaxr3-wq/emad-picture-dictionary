@@ -3,16 +3,28 @@ import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..")
-const assessmentSource = await readFile(
-  join(projectRoot, "src", "app", "assessment.ts"),
-  "utf8",
+const assessmentSources = await Promise.all(
+  ["assessment.ts", "assessmentExpansion.ts"].map((file) =>
+    readFile(join(projectRoot, "src", "app", file), "utf8"),
+  ),
 )
-const sources = [...assessmentSource.matchAll(/audioSrc:\s*"([^"]+)"/g)].map(
+const sourceText = assessmentSources.join("\n")
+const sources = [...sourceText.matchAll(/audioSrc:\s*"([^"]+)"/g)].map(
   (match) => match[1],
 )
 
 if (sources.length !== 5 || new Set(sources).size !== 5) {
-  throw new Error(`Expected five unique listening recordings; found ${sources.length}.`)
+  throw new Error(
+    `Expected five unique bundled listening recordings; found ${sources.length}.`,
+  )
+}
+
+const transcripts = [...sourceText.matchAll(/audioText:\s*/g)].length
+const listeningQuestions = transcripts
+if (listeningQuestions !== 15) {
+  throw new Error(
+    `Expected fifteen listening questions with fallback transcripts; found ${listeningQuestions}.`,
+  )
 }
 
 for (const source of sources) {
@@ -22,9 +34,14 @@ for (const source of sources) {
     throw new Error(`${source} is too small to be a complete recording.`)
   }
   const header = await readFile(filePath)
-  if (header.subarray(0, 4).toString("ascii") !== "RIFF" || header.subarray(8, 12).toString("ascii") !== "WAVE") {
+  if (
+    header.subarray(0, 4).toString("ascii") !== "RIFF" ||
+    header.subarray(8, 12).toString("ascii") !== "WAVE"
+  ) {
     throw new Error(`${source} is not a valid WAV container.`)
   }
 }
 
-console.log(`Assessment audio QA passed: ${sources.length} valid WAV recordings.`)
+console.log(
+  `Assessment audio QA passed: ${sources.length} valid WAV recordings and ${listeningQuestions} listening prompts with speech fallback.`,
+)

@@ -10,9 +10,13 @@ import {
 } from "../src/app/assessment"
 
 const ids = initialAssessmentQuestions.map(({ id }) => id)
-assert.equal(new Set(ids).size, ids.length, "Assessment question ids must be unique.")
+assert.equal(
+  new Set(ids).size,
+  ids.length,
+  "Assessment question ids must be unique.",
+)
 assert.ok(
-  initialAssessmentQuestions.length >= 60,
+  initialAssessmentQuestions.length >= 90,
   `Expected a substantially expanded bank; found ${initialAssessmentQuestions.length}.`,
 )
 assert.ok(
@@ -21,7 +25,9 @@ assert.ok(
 )
 
 const questionTypes = new Set(
-  initialAssessmentQuestions.map(({ questionType }) => questionType).filter(Boolean),
+  initialAssessmentQuestions
+    .map(({ questionType }) => questionType)
+    .filter(Boolean),
 )
 for (const expected of [
   "meaning",
@@ -32,10 +38,15 @@ for (const expected of [
   "collocation",
   "usage",
 ]) {
-  assert.ok(questionTypes.has(expected as never), `Missing curated question type: ${expected}`)
+  assert.ok(
+    questionTypes.has(expected as never),
+    `Missing curated question type: ${expected}`,
+  )
 }
 
-const originalById = new Map(initialAssessmentQuestions.map((item) => [item.id, item]))
+const originalById = new Map(
+  initialAssessmentQuestions.map((item) => [item.id, item]),
+)
 const first = selectAssessmentQuestions([], "assessment-qa-seed-one")
 const second = selectAssessmentQuestions([], "assessment-qa-seed-two")
 
@@ -48,10 +59,10 @@ assert.notDeepEqual(
 )
 
 const expectedSkillCounts: Record<AssessmentSkill, number> = {
-  vocabulary: 12,
-  grammar: 8,
-  reading: 5,
-  listening: 5,
+  vocabulary: 20,
+  grammar: 12,
+  reading: 9,
+  listening: 9,
 }
 for (const [skill, expected] of Object.entries(expectedSkillCounts)) {
   assert.equal(first.filter((item) => item.skill === skill).length, expected)
@@ -67,15 +78,37 @@ for (const item of first) {
   )
 }
 
+for (let attempt = 0; attempt < 25; attempt += 1) {
+  const sample = selectAssessmentQuestions([], `assessment-coverage-${attempt}`)
+  assert.equal(sample.length, ASSESSMENT_QUESTION_COUNT)
+  assert.equal(
+    new Set(sample.map(({ id }) => id)).size,
+    ASSESSMENT_QUESTION_COUNT,
+    `Attempt ${attempt} contains duplicate questions.`,
+  )
+  for (const skill of Object.keys(expectedSkillCounts) as AssessmentSkill[]) {
+    assert.equal(
+      sample.filter((item) => item.skill === skill).length,
+      expectedSkillCounts[skill],
+      `Attempt ${attempt} has an incorrect ${skill} balance.`,
+    )
+  }
+}
+
 assert.ok(
   first.some((item) => {
     const original = originalById.get(item.id)
-    return original && item.options.join("\u0000") !== original.options.join("\u0000")
+    return (
+      original &&
+      item.options.join("\u0000") !== original.options.join("\u0000")
+    )
   }),
   "The QA attempt did not randomize any answer options.",
 )
 
-const perfectAnswers = Object.fromEntries(first.map((item) => [item.id, item.correctIndex]))
+const perfectAnswers = Object.fromEntries(
+  first.map((item) => [item.id, item.correctIndex]),
+)
 const perfect = scoreAssessment(first, perfectAnswers)
 assert.equal(perfect.correct, ASSESSMENT_QUESTION_COUNT)
 assert.equal(perfect.percent, 100)
@@ -85,4 +118,3 @@ console.log(
   `Assessment QA passed: ${initialAssessmentQuestions.length} curated questions, ` +
     `${questionTypes.size} vocabulary question types, ${first.length} balanced questions per attempt.`,
 )
-

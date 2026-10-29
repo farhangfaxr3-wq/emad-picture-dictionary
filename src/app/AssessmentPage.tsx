@@ -33,7 +33,8 @@ import {
 } from "./assessment"
 
 const HISTORY_KEY = "emad-level-assessment-history"
-const card = "rounded-[22px] border border-border bg-card text-card-foreground shadow-sm"
+const card =
+  "rounded-[22px] border border-border bg-card text-card-foreground shadow-sm"
 const levelColors: Record<CEFRLevel, string> = {
   A1: "border border-primary/20 bg-secondary text-secondary-foreground",
   A2: "border border-primary/20 bg-secondary text-secondary-foreground",
@@ -93,12 +94,21 @@ function IntroScreen({
   onBegin: () => void
 }) {
   const latest = history[0]
-  const skills: { name: AssessmentSkill; count: number; description: string }[] = [
-    { name: "vocabulary", count: 12, description: "Meaning and use in context" },
-    { name: "grammar", count: 8, description: "Forms from A1 to C2" },
-    { name: "reading", count: 5, description: "Main ideas and inference" },
-    { name: "listening", count: 5, description: "Real audio comprehension" },
-  ]
+  const skills: {
+    name: AssessmentSkill
+    count: number
+    description: string
+  }[] =
+    [
+      {
+        name: "vocabulary",
+        count: 20,
+        description: "Meaning and use in context",
+      },
+      { name: "grammar", count: 12, description: "Forms from A1 to C2" },
+      { name: "reading", count: 9, description: "Main ideas and inference" },
+      { name: "listening", count: 9, description: "Audio comprehension" },
+    ]
   return (
     <div className="space-y-6">
       <section className="relative overflow-hidden rounded-[26px] bg-[#173c36] px-6 py-8 text-white sm:px-9 sm:py-10 lg:px-12">
@@ -112,13 +122,13 @@ function IntroScreen({
             <span className="text-[#76cfb8]">Improve your English.</span>
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-7 text-white/70">
-            Complete a focused 30-question assessment and receive an estimated
+            Complete a balanced 50-question assessment and receive an estimated
             CEFR level, skill-by-skill feedback, and a learning pathway matched
             to your result.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/75">
             <span className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2">
-              <Clock3 size={15} /> About 15-20 minutes
+              <Clock3 size={15} /> About 25-35 minutes
             </span>
             <span className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2">
               <ShieldCheck size={15} /> Results stay on this device
@@ -130,7 +140,11 @@ function IntroScreen({
             disabled={loading}
             className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#65c4aa] px-6 py-3 text-sm font-bold text-[#12382f] transition hover:bg-[#79d3ba] disabled:cursor-wait disabled:opacity-70"
           >
-            {loading ? <LoaderCircle className="animate-spin" size={18} /> : <GraduationCap size={19} />}
+            {loading ? (
+              <LoaderCircle className="animate-spin" size={18} />
+            ) : (
+              <GraduationCap size={19} />
+            )}
             {loading ? "Preparing your assessment…" : "Test My English Level"}
             {!loading && <ArrowRight size={17} />}
           </button>
@@ -149,7 +163,9 @@ function IntroScreen({
               <h2 className="font-display text-base font-bold">
                 {assessmentSkillLabels[skill.name]}
               </h2>
-              <span className="text-[10px] font-semibold text-primary">{skill.count} questions</span>
+              <span className="text-[10px] font-semibold text-primary">
+                {skill.count} questions
+              </span>
             </div>
             <p className="mt-1.5 text-[11px] leading-5 text-muted-foreground">
               {skill.description}
@@ -168,16 +184,19 @@ function IntroScreen({
               "You can move backward and change answers.",
               "Do not use a dictionary during the assessment.",
             ].map((instruction) => (
-              <div key={instruction} className="flex gap-3 text-xs leading-6 text-muted-foreground">
+              <div
+                key={instruction}
+                className="flex gap-3 text-xs leading-6 text-muted-foreground"
+              >
                 <Check className="mt-1 shrink-0 text-primary" size={16} />
                 <span>{instruction}</span>
               </div>
             ))}
           </div>
           <p className="mt-5 border-t border-border pt-5 text-[11px] leading-6 text-muted-foreground">
-            This is an informal CEFR-based estimate, not an official certificate.
-            It assesses vocabulary, grammar, reading, and listening; it does not
-            assess speaking or writing.
+            This is an informal CEFR-based estimate, not an official
+            certificate. It assesses vocabulary, grammar, reading, and
+            listening; it does not assess speaking or writing.
           </p>
         </section>
 
@@ -188,18 +207,23 @@ function IntroScreen({
           {latest ? (
             <>
               <div className="mt-4 flex items-center gap-4">
-                <span className={`flex h-16 w-16 items-center justify-center rounded-2xl text-xl font-extrabold ${levelColors[latest.level]}`}>
+                <span
+                  className={`flex h-16 w-16 items-center justify-center rounded-2xl text-xl font-extrabold ${levelColors[latest.level]}`}
+                >
                   {latest.level}
                 </span>
                 <div>
-                  <h2 className="font-display text-lg font-bold">{cefrLabels[latest.level]}</h2>
+                  <h2 className="font-display text-lg font-bold">
+                    {cefrLabels[latest.level]}
+                  </h2>
                   <p className="mt-1 text-[11px] text-muted-foreground">
                     {latest.correct}/{latest.total} correct · {latest.percent}%
                   </p>
                 </div>
               </div>
               <p className="mt-4 text-[10px] leading-5 text-muted-foreground">
-                Completed {new Date(latest.completedAt).toLocaleDateString()} on bank version {latest.bankVersion}.
+                Completed {new Date(latest.completedAt).toLocaleDateString()} on
+                bank version {latest.bankVersion}.
               </p>
             </>
           ) : (
@@ -222,7 +246,8 @@ function AssessmentQuestionView({
   selected: number | undefined
   onSelect: (index: number) => void
 }) {
-  const [audioState, setAudioState] = useState<"idle" | "loading" | "playing" | "error">("idle")
+  const [audioState, setAudioState] =
+    useState<"idle" | "loading" | "playing" | "error">("idle")
   const audio = useRef<HTMLAudioElement | null>(null)
   const utterance = useRef<SpeechSynthesisUtterance | null>(null)
 
@@ -305,7 +330,9 @@ function AssessmentQuestionView({
         <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-[10px] font-semibold text-primary">
           <SkillIcon skill={item.skill} /> {assessmentSkillLabels[item.skill]}
         </span>
-        <span className={`rounded-full px-3 py-1.5 text-[10px] font-bold ${levelColors[item.level]}`}>
+        <span
+          className={`rounded-full px-3 py-1.5 text-[10px] font-bold ${levelColors[item.level]}`}
+        >
           {item.level} · {cefrLabels[item.level]}
         </span>
       </div>
@@ -321,17 +348,27 @@ function AssessmentQuestionView({
             disabled={audioBusy}
             className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {audioBusy ? <Volume2 className="animate-pulse" size={18} /> : <Headphones size={18} />}
-            {audioState === "loading" ? "Loading audio…" : audioState === "playing" ? "Playing audio…" : "Play audio"}
+            {audioBusy ? (
+              <Volume2 className="animate-pulse" size={18} />
+            ) : (
+              <Headphones size={18} />
+            )}
+            {audioState === "loading"
+              ? "Loading audio…"
+              : audioState === "playing"
+                ? "Playing audio…"
+                : "Play audio"}
           </button>
           <div aria-live="polite">
             {audioState === "error" ? (
               <p className="mt-3 rounded-lg border border-accent/30 bg-accent/15 px-3 py-2 text-[10px] leading-5 text-foreground">
-                Audio could not play. Check your device volume, then try again or use another browser.
+                Audio could not play. Check your device volume, then try again
+                or use another browser.
               </p>
             ) : (
               <p className="mt-3 text-[10px] leading-5 text-muted-foreground">
-                You may replay the recording. The transcript is intentionally hidden during the assessment.
+                You may replay the recording. The transcript is intentionally
+                hidden during the assessment.
               </p>
             )}
           </div>
@@ -340,7 +377,9 @@ function AssessmentQuestionView({
 
       {item.passage && (
         <div className="mt-6 rounded-2xl border border-border bg-muted/70 p-5 text-sm leading-7 text-foreground">
-          <p className="mb-2 text-[9px] font-bold uppercase tracking-[.16em] text-primary">Reading passage</p>
+          <p className="mb-2 text-[9px] font-bold uppercase tracking-[.16em] text-primary">
+            Reading passage
+          </p>
           {item.passage}
         </div>
       )}
@@ -363,11 +402,19 @@ function AssessmentQuestionView({
                   : "border-border bg-background hover:border-primary/40 hover:bg-secondary/40"
               }`}
             >
-              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${active ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}>
+              <span
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
+                  active
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-muted-foreground"
+                }`}
+              >
                 {String.fromCharCode(65 + index)}
               </span>
               <span className="leading-6">{option}</span>
-              {active && <Check className="ml-auto shrink-0 text-primary" size={18} />}
+              {active && (
+                <Check className="ml-auto shrink-0 text-primary" size={18} />
+              )}
             </button>
           )
         })}
@@ -384,8 +431,12 @@ function ResultScreen({
   onRetake: () => void
 }) {
   const [preferred, setPreferred] = useState<CEFRLevel>(result.level)
-  const skillEntries = Object.entries(result.skills) as [AssessmentSkill, AssessmentResult["skills"][AssessmentSkill]][]
-  const strongest = [...skillEntries].sort((a, b) => b[1].percent - a[1].percent)[0]
+  const skillEntries = Object.entries(
+    result.skills,
+  ) as [AssessmentSkill, AssessmentResult["skills"][AssessmentSkill]][]
+  const strongest = [...skillEntries].sort(
+    (a, b) => b[1].percent - a[1].percent,
+  )[0]
   const focus = [...skillEntries].sort((a, b) => a[1].percent - b[1].percent)[0]
 
   const chooseLevel = (level: CEFRLevel) => {
@@ -398,18 +449,29 @@ function ResultScreen({
       <section className="relative overflow-hidden rounded-[26px] bg-[#173c36] p-7 text-white sm:p-10">
         <div className="relative z-10 flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
           <div className="max-w-xl">
-            <p className="text-[10px] font-semibold uppercase tracking-[.17em] text-[#8ed0bd]">Your estimated level</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[.17em] text-[#8ed0bd]">
+              Your estimated level
+            </p>
             <div className="mt-4 flex items-center gap-4">
               <span className="flex h-20 w-20 items-center justify-center rounded-[24px] bg-[#69c7ad] text-3xl font-extrabold text-[#12372f] sm:h-24 sm:w-24 sm:text-4xl">
                 {result.level}
               </span>
               <div>
-                <h1 className="font-display text-3xl font-extrabold sm:text-4xl">{cefrLabels[result.level]}</h1>
-                <p className="mt-2 text-sm text-white/65">Informal CEFR-based estimate</p>
+                <h1 className="font-display text-3xl font-extrabold sm:text-4xl">
+                  {cefrLabels[result.level]}
+                </h1>
+                <p className="mt-2 text-sm text-white/65">
+                  Informal CEFR-based estimate
+                </p>
               </div>
             </div>
             <p className="mt-5 text-sm leading-7 text-white/70">
-              You answered <strong className="text-white">{result.correct} of {result.total}</strong> questions correctly. Difficulty-weighted evidence placed you at {result.level}.
+              You answered{" "}
+              <strong className="text-white">
+                {result.correct} of {result.total}
+              </strong>{" "}
+              questions correctly. Difficulty-weighted evidence placed you at{" "}
+              {result.level}.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 md:w-64">
@@ -418,7 +480,9 @@ function ResultScreen({
               <p className="mt-1 text-[10px] text-white/60">Overall accuracy</p>
             </div>
             <div className="rounded-2xl bg-white/10 p-4">
-              <p className="text-2xl font-extrabold">{result.weightedPercent}%</p>
+              <p className="text-2xl font-extrabold">
+                {result.weightedPercent}%
+              </p>
               <p className="mt-1 text-[10px] text-white/60">Weighted score</p>
             </div>
           </div>
@@ -431,87 +495,150 @@ function ResultScreen({
           {skillEntries.map(([skill, score]) => (
             <div key={skill}>
               <div className="mb-2 flex items-center justify-between text-xs">
-                <span className="flex items-center gap-2 font-semibold"><SkillIcon skill={skill} /> {assessmentSkillLabels[skill]}</span>
-                <span className="text-muted-foreground">{score.correct}/{score.total} · {score.percent}%</span>
+                <span className="flex items-center gap-2 font-semibold">
+                  <SkillIcon skill={skill} /> {assessmentSkillLabels[skill]}
+                </span>
+                <span className="text-muted-foreground">
+                  {score.correct}/{score.total} · {score.percent}%
+                </span>
               </div>
               <div className="h-2 overflow-hidden rounded-full bg-secondary">
-                <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${score.percent}%` }} />
+                <div
+                  className="h-full rounded-full bg-primary transition-all"
+                  style={{ width: `${score.percent}%` }}
+                />
               </div>
             </div>
           ))}
         </div>
         <div className="mt-7 grid gap-4 border-t border-border pt-6 sm:grid-cols-2">
           <div className="rounded-2xl border border-border bg-secondary/70 p-5">
-            <p className="text-[10px] font-semibold uppercase tracking-[.12em] text-primary">Your strength</p>
-            <p className="mt-2 text-sm font-semibold">{assessmentSkillLabels[strongest[0]]}</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">This was your strongest assessed skill at {strongest[1].percent}%.</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[.12em] text-primary">
+              Your strength
+            </p>
+            <p className="mt-2 text-sm font-semibold">
+              {assessmentSkillLabels[strongest[0]]}
+            </p>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              This was your strongest assessed skill at {strongest[1].percent}%.
+            </p>
           </div>
           <div className="rounded-2xl border border-border bg-muted/70 p-5">
-            <p className="text-[10px] font-semibold uppercase tracking-[.12em] text-primary">Next focus</p>
-            <p className="mt-2 text-sm font-semibold">{assessmentSkillLabels[focus[0]]}</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">Regular practice here will give you the clearest next improvement.</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[.12em] text-primary">
+              Next focus
+            </p>
+            <p className="mt-2 text-sm font-semibold">
+              {assessmentSkillLabels[focus[0]]}
+            </p>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              Regular practice here will give you the clearest next improvement.
+            </p>
           </div>
         </div>
       </section>
 
       <div className="grid gap-5 lg:grid-cols-[1fr_340px]">
         <section className={`${card} p-6 sm:p-7`}>
-          <h2 className="font-display text-xl font-bold">Your recommended pathway</h2>
+          <h2 className="font-display text-xl font-bold">
+            Your recommended pathway
+          </h2>
           <div className="mt-5 grid gap-3">
             {resultRecommendations(result.level).map((recommendation) => (
-              <div key={recommendation} className="flex gap-3 rounded-xl bg-secondary/50 p-4 text-xs leading-6 text-muted-foreground">
+              <div
+                key={recommendation}
+                className="flex gap-3 rounded-xl bg-secondary/50 p-4 text-xs leading-6 text-muted-foreground"
+              >
                 <Check className="mt-1 shrink-0 text-primary" size={16} />
                 <span>{recommendation}</span>
               </div>
             ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link to={`/dictionary?level=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-semibold text-primary-foreground">
+            <Link
+              to={`/dictionary?level=${result.level}`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-semibold text-primary-foreground"
+            >
               Explore {result.level} vocabulary <ArrowRight size={15} />
             </Link>
-            <Link to={`/practice?level=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold">
+            <Link
+              to={`/practice?level=${result.level}`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold"
+            >
               Practice at {result.level}
             </Link>
-            <Link to={`/topics/School?section=flashcards&cefr=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold">
+            <Link
+              to={`/topics/School?section=flashcards&cefr=${result.level}`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold"
+            >
               School flashcards
             </Link>
-            <Link to={`/topics/School?section=write&cefr=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold">
+            <Link
+              to={`/topics/School?section=write&cefr=${result.level}`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold"
+            >
               Writing practice
             </Link>
-            <Link to={`/topics/School?section=games&cefr=${result.level}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold">
+            <Link
+              to={`/topics/School?section=games&cefr=${result.level}`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border px-5 py-3 text-xs font-semibold"
+            >
               Play a word game
             </Link>
           </div>
         </section>
 
         <section className={`${card} p-6`}>
-          <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-primary">Preferred learning level</p>
-          <h2 className="mt-2 font-display text-lg font-bold">You stay in control.</h2>
-          <p className="mt-2 text-xs leading-6 text-muted-foreground">Your result selected {result.level}, but you can choose another level for Dictionary and Practice.</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-primary">
+            Preferred learning level
+          </p>
+          <h2 className="mt-2 font-display text-lg font-bold">
+            You stay in control.
+          </h2>
+          <p className="mt-2 text-xs leading-6 text-muted-foreground">
+            Your result selected {result.level}, but you can choose another
+            level for Dictionary and Practice.
+          </p>
           <select
             value={preferred}
             onChange={(event) => chooseLevel(event.target.value as CEFRLevel)}
             className="mt-5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-semibold"
             aria-label="Preferred learning level"
           >
-            {cefrLevels.map((level) => <option key={level} value={level}>{level} · {cefrLabels[level]}</option>)}
+            {cefrLevels.map((level) => (
+              <option key={level} value={level}>
+                {level} · {cefrLabels[level]}
+              </option>
+            ))}
           </select>
-          <p className="mt-3 text-[10px] leading-5 text-muted-foreground">Saved only in this browser on this device.</p>
-          <button type="button" onClick={onRetake} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-primary">
+          <p className="mt-3 text-[10px] leading-5 text-muted-foreground">
+            Saved only in this browser on this device.
+          </p>
+          <button
+            type="button"
+            onClick={onRetake}
+            className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-primary"
+          >
             <RefreshCcw size={15} /> Retake assessment
           </button>
         </section>
       </div>
 
       <section className="rounded-2xl border border-border bg-card p-5 text-[11px] leading-6 text-muted-foreground">
-        <strong>How the estimate works:</strong> correct answers receive more weight at higher CEFR difficulties. The estimate is capped to one band above the highest level where at least half of the sampled questions were answered correctly. Bank version {result.bankVersion} preserves the meaning of this result over time. This is not an official CEFR certificate and does not assess speaking or writing.
+        <strong>How the estimate works:</strong> correct answers receive more
+        weight at higher CEFR difficulties. The estimate is capped to one band
+        above the highest level where at least half of the sampled questions
+        were answered correctly. Bank version {result.bankVersion} preserves the
+        meaning of this result over time. This is not an official CEFR
+        certificate and does not assess speaking or writing.
       </section>
     </div>
   )
 }
 
 export default function AssessmentPage() {
-  const [screen, setScreen] = useState<"intro" | "assessment" | "result">("intro")
+  const [screen, setScreen] = useState<"intro" | "assessment" | "result">(
+    "intro",
+  )
   const [approved, setApproved] = useState<AssessmentQuestion[]>([])
   const [questions, setQuestions] = useState<AssessmentQuestion[]>([])
   const [answers, setAnswers] = useState<Record<string, number>>({})
@@ -567,14 +694,23 @@ export default function AssessmentPage() {
 
   const current = questions[currentIndex]
   const answeredCount = Object.keys(answers).length
-  const progress = questions.length ? ((currentIndex + 1) / questions.length) * 100 : 0
+  const progress = questions.length
+    ? ((currentIndex + 1) / questions.length) * 100
+    : 0
   const unanswered = questions.length - answeredCount
   const groupedProgress = useMemo(
     () =>
       Object.fromEntries(
-        (["vocabulary", "grammar", "reading", "listening"] as AssessmentSkill[]).map((skill) => [
+        ([
+          "vocabulary",
+          "grammar",
+          "reading",
+          "listening",
+        ] as AssessmentSkill[]).map((skill) => [
           skill,
-          questions.filter((item) => item.skill === skill && answers[item.id] !== undefined).length,
+          questions.filter(
+            (item) => item.skill === skill && answers[item.id] !== undefined,
+          ).length,
         ]),
       ) as Record<AssessmentSkill, number>,
     [answers, questions],
@@ -593,20 +729,31 @@ export default function AssessmentPage() {
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <button type="button" onClick={() => setScreen("intro")} className="inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground">
+        <button
+          type="button"
+          onClick={() => setScreen("intro")}
+          className="inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft size={15} /> Exit assessment
         </button>
-        <p className="text-[10px] text-muted-foreground">Bank {ASSESSMENT_BANK_VERSION} · Results stay on this device</p>
+        <p className="text-[10px] text-muted-foreground">
+          Bank {ASSESSMENT_BANK_VERSION} · Results stay on this device
+        </p>
       </div>
 
       <section className={`${card} overflow-hidden`}>
         <div className="border-b border-border bg-secondary/35 px-5 py-4 sm:px-7">
           <div className="flex items-center justify-between gap-4 text-[10px] font-semibold text-muted-foreground">
-            <span>Question {currentIndex + 1} of {questions.length}</span>
+            <span>
+              Question {currentIndex + 1} of {questions.length}
+            </span>
             <span>{answeredCount} answered</span>
           </div>
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-background">
-            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} />
+            <div
+              className="h-full rounded-full bg-primary transition-all"
+              style={{ width: `${progress}%` }}
+            />
           </div>
         </div>
 
@@ -615,7 +762,12 @@ export default function AssessmentPage() {
             key={current.id}
             item={current}
             selected={answers[current.id]}
-            onSelect={(index) => setAnswers((currentAnswers) => ({ ...currentAnswers, [current.id]: index }))}
+            onSelect={(index) =>
+              setAnswers((currentAnswers) => ({
+                ...currentAnswers,
+                [current.id]: index,
+              }))
+            }
           />
         </div>
 
@@ -649,31 +801,67 @@ export default function AssessmentPage() {
       </section>
 
       <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {(["vocabulary", "grammar", "reading", "listening"] as AssessmentSkill[]).map((skill) => (
-          <div key={skill} className="rounded-xl border border-border bg-card px-3 py-2.5 text-[10px] text-muted-foreground">
-            <span className="font-semibold text-foreground">{assessmentSkillLabels[skill]}</span>
+        {([
+          "vocabulary",
+          "grammar",
+          "reading",
+          "listening",
+        ] as AssessmentSkill[]).map((skill) => (
+          <div
+            key={skill}
+            className="rounded-xl border border-border bg-card px-3 py-2.5 text-[10px] text-muted-foreground"
+          >
+            <span className="font-semibold text-foreground">
+              {assessmentSkillLabels[skill]}
+            </span>
             <span className="ml-1">· {groupedProgress[skill]}</span>
           </div>
         ))}
       </div>
 
       {confirmSubmit && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#132f2b]/55 p-3 sm:items-center" role="dialog" aria-modal="true" aria-labelledby="submit-title">
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-[#132f2b]/55 p-3 sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="submit-title"
+        >
           <section className="w-full max-w-md rounded-[22px] bg-card p-6 shadow-2xl sm:p-7">
-            <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${unanswered ? "bg-accent/20 text-foreground" : "bg-secondary text-primary"}`}>
+            <span
+              className={`flex h-12 w-12 items-center justify-center rounded-xl ${
+                unanswered
+                  ? "bg-accent/20 text-foreground"
+                  : "bg-secondary text-primary"
+              }`}
+            >
               {unanswered ? <CircleAlert size={23} /> : <Check size={23} />}
             </span>
-            <h2 id="submit-title" className="mt-5 font-display text-xl font-bold">Submit your assessment?</h2>
+            <h2
+              id="submit-title"
+              className="mt-5 font-display text-xl font-bold"
+            >
+              Submit your assessment?
+            </h2>
             <p className="mt-2 text-xs leading-6 text-muted-foreground">
               {unanswered
-                ? `${unanswered} question${unanswered === 1 ? " is" : "s are"} unanswered. Unanswered questions will be marked incorrect.`
-                : "All 30 questions are answered. Your result will be calculated and saved on this device."}
+                ? `${unanswered} question${
+                    unanswered === 1 ? " is" : "s are"
+                  } unanswered. Unanswered questions will be marked incorrect.`
+                : `All ${questions.length} questions are answered. Your result will be calculated and saved on this device.`}
             </p>
             <div className="mt-6 flex flex-col gap-2 sm:flex-row-reverse">
-              <button type="button" onClick={finish} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-semibold text-primary-foreground">
+              <button
+                type="button"
+                onClick={finish}
+                className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-semibold text-primary-foreground"
+              >
                 Submit assessment <ArrowRight size={15} />
               </button>
-              <button type="button" onClick={() => setConfirmSubmit(false)} className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border px-5 py-3 text-xs font-semibold">
+              <button
+                type="button"
+                onClick={() => setConfirmSubmit(false)}
+                className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border px-5 py-3 text-xs font-semibold"
+              >
                 Continue reviewing
               </button>
             </div>

@@ -1,10 +1,11 @@
 import type { Word } from "./content"
 import { cefrLevels, type CEFRLevel } from "./cefr"
 import { createCuratedAssessmentQuestions } from "./curatedAssessmentBank"
+import { createAssessmentExpansion } from "./assessmentExpansion"
 import { vocabulary } from "./vocabulary"
 
-export const ASSESSMENT_BANK_VERSION = "2026.10.2"
-export const ASSESSMENT_QUESTION_COUNT = 30
+export const ASSESSMENT_BANK_VERSION = "2026.10.3"
+export const ASSESSMENT_QUESTION_COUNT = 50
 
 export type AssessmentSkill = "vocabulary" | "grammar" | "reading" | "listening"
 
@@ -23,17 +24,7 @@ export interface AssessmentQuestion {
   sourceId?: string
   sourceLabel?: string
   sourceConfidence?: "low" | "medium" | "high"
-  questionType?:
-    | "meaning"
-    | "synonym"
-    | "antonym"
-    | "sentence-completion"
-    | "context"
-    | "collocation"
-    | "usage"
-    | "grammar"
-    | "reading-comprehension"
-    | "listening-comprehension"
+  questionType?: "meaning" | "synonym" | "antonym" | "sentence-completion" | "context" | "collocation" | "usage" | "grammar" | "reading-comprehension" | "listening-comprehension"
 }
 
 export interface SkillScore {
@@ -206,7 +197,12 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     "vocabulary",
     "C2",
     "Which meaning is closest to “ubiquitous”?",
-    ["carefully hidden", "present almost everywhere", "recently invented", "difficult to prove"],
+    [
+      "carefully hidden",
+      "present almost everywhere",
+      "recently invented",
+      "difficult to prove",
+    ],
     1,
     "Ubiquitous means present, found, or appearing everywhere.",
   ),
@@ -215,7 +211,12 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     "vocabulary",
     "C2",
     "To ameliorate a problem is to…",
-    ["make it less severe", "describe it vaguely", "cause it deliberately", "ignore it completely"],
+    [
+      "make it less severe",
+      "describe it vaguely",
+      "cause it deliberately",
+      "ignore it completely",
+    ],
     0,
     "Ameliorate means to make a difficult or unpleasant situation better.",
   ),
@@ -225,7 +226,12 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     "grammar",
     "A1",
     "Choose the correct sentence.",
-    ["She are a student.", "She is a student.", "She be a student.", "She am a student."],
+    [
+      "She are a student.",
+      "She is a student.",
+      "She be a student.",
+      "She am a student.",
+    ],
     1,
     "Use “is” with the third-person singular subject “she.”",
   ),
@@ -316,7 +322,10 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     ["To the library", "To the market", "To the station", "To the hospital"],
     0,
     "The passage says Lina goes to the library.",
-    { passage: "Lina finishes class at two o'clock. She goes to the library and reads for one hour." },
+    {
+      passage:
+        "Lina finishes class at two o'clock. She goes to the library and reads for one hour.",
+    },
   ),
   question(
     "r-a2-bridge",
@@ -396,7 +405,12 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     "listening",
     "A1",
     "Where is the blue notebook?",
-    ["Under the chair", "On the teacher's desk", "Inside the bag", "Beside the window"],
+    [
+      "Under the chair",
+      "On the teacher's desk",
+      "Inside the bag",
+      "Beside the window",
+    ],
     1,
     "The recording says the blue notebook is on the teacher's desk.",
     {
@@ -409,7 +423,12 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     "listening",
     "A2",
     "When will Maya's train leave?",
-    ["At nine o'clock", "At nine fifteen", "At half past nine", "At ten o'clock"],
+    [
+      "At nine o'clock",
+      "At nine fifteen",
+      "At half past nine",
+      "At ten o'clock",
+    ],
     2,
     "The announcement changes the departure time to half past nine.",
     {
@@ -476,6 +495,7 @@ export const initialAssessmentQuestions: AssessmentQuestion[] = [
     },
   ),
   ...createCuratedAssessmentQuestions(ASSESSMENT_BANK_VERSION),
+  ...createAssessmentExpansion(ASSESSMENT_BANK_VERSION),
 ]
 
 const levelWeights: Record<CEFRLevel, number> = {
@@ -487,12 +507,13 @@ const levelWeights: Record<CEFRLevel, number> = {
   C2: 6,
 }
 
-const selectionPlan: Record<AssessmentSkill, Partial<Record<CEFRLevel, number>>> = {
-  vocabulary: { A1: 2, A2: 2, B1: 2, B2: 2, C1: 2, C2: 2 },
-  grammar: { A1: 2, A2: 1, B1: 2, B2: 1, C1: 1, C2: 1 },
-  reading: { A1: 1, A2: 1, B1: 1, B2: 1, C1: 1 },
-  listening: { A1: 1, A2: 1, B1: 1, B2: 1, C1: 1 },
-}
+const selectionPlan: Record<AssessmentSkill, Partial<Record<CEFRLevel, number>>> =
+  {
+    vocabulary: { A1: 4, A2: 4, B1: 3, B2: 3, C1: 3, C2: 3 },
+    grammar: { A1: 2, A2: 2, B1: 2, B2: 2, C1: 2, C2: 2 },
+    reading: { A1: 2, A2: 2, B1: 2, B2: 1, C1: 1, C2: 1 },
+    listening: { A1: 2, A2: 2, B1: 2, B2: 1, C1: 1, C2: 1 },
+  }
 
 function hash(value: string) {
   let result = 2166136261
@@ -510,9 +531,15 @@ function shuffled<T>(items: T[], seed: string) {
     .map(({ item }) => item)
 }
 
-function shuffleAnswerOptions(question: AssessmentQuestion, seed: string): AssessmentQuestion {
+function shuffleAnswerOptions(
+  question: AssessmentQuestion,
+  seed: string,
+): AssessmentQuestion {
   const shuffledOptions = shuffled(
-    question.options.map((option, originalIndex) => ({ option, originalIndex })),
+    question.options.map((option, originalIndex) => ({
+      option,
+      originalIndex,
+    })),
     `${seed}:${question.id}:answer-options`,
   )
   return {
@@ -538,7 +565,9 @@ export function selectAssessmentQuestions(
       const candidates = pool.filter(
         (candidate) => candidate.skill === skill && candidate.level === level,
       )
-      selected.push(...shuffled(candidates, `${seed}:${skill}:${level}`).slice(0, count))
+      selected.push(
+        ...shuffled(candidates, `${seed}:${skill}:${level}`).slice(0, count),
+      )
     }
   }
   return shuffled(selected, `${seed}:question-order`)
@@ -551,12 +580,15 @@ export function validateQuestion(question: AssessmentQuestion) {
     question &&
       question.id &&
       question.bankVersion &&
-      ["vocabulary", "grammar", "reading", "listening"].includes(question.skill) &&
+      ["vocabulary", "grammar", "reading", "listening"].includes(
+        question.skill,
+      ) &&
       cefrLevels.includes(question.level) &&
       question.prompt.trim() &&
       Array.isArray(question.options) &&
       question.options.length === 4 &&
-      new Set(question.options.map((option) => option.trim().toLowerCase())).size === 4 &&
+      new Set(question.options.map((option) => option.trim().toLowerCase()))
+        .size === 4 &&
       Number.isInteger(question.correctIndex) &&
       question.correctIndex >= 0 &&
       question.correctIndex < 4 &&
@@ -600,7 +632,9 @@ export function scoreAssessment(
 
   for (const skill of skillNames) {
     const result = skills[skill]
-    result.percent = result.total ? Math.round((result.correct / result.total) * 100) : 0
+    result.percent = result.total
+      ? Math.round((result.correct / result.total) * 100)
+      : 0
   }
 
   const weightedPercent = possibleWeight
@@ -620,7 +654,8 @@ export function scoreAssessment(
               : 5
   const highestSupportedIndex = cefrLevels.reduce((highest, level, index) => {
     const performance = levelPerformance[level]
-    return performance.total > 0 && performance.correct / performance.total >= 0.5
+    return performance.total > 0 &&
+      performance.correct / performance.total >= 0.5
       ? index
       : highest
   }, 0)
@@ -633,7 +668,9 @@ export function scoreAssessment(
     level: cefrLevels[finalLevelIndex],
     correct,
     total: questions.length,
-    percent: questions.length ? Math.round((correct / questions.length) * 100) : 0,
+    percent: questions.length
+      ? Math.round((correct / questions.length) * 100)
+      : 0,
     weightedPercent,
     skills,
   }
@@ -655,7 +692,9 @@ function optionSetForWord(word: Word, words: Word[]) {
     .filter(
       (definition, index, definitions) =>
         definition.toLowerCase() !== word.definition.trim().toLowerCase() &&
-        definitions.findIndex((item) => item.toLowerCase() === definition.toLowerCase()) === index,
+        definitions.findIndex(
+          (item) => item.toLowerCase() === definition.toLowerCase(),
+        ) === index,
     )
     .slice(0, 3)
   if (distractors.length < 3) return null
@@ -679,23 +718,23 @@ export function generateVocabularyQuestionCandidates(
   )
 
   return eligible.slice(-limit).reduce<AssessmentQuestion[]>((result, word) => {
-      const optionSet = optionSetForWord(word, eligible)
-      if (!optionSet || !word.cefr) return result
-      result.push({
-        id: `auto-vocabulary-${word.id}-v1`,
-        bankVersion: "auto-vocabulary-v1",
-        skill: "vocabulary",
-        level: word.cefr.level,
-        prompt: `Which definition best matches “${word.word}”?`,
-        options: optionSet.options,
-        correctIndex: optionSet.correctIndex,
-        explanation: `“${word.word}” means: ${word.definition.trim()}`,
-        sourceId: word.id,
-        sourceLabel: `${word.topic} · ${word.group}`,
-        sourceConfidence: word.cefr.confidence,
-      })
-      return result
-    }, [])
+    const optionSet = optionSetForWord(word, eligible)
+    if (!optionSet || !word.cefr) return result
+    result.push({
+      id: `auto-vocabulary-${word.id}-v1`,
+      bankVersion: "auto-vocabulary-v1",
+      skill: "vocabulary",
+      level: word.cefr.level,
+      prompt: `Which definition best matches “${word.word}”?`,
+      options: optionSet.options,
+      correctIndex: optionSet.correctIndex,
+      explanation: `“${word.word}” means: ${word.definition.trim()}`,
+      sourceId: word.id,
+      sourceLabel: `${word.topic} · ${word.group}`,
+      sourceConfidence: word.cefr.confidence,
+    })
+    return result
+  }, [])
 }
 
 export const assessmentSkillLabels: Record<AssessmentSkill, string> = {

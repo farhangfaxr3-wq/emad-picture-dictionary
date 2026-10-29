@@ -12144,5 +12144,50 @@
     "licenseUrl": "https://unsplash.com/license",
     "description": "Woman in white hat admiring tropical ocean view",
     "kind": "object"
+  },
+  "Nature|soil erosion": {
+    "src": "/images/vocabulary/unsplash-c1-soil-erosion.jpg",
+    "source": "https://unsplash.com/photos/a-tree-that-has-some-roots-on-it-DRr8Fa3NFEo",
+    "author": "Pramod Kumar Sharma",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "description": "Exposed tree roots on worn soil show how the top layer of earth has been removed",
+    "kind": "object"
+  },
+  "Transportation|battery-electric vehicle": {
+    "src": "/images/vocabulary/unsplash-c1-battery-electric-vehicle.jpg",
+    "source": "https://unsplash.com/photos/an-electric-car-being-charged-at-a-charging-station-qdNvo1Uk9lk",
+    "author": "Michael Förtsch",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "description": "An electric car connected to a charging cable",
+    "kind": "object"
+  },
+  "Places|civic plaza": {
+    "src": "/images/vocabulary/unsplash-c1-civic-plaza.jpg",
+    "source": "https://unsplash.com/photos/people-gather-in-a-modern-plaza-with-fountains-and-greenery-_74TJsS2xps",
+    "author": "Mikhail Savin",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "description": "People gathering in a large public city plaza",
+    "kind": "object"
+  },
+  "Sports|aerobic endurance training": {
+    "src": "/images/vocabulary/unsplash-c1-aerobic-endurance-training.jpg",
+    "source": "https://unsplash.com/photos/people-running-on-race-track-poa-Ycw1W8U",
+    "author": "Nicolas Hoizey",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "description": "Athletes running on a track during endurance training",
+    "kind": "object"
+  },
+  "Home|biophilic design strategy": {
+    "src": "/images/vocabulary/unsplash-c2-biophilic-design-strategy.jpg",
+    "source": "https://unsplash.com/photos/modern-living-room-with-large-windows-and-plants-lla3HZ5Sgm8",
+    "author": "Studio Archifiction",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "description": "A daylight-filled interior designed with abundant living plants",
+    "kind": "object"
   }
 }

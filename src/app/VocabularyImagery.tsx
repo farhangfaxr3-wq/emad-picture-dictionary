@@ -1,19 +1,33 @@
 import { useState } from "react"
+
+import { BookOpenText, ImageOff } from "lucide-react"
+
 import type { Word } from "./content"
+
 import { categoryImages } from "./CategoryImagery"
+
 import library from "./vocabularyPhotos.json"
 
 export interface VocabularyImage {
   src: string
+
   source: string
+
   author: string
+
   license: string
+
   licenseUrl: string
+
   description: string
+
   filename?: string
+
   kind: string
 }
+
 const photographs: Record<string, VocabularyImage> = library
+
 export function getVerifiedVocabularyPhoto(
   word: Pick<Word, "word" | "topic" | "sourceTopic">,
 ): VocabularyImage | undefined {
@@ -23,57 +37,95 @@ export function getVerifiedVocabularyPhoto(
       ? photographs[`${word.sourceTopic}|${word.word}`]
       : undefined) ||
     photographs[word.word]
+
   return photograph?.kind === "context" ? undefined : photograph
 }
+
 export function contextPhotograph(word: Word): VocabularyImage {
   const category =
     categoryImages.find((image) => image.category === word.topic) ||
     categoryImages[0]
+
   return {
     src: `/images/categories/${category.photoId}.jpg`,
+
     source: `https://unsplash.com/@${category.username}`,
+
     author: category.photographer,
+
     license: "Unsplash License",
+
     licenseUrl: "https://unsplash.com/license",
+
     description: category.alt,
+
     kind: "context",
   }
 }
+
 export function getVocabularyPhoto(word: Word): VocabularyImage {
   return getVerifiedVocabularyPhoto(word) || contextPhotograph(word)
 }
+
 export function visualVocabulary(words: Word[]): Word[] {
   const seen = new Set<string>()
+
   const distinct = words.filter((word) => {
     const image = getVocabularyPhoto(word)
+
     if (seen.has(image.src)) return false
+
     seen.add(image.src)
+
     return true
   })
+
   const recognizable = distinct.filter(
     (word) => getVocabularyPhoto(word).kind !== "context",
   )
+
   return recognizable.length >= 4 ? recognizable : distinct
 }
+
 export function VocabularyPhoto({
   word,
+
   className = "",
 }: {
   word: Word
+
   className?: string
 }) {
   const [failed, setFailed] = useState(false)
+
   const image = failed ? undefined : getVerifiedVocabularyPhoto(word)
+
   if (!image)
     return (
       <div
         role="img"
         aria-label={`No verified image is available for ${word.word}`}
-        className={`flex items-center justify-center rounded-xl border border-dashed border-border bg-background px-4 text-center text-xs font-semibold text-muted-foreground ${className}`}
+        className={`relative flex items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-[linear-gradient(145deg,var(--secondary),var(--background))] px-5 py-6 text-center ${className}`}
       >
-        No verified image available
+        <span className="absolute -right-6 -top-8 h-24 w-24 rounded-full border-[16px] border-primary/5" />
+        <span className="absolute -bottom-10 -left-8 h-28 w-28 rounded-full bg-primary/5" />
+        <div className="relative flex max-w-[18rem] flex-col items-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-card text-primary shadow-sm ring-1 ring-border">
+            <BookOpenText aria-hidden="true" size={23} />
+          </span>
+          <span className="mt-3 line-clamp-2 font-display text-sm font-bold text-foreground">
+            {word.word}
+          </span>
+          <span className="mt-1 text-[10px] font-semibold uppercase tracking-[.14em] text-primary">
+            {word.topic}
+          </span>
+          <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
+            <ImageOff aria-hidden="true" size={13} /> Verified photo pending
+          </span>
+        </div>
       </div>
     )
+
   return (
     <img
       src={image.src}
@@ -98,8 +150,10 @@ export function VocabularyPhoto({
     />
   )
 }
+
 export function VocabularyPhotoCredit({ word }: { word: Word }) {
   const image = getVerifiedVocabularyPhoto(word)
+
   if (!image)
     return (
       <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
@@ -107,6 +161,7 @@ export function VocabularyPhotoCredit({ word }: { word: Word }) {
         pronunciation, and learning activities instead.
       </div>
     )
+
   return (
     <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
       <p>
@@ -141,14 +196,20 @@ export function VocabularyPhotoCredit({ word }: { word: Word }) {
     </div>
   )
 }
+
 export function VocabularyPhotographyCredits() {
   const [query, setQuery] = useState("")
+
   const [page, setPage] = useState(0)
+
   const entries = Object.entries(photographs).filter(([word, image]) =>
     `${word} ${image.author}`
+
       .toLowerCase()
+
       .includes(query.trim().toLowerCase()),
   )
+
   return (
     <details className="mt-4 rounded-xl border border-border p-4">
       <summary className="cursor-pointer text-xs font-semibold text-primary">
@@ -172,6 +233,7 @@ export function VocabularyPhotographyCredits() {
         value={query}
         onChange={(event) => {
           setQuery(event.target.value)
+
           setPage(0)
         }}
         placeholder="Search a word or photographer…"

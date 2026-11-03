@@ -1,5 +1,5 @@
 import { randomBytes, webcrypto } from "node:crypto"
-import { readFileSync } from "node:fs"
+import { chmodSync, readFileSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { spawnSync } from "node:child_process"
 
@@ -12,6 +12,15 @@ const adminEmails = String(config.vars?.ADMIN_EMAILS || "")
   .split(",")
   .map((email) => email.trim().toLowerCase())
   .filter(Boolean)
+const outputFileArgumentIndex = process.argv.indexOf("--output-file")
+const outputFile =
+  outputFileArgumentIndex >= 0
+    ? resolve(process.argv[outputFileArgumentIndex + 1] || "")
+    : ""
+
+if (outputFileArgumentIndex >= 0 && !process.argv[outputFileArgumentIndex + 1]) {
+  throw new Error("Provide a file path after --output-file.")
+}
 
 if (adminEmails.length === 0) {
   throw new Error(
@@ -110,12 +119,26 @@ for (const [email, code] of codes) {
   await verifyProductionCode(email, code, setupProof)
 }
 
-console.log("\nSECURE ADMINISTRATOR ACCESS CODES")
-console.log("Save each code in a password manager. They will not be shown again.\n")
-for (const [email, code] of codes) {
-  console.log(`${email}: ${code}`)
+const codeLines = [...codes].map(([email, code]) => `${email}: ${code}`)
+if (outputFile) {
+  writeFileSync(
+    outputFile,
+    `SECURE ADMINISTRATOR ACCESS CODES\n\n${codeLines.join("\n")}\n`,
+    { encoding: "utf8", mode: 0o600 },
+  )
+  try {
+    chmodSync(outputFile, 0o600)
+  } catch {
+    // Windows protects the file through the current user's inherited ACL.
+  }
+  console.log(`\nAccess codes were saved locally to ${outputFile}`)
+  console.log("Move them to a password manager, then delete that local file.")
+} else {
+  console.log("\nSECURE ADMINISTRATOR ACCESS CODES")
+  console.log(
+    "Save each code in a password manager. They will not be shown again.\n",
+  )
+  for (const line of codeLines) console.log(line)
 }
-console.log(
-  "\nAccess-code authentication is configured and verified. No code was saved locally.",
-)
+console.log("\nAccess-code authentication is configured and verified.")
 codes.clear()

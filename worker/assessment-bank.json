@@ -1,0 +1,1585 @@
+[
+  {
+    "id": "v-a1-house",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "A1",
+    "prompt": "Which word means a building where people live?",
+    "options": [
+      "house",
+      "river",
+      "shirt",
+      "market"
+    ],
+    "correctIndex": 0,
+    "explanation": "A house is a building where people live."
+  },
+  {
+    "id": "v-a1-apple",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "A1",
+    "prompt": "Which word names a round fruit that can have red or green skin?",
+    "options": [
+      "bread",
+      "apple",
+      "chair",
+      "flower"
+    ],
+    "correctIndex": 1,
+    "explanation": "An apple is a round fruit with red or green skin."
+  },
+  {
+    "id": "v-a2-journey",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "A2",
+    "prompt": "What is a journey?",
+    "options": [
+      "A place where food is cooked",
+      "The act of travelling from one place to another",
+      "A short written answer",
+      "A person who repairs machines"
+    ],
+    "correctIndex": 1,
+    "explanation": "A journey is the act of travelling from one place to another."
+  },
+  {
+    "id": "v-a2-receipt",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "A2",
+    "prompt": "After paying in a shop, which document shows what you bought?",
+    "options": [
+      "passport",
+      "timetable",
+      "receipt",
+      "invitation"
+    ],
+    "correctIndex": 2,
+    "explanation": "A receipt records the items bought and the amount paid."
+  },
+  {
+    "id": "v-b1-reliable",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "B1",
+    "prompt": "If a person is reliable, they are…",
+    "options": [
+      "easy to forget",
+      "able to be trusted",
+      "unwilling to speak",
+      "likely to arrive late"
+    ],
+    "correctIndex": 1,
+    "explanation": "Reliable people or things can be trusted to behave consistently."
+  },
+  {
+    "id": "v-b1-volunteer",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "B1",
+    "prompt": "Which sentence uses “volunteer” correctly?",
+    "options": [
+      "The volunteer offered to help without being paid.",
+      "Please volunteer the door before you leave.",
+      "The train volunteer at six o'clock.",
+      "She bought a volunteer at the market."
+    ],
+    "correctIndex": 0,
+    "explanation": "A volunteer chooses to help without being paid."
+  },
+  {
+    "id": "v-b2-syllabus",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "B2",
+    "prompt": "What information would you expect to find in a course syllabus?",
+    "options": [
+      "A passenger's travel history",
+      "Course topics, requirements, and dates",
+      "A patient's medical results",
+      "A city's weather records"
+    ],
+    "correctIndex": 1,
+    "explanation": "A syllabus outlines a course's content, requirements, and schedule."
+  },
+  {
+    "id": "v-b2-carbon-footprint",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "B2",
+    "prompt": "A person's carbon footprint refers to…",
+    "options": [
+      "the distance they walk each day",
+      "the total greenhouse gases linked to their activities",
+      "the size of the land they own",
+      "the amount of paper they recycle"
+    ],
+    "correctIndex": 1,
+    "explanation": "A carbon footprint measures greenhouse-gas emissions linked to an activity, person, or organization."
+  },
+  {
+    "id": "v-c1-plagiarism",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "C1",
+    "prompt": "Which situation is an example of plagiarism?",
+    "options": [
+      "Summarizing a source and citing it",
+      "Quoting an author with a reference",
+      "Presenting another person's ideas as your own",
+      "Comparing two published studies"
+    ],
+    "correctIndex": 2,
+    "explanation": "Plagiarism is presenting someone else's words or ideas as your own."
+  },
+  {
+    "id": "v-c1-methodology",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "C1",
+    "prompt": "In a research report, the methodology explains…",
+    "options": [
+      "how the study was designed and carried out",
+      "why the title was selected",
+      "who will buy the final report",
+      "which result is most surprising"
+    ],
+    "correctIndex": 0,
+    "explanation": "Methodology describes the organized methods used to conduct a study."
+  },
+  {
+    "id": "v-c2-ubiquitous",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "C2",
+    "prompt": "Which meaning is closest to “ubiquitous”?",
+    "options": [
+      "carefully hidden",
+      "present almost everywhere",
+      "recently invented",
+      "difficult to prove"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ubiquitous means present, found, or appearing everywhere."
+  },
+  {
+    "id": "v-c2-ameliorate",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary",
+    "level": "C2",
+    "prompt": "To ameliorate a problem is to…",
+    "options": [
+      "make it less severe",
+      "describe it vaguely",
+      "cause it deliberately",
+      "ignore it completely"
+    ],
+    "correctIndex": 0,
+    "explanation": "Ameliorate means to make a difficult or unpleasant situation better."
+  },
+  {
+    "id": "g-a1-be",
+    "bankVersion": "2026.10.3",
+    "skill": "grammar",
+    "level": "A1",
+    "prompt": "Choose the correct sentence.",
+    "options": [
+      "She are a student.",
+      "She is a student.",
+      "She be a student.",
+      "She am a student."
+    ],
+    "correctIndex": 1,
+    "explanation": "Use “is” with the third-person singular subject “she.”"
+  },
+  {
+    "id": "g-a1-present-simple",
+    "bankVersion": "2026.10.3",
+    "skill": "grammar",
+    "level": "A1",
+    "prompt": "I ___ coffee every morning.",
+    "options": [
+      "drink",
+      "drinks",
+      "drinking",
+      "drank"
+    ],
+    "correctIndex": 0,
+    "explanation": "Use the base form “drink” with “I” for a regular habit."
+  },
+  {
+    "id": "g-a2-past-simple",
+    "bankVersion": "2026.10.3",
+    "skill": "grammar",
+    "level": "A2",
+    "prompt": "We ___ the museum yesterday.",
+    "options": [
+      "visit",
+      "have visited",
+      "visited",
+      "are visiting"
+    ],
+    "correctIndex": 2,
+    "explanation": "“Yesterday” signals a finished past action, so the past simple “visited” is correct."
+  },
+  {
+    "id": "g-b1-first-conditional",
+    "bankVersion": "2026.10.3",
+    "skill": "grammar",
+    "level": "B1",
+    "prompt": "If it rains tomorrow, we ___ at home.",
+    "options": [
+      "stay",
+      "stayed",
+      "will stay",
+      "would stay"
+    ],
+    "correctIndex": 2,
+    "explanation": "The first conditional uses present simple after “if” and “will” in the result clause."
+  },
+  {
+    "id": "g-b1-present-perfect",
+    "bankVersion": "2026.10.3",
+    "skill": "grammar",
+    "level": "B1",
+    "prompt": "Which sentence is correct?",
+    "options": [
+      "I live here since 2020.",
+      "I am living here since 2020.",
+      "I have lived here since 2020.",
+      "I lived here since 2020."
+    ],
+    "correctIndex": 2,
+    "explanation": "Use the present perfect for a situation that began in the past and continues now."
+  },
+  {
+    "id": "g-b2-reported-speech",
+    "bankVersion": "2026.10.3",
+    "skill": "grammar",
+    "level": "B2",
+    "prompt": "Mina said, “I am tired.” Choose the best reported form.",
+    "options": [
+      "Mina said that I am tired.",
+      "Mina said that she was tired.",
+      "Mina said that she is tired yesterday.",
+      "Mina told that she tired."
+    ],
+    "correctIndex": 1,
+    "explanation": "In standard reported speech, “I” changes to “she” and “am” backshifts to “was.”"
+  },
+  {
+    "id": "g-c1-inversion",
+    "bankVersion": "2026.10.3",
+    "skill": "grammar",
+    "level": "C1",
+    "prompt": "Complete the sentence: Rarely ___ such a thoughtful presentation.",
+    "options": [
+      "I have seen",
+      "have I seen",
+      "I saw",
+      "did I have seen"
+    ],
+    "correctIndex": 1,
+    "explanation": "A negative adverb at the beginning triggers subject-auxiliary inversion: “Rarely have I seen.”"
+  },
+  {
+    "id": "g-c2-subjunctive",
+    "bankVersion": "2026.10.3",
+    "skill": "grammar",
+    "level": "C2",
+    "prompt": "Choose the most appropriate formal sentence.",
+    "options": [
+      "It is essential that every applicant is informed immediately.",
+      "It is essential that every applicant be informed immediately.",
+      "It is essential that every applicant was informed immediately.",
+      "It is essential every applicant to be informed immediately."
+    ],
+    "correctIndex": 1,
+    "explanation": "Formal mandative constructions can use the base-form subjunctive: “that every applicant be informed.”"
+  },
+  {
+    "id": "r-a1-library",
+    "bankVersion": "2026.10.3",
+    "skill": "reading",
+    "level": "A1",
+    "prompt": "Where does Lina go after class?",
+    "options": [
+      "To the library",
+      "To the market",
+      "To the station",
+      "To the hospital"
+    ],
+    "correctIndex": 0,
+    "explanation": "The passage says Lina goes to the library.",
+    "passage": "Lina finishes class at two o'clock. She goes to the library and reads for one hour."
+  },
+  {
+    "id": "r-a2-bridge",
+    "bankVersion": "2026.10.3",
+    "skill": "reading",
+    "level": "A2",
+    "prompt": "Why should passengers leave home early?",
+    "options": [
+      "The buses are free today.",
+      "The station has moved.",
+      "Repairs may make the journey longer.",
+      "The morning service is cancelled."
+    ],
+    "correctIndex": 2,
+    "explanation": "Bridge repairs may delay buses, so passengers are advised to allow extra time.",
+    "passage": "Buses will use a different road today because engineers are repairing the bridge. Morning services will still run, but journeys may take fifteen minutes longer. Passengers should leave home early."
+  },
+  {
+    "id": "r-b1-work-pilot",
+    "bankVersion": "2026.10.3",
+    "skill": "reading",
+    "level": "B1",
+    "prompt": "What was the main benefit of the trial?",
+    "options": [
+      "The company hired more staff.",
+      "Employees finished focused work more efficiently.",
+      "Meetings became longer.",
+      "Customers visited the office more often."
+    ],
+    "correctIndex": 1,
+    "explanation": "The shorter meetings protected focused time, and teams completed key tasks sooner.",
+    "passage": "A small company tested shorter meetings for one month. Managers limited routine meetings to twenty-five minutes and protected two hours of quiet work each morning. Staff reported fewer interruptions, and most teams finished key tasks earlier than before."
+  },
+  {
+    "id": "r-b2-urban-trees",
+    "bankVersion": "2026.10.3",
+    "skill": "reading",
+    "level": "B2",
+    "prompt": "Which statement best reflects the writer's view?",
+    "options": [
+      "Tree planting is useless without new roads.",
+      "Any tree species will improve every neighborhood equally.",
+      "Urban trees help, but good planning and maintenance matter.",
+      "Cities should replace buildings with forests."
+    ],
+    "correctIndex": 2,
+    "explanation": "The writer supports urban trees while stressing species choice, placement, and long-term care.",
+    "passage": "Urban trees can cool streets, absorb rainwater, and make public spaces more pleasant. Yet planting alone is not enough. Cities must select suitable species, protect roots, and budget for care. Without long-term planning, many young trees fail before their benefits are realized."
+  },
+  {
+    "id": "r-c1-intellectual-humility",
+    "bankVersion": "2026.10.3",
+    "skill": "reading",
+    "level": "C1",
+    "prompt": "What can reasonably be inferred from the passage?",
+    "options": [
+      "Expertise removes the need to revise beliefs.",
+      "Uncertainty always prevents decisive action.",
+      "Recognizing limits can improve the quality of judgement.",
+      "Confident speakers are usually more accurate."
+    ],
+    "correctIndex": 2,
+    "explanation": "The passage argues that recognizing uncertainty supports better questions and more reliable decisions.",
+    "passage": "Intellectual humility is not the absence of confidence; it is an awareness that one's knowledge may be incomplete. Decision-makers who acknowledge uncertainty can still act firmly, but they remain willing to revise a conclusion when stronger evidence appears. This habit often produces better questions and more dependable judgement."
+  },
+  {
+    "id": "l-a1-notebook",
+    "bankVersion": "2026.10.3",
+    "skill": "listening",
+    "level": "A1",
+    "prompt": "Where is the blue notebook?",
+    "options": [
+      "Under the chair",
+      "On the teacher's desk",
+      "Inside the bag",
+      "Beside the window"
+    ],
+    "correctIndex": 1,
+    "explanation": "The recording says the blue notebook is on the teacher's desk.",
+    "audioText": "The blue notebook is on the teacher's desk.",
+    "audioSrc": "/audio/assessment/l-a1-notebook.wav"
+  },
+  {
+    "id": "l-a2-train",
+    "bankVersion": "2026.10.3",
+    "skill": "listening",
+    "level": "A2",
+    "prompt": "When will Maya's train leave?",
+    "options": [
+      "At nine o'clock",
+      "At nine fifteen",
+      "At half past nine",
+      "At ten o'clock"
+    ],
+    "correctIndex": 2,
+    "explanation": "The announcement changes the departure time to half past nine.",
+    "audioText": "Maya planned to take the nine o'clock train, but a delay means it will now leave at half past nine.",
+    "audioSrc": "/audio/assessment/l-a2-train.wav"
+  },
+  {
+    "id": "l-b1-assignment",
+    "bankVersion": "2026.10.3",
+    "skill": "listening",
+    "level": "B1",
+    "prompt": "What must students do by Thursday?",
+    "options": [
+      "Give their presentation",
+      "Submit the written assignment",
+      "Choose a new research topic",
+      "Meet the lecturer online"
+    ],
+    "correctIndex": 1,
+    "explanation": "The written assignment is due Thursday; presentations begin the following Monday.",
+    "audioText": "Please submit your written assignment by Thursday afternoon. We will begin the short presentations next Monday.",
+    "audioSrc": "/audio/assessment/l-b1-assignment.wav"
+  },
+  {
+    "id": "l-b2-workshop",
+    "bankVersion": "2026.10.3",
+    "skill": "listening",
+    "level": "B2",
+    "prompt": "What will happen first?",
+    "options": [
+      "The rescheduled workshop will take place.",
+      "Participants will receive online materials.",
+      "The building will reopen.",
+      "Participants will receive refunds."
+    ],
+    "correctIndex": 1,
+    "explanation": "Materials arrive on Friday, before the workshop takes place the following Wednesday.",
+    "audioText": "Although the workshop has been postponed until next Wednesday, participants will receive the online materials this Friday so they can prepare in advance.",
+    "audioSrc": "/audio/assessment/l-b2-workshop.wav"
+  },
+  {
+    "id": "l-c1-committee",
+    "bankVersion": "2026.10.3",
+    "skill": "listening",
+    "level": "C1",
+    "prompt": "Why did the committee commission an independent review?",
+    "options": [
+      "To replace the proposal immediately",
+      "To evaluate its long-term costs before deciding",
+      "To identify the proposal's author",
+      "To avoid discussing the proposal again"
+    ],
+    "correctIndex": 1,
+    "explanation": "The committee wanted independent evidence about long-term costs before reaching a final decision.",
+    "audioText": "The committee did not reject the proposal outright. Instead, it commissioned an independent review to determine whether the projected long-term savings justified the substantial initial cost.",
+    "audioSrc": "/audio/assessment/l-c1-committee.wav"
+  },
+  {
+    "id": "v-a1-quiet",
+    "level": "A1",
+    "questionType": "antonym",
+    "prompt": "Which word is the opposite of noisy?",
+    "options": [
+      "busy",
+      "quiet",
+      "bright",
+      "heavy"
+    ],
+    "correctIndex": 1,
+    "explanation": "Quiet means making little or no noise, so it is the opposite of noisy.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a1-breakfast",
+    "level": "A1",
+    "questionType": "meaning",
+    "prompt": "Which meal do people usually eat in the morning?",
+    "options": [
+      "dinner",
+      "lunch",
+      "breakfast",
+      "snack"
+    ],
+    "correctIndex": 2,
+    "explanation": "Breakfast is the first meal of the day and is usually eaten in the morning.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a1-library",
+    "level": "A1",
+    "questionType": "context",
+    "prompt": "Narin wants to borrow a book. Where should she go?",
+    "options": [
+      "library",
+      "bakery",
+      "pharmacy",
+      "airport"
+    ],
+    "correctIndex": 0,
+    "explanation": "A library is a place where people can read or borrow books.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a1-thirsty",
+    "level": "A1",
+    "questionType": "sentence-completion",
+    "prompt": "After the long walk, I was very ___, so I drank some water.",
+    "options": [
+      "hungry",
+      "thirsty",
+      "sleepy",
+      "angry"
+    ],
+    "correctIndex": 1,
+    "explanation": "Thirsty describes the feeling of needing or wanting a drink.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a1-do-homework",
+    "level": "A1",
+    "questionType": "collocation",
+    "prompt": "Choose the natural word combination.",
+    "options": [
+      "make homework",
+      "take homework",
+      "do homework",
+      "build homework"
+    ],
+    "correctIndex": 2,
+    "explanation": "In English, the standard collocation is “do homework.”",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a1-expensive",
+    "level": "A1",
+    "questionType": "antonym",
+    "prompt": "Which word is the opposite of expensive?",
+    "options": [
+      "cheap",
+      "large",
+      "modern",
+      "useful"
+    ],
+    "correctIndex": 0,
+    "explanation": "Cheap means costing little money, the opposite of expensive.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a2-crowded",
+    "level": "A2",
+    "questionType": "meaning",
+    "prompt": "If a bus is crowded, it is…",
+    "options": [
+      "moving slowly",
+      "full of people",
+      "very old",
+      "free to use"
+    ],
+    "correctIndex": 1,
+    "explanation": "Crowded means containing too many people or things in a small space.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a2-repair",
+    "level": "A2",
+    "questionType": "synonym",
+    "prompt": "Which word is closest in meaning to repair?",
+    "options": [
+      "fix",
+      "hide",
+      "borrow",
+      "measure"
+    ],
+    "correctIndex": 0,
+    "explanation": "To repair something is to fix it so that it works again.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a2-appointment",
+    "level": "A2",
+    "questionType": "context",
+    "prompt": "Sara has an appointment with the dentist at 3:00. What does appointment mean here?",
+    "options": [
+      "a planned meeting",
+      "a medical bill",
+      "a short holiday",
+      "a kind of medicine"
+    ],
+    "correctIndex": 0,
+    "explanation": "An appointment is an arrangement to meet someone at a particular time.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a2-catch-bus",
+    "level": "A2",
+    "questionType": "collocation",
+    "prompt": "Complete the sentence: We left early to ___ the first bus.",
+    "options": [
+      "hold",
+      "catch",
+      "wear",
+      "invite"
+    ],
+    "correctIndex": 1,
+    "explanation": "Catch a bus means get on it before it leaves.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a2-polite",
+    "level": "A2",
+    "questionType": "antonym",
+    "prompt": "Which word is the opposite of polite?",
+    "options": [
+      "patient",
+      "helpful",
+      "rude",
+      "honest"
+    ],
+    "correctIndex": 2,
+    "explanation": "Rude behavior is not polite or respectful.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-a2-lend",
+    "level": "A2",
+    "questionType": "usage",
+    "prompt": "Which sentence uses lend correctly?",
+    "options": [
+      "Can you lend me your pen?",
+      "Can you lend from the library?",
+      "I lend very tired today.",
+      "The train will lend at noon."
+    ],
+    "correctIndex": 0,
+    "explanation": "Lend means give something to someone temporarily, expecting it to be returned.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b1-achievement",
+    "level": "B1",
+    "questionType": "meaning",
+    "prompt": "What is an achievement?",
+    "options": [
+      "a successful result gained through effort",
+      "a sudden change in weather",
+      "a list of daily expenses",
+      "a disagreement between friends"
+    ],
+    "correctIndex": 0,
+    "explanation": "An achievement is something important or successful completed through effort.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b1-decline",
+    "level": "B1",
+    "questionType": "context",
+    "prompt": "Sales began to decline after the price increase. What did sales do?",
+    "options": [
+      "became more regular",
+      "went down",
+      "stopped being measured",
+      "increased quickly"
+    ],
+    "correctIndex": 1,
+    "explanation": "In this context, decline means decrease or become lower.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b1-make-decision",
+    "level": "B1",
+    "questionType": "collocation",
+    "prompt": "Choose the natural collocation.",
+    "options": [
+      "do a decision",
+      "make a decision",
+      "build a decision",
+      "put a decision"
+    ],
+    "correctIndex": 1,
+    "explanation": "The standard English collocation is “make a decision.”",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b1-convenient",
+    "level": "B1",
+    "questionType": "synonym",
+    "prompt": "Which phrase is closest in meaning to convenient?",
+    "options": [
+      "easy and suitable to use",
+      "rare and expensive",
+      "strictly controlled",
+      "difficult to explain"
+    ],
+    "correctIndex": 0,
+    "explanation": "Convenient describes something that is useful, easy, or suitable for a situation.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b1-prevent",
+    "level": "B1",
+    "questionType": "sentence-completion",
+    "prompt": "Regular backups help ___ the loss of important files.",
+    "options": [
+      "prevent",
+      "predict",
+      "publish",
+      "permit"
+    ],
+    "correctIndex": 0,
+    "explanation": "Prevent means stop something from happening.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b1-encourage",
+    "level": "B1",
+    "questionType": "usage",
+    "prompt": "Which sentence uses encourage correctly?",
+    "options": [
+      "Teachers encourage students to ask questions.",
+      "We encourage the door every night.",
+      "The bus encouraged at the station.",
+      "She bought an encourage yesterday."
+    ],
+    "correctIndex": 0,
+    "explanation": "Encourage means give someone support or confidence to do something.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b2-feasible",
+    "level": "B2",
+    "questionType": "meaning",
+    "prompt": "If a plan is feasible, it is…",
+    "options": [
+      "possible and practical",
+      "secret and illegal",
+      "old-fashioned",
+      "poorly explained"
+    ],
+    "correctIndex": 0,
+    "explanation": "Feasible means possible to do successfully and practically.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b2-allocate",
+    "level": "B2",
+    "questionType": "context",
+    "prompt": "The university will allocate more funds to the library. What will it do?",
+    "options": [
+      "borrow the funds",
+      "divide and assign the funds",
+      "hide the funds",
+      "return all the funds"
+    ],
+    "correctIndex": 1,
+    "explanation": "Allocate means officially assign money, time, or resources for a purpose.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b2-draw-conclusion",
+    "level": "B2",
+    "questionType": "collocation",
+    "prompt": "Complete the academic phrase: The researchers could not ___ a firm conclusion.",
+    "options": [
+      "draw",
+      "paint",
+      "pull",
+      "carry"
+    ],
+    "correctIndex": 0,
+    "explanation": "Draw a conclusion is the standard collocation for reaching a judgement from evidence.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b2-substantial",
+    "level": "B2",
+    "questionType": "synonym",
+    "prompt": "Which word is closest in meaning to substantial in “a substantial improvement”?",
+    "options": [
+      "temporary",
+      "considerable",
+      "accidental",
+      "uncertain"
+    ],
+    "correctIndex": 1,
+    "explanation": "Substantial can mean large or considerable in amount or importance.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b2-reluctant",
+    "level": "B2",
+    "questionType": "antonym",
+    "prompt": "Which word is the closest opposite of reluctant?",
+    "options": [
+      "willing",
+      "careless",
+      "silent",
+      "formal"
+    ],
+    "correctIndex": 0,
+    "explanation": "Reluctant means unwilling or hesitant, so willing is its closest opposite.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-b2-maintain",
+    "level": "B2",
+    "questionType": "sentence-completion",
+    "prompt": "Engineers inspect the bridge regularly to ___ its safety.",
+    "options": [
+      "maintain",
+      "assume",
+      "translate",
+      "withdraw"
+    ],
+    "correctIndex": 0,
+    "explanation": "Maintain means keep something in good condition or at the same level.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c1-mitigate",
+    "level": "C1",
+    "questionType": "meaning",
+    "prompt": "To mitigate a risk is to…",
+    "options": [
+      "make it less severe",
+      "deny that it exists",
+      "measure it precisely",
+      "transfer it secretly"
+    ],
+    "correctIndex": 0,
+    "explanation": "Mitigate means reduce the harmfulness, seriousness, or severity of something.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c1-compelling",
+    "level": "C1",
+    "questionType": "context",
+    "prompt": "The committee found the evidence compelling. What does compelling mean here?",
+    "options": [
+      "confusing and incomplete",
+      "convincing and persuasive",
+      "ordinary and expected",
+      "private and confidential"
+    ],
+    "correctIndex": 1,
+    "explanation": "Compelling evidence is powerful enough to convince someone.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c1-empirical-evidence",
+    "level": "C1",
+    "questionType": "collocation",
+    "prompt": "Which phrase best describes information based on observation or experiment?",
+    "options": [
+      "casual evidence",
+      "empirical evidence",
+      "imaginary evidence",
+      "decorative evidence"
+    ],
+    "correctIndex": 1,
+    "explanation": "Empirical evidence comes from observation, measurement, or experiment.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c1-equivocal",
+    "level": "C1",
+    "questionType": "synonym",
+    "prompt": "Which word is closest in meaning to equivocal?",
+    "options": [
+      "ambiguous",
+      "generous",
+      "permanent",
+      "accurate"
+    ],
+    "correctIndex": 0,
+    "explanation": "Equivocal means open to more than one interpretation or deliberately unclear.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c1-detrimental",
+    "level": "C1",
+    "questionType": "antonym",
+    "prompt": "Which word is the closest opposite of detrimental?",
+    "options": [
+      "beneficial",
+      "controversial",
+      "gradual",
+      "inevitable"
+    ],
+    "correctIndex": 0,
+    "explanation": "Detrimental means harmful, while beneficial means producing a good effect.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c1-substantiate",
+    "level": "C1",
+    "questionType": "sentence-completion",
+    "prompt": "The author must provide reliable sources to ___ the central claim.",
+    "options": [
+      "substantiate",
+      "postpone",
+      "disperse",
+      "conceal"
+    ],
+    "correctIndex": 0,
+    "explanation": "Substantiate means support a claim with evidence or proof.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c2-nuanced",
+    "level": "C2",
+    "questionType": "meaning",
+    "prompt": "A nuanced argument is one that…",
+    "options": [
+      "recognizes subtle distinctions",
+      "uses only numerical data",
+      "avoids all disagreement",
+      "repeats a simple claim"
+    ],
+    "correctIndex": 0,
+    "explanation": "Nuanced means showing awareness of subtle differences or complexities.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c2-tenuous",
+    "level": "C2",
+    "questionType": "context",
+    "prompt": "The connection between the two events is tenuous. What does this suggest?",
+    "options": [
+      "The connection is weak or uncertain.",
+      "The connection is legally protected.",
+      "The connection is widely celebrated.",
+      "The connection is easy to measure."
+    ],
+    "correctIndex": 0,
+    "explanation": "Tenuous describes a connection or argument that is very weak or slight.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c2-cogent",
+    "level": "C2",
+    "questionType": "synonym",
+    "prompt": "Which word is closest in meaning to cogent?",
+    "options": [
+      "convincing",
+      "obsolete",
+      "random",
+      "decorative"
+    ],
+    "correctIndex": 0,
+    "explanation": "A cogent argument is clearly expressed and convincing.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c2-exacerbate",
+    "level": "C2",
+    "questionType": "antonym",
+    "prompt": "Which verb is the closest opposite of exacerbate?",
+    "options": [
+      "alleviate",
+      "illustrate",
+      "anticipate",
+      "differentiate"
+    ],
+    "correctIndex": 0,
+    "explanation": "Exacerbate means make a problem worse; alleviate means make it less severe.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c2-robust-framework",
+    "level": "C2",
+    "questionType": "collocation",
+    "prompt": "Choose the most natural academic phrase.",
+    "options": [
+      "a robust analytical framework",
+      "a muscular analytical frame",
+      "a hard analysis skeleton",
+      "a loud analytic structure"
+    ],
+    "correctIndex": 0,
+    "explanation": "A robust analytical framework is a strong, reliable system for analysis.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "v-c2-circumspect",
+    "level": "C2",
+    "questionType": "usage",
+    "prompt": "Which sentence uses circumspect correctly?",
+    "options": [
+      "The diplomats were circumspect when discussing the sensitive issue.",
+      "The engine circumspect at high speed.",
+      "She bought a circumspect for the office.",
+      "The rain was circumspect all afternoon."
+    ],
+    "correctIndex": 0,
+    "explanation": "Circumspect describes someone who is careful to consider risks before acting or speaking.",
+    "bankVersion": "2026.10.3",
+    "skill": "vocabulary"
+  },
+  {
+    "id": "g-a1-there-is",
+    "skill": "grammar",
+    "level": "A1",
+    "questionType": "grammar",
+    "prompt": "Choose the correct sentence.",
+    "options": [
+      "There is a book on the desk.",
+      "There are a book on the desk.",
+      "There be a book on the desk.",
+      "There am a book on the desk."
+    ],
+    "correctIndex": 0,
+    "explanation": "Use “there is” before one singular thing.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-a1-can",
+    "skill": "grammar",
+    "level": "A1",
+    "questionType": "grammar",
+    "prompt": "My sister ___ swim very well.",
+    "options": [
+      "can",
+      "cans",
+      "can to",
+      "is can"
+    ],
+    "correctIndex": 0,
+    "explanation": "The modal verb “can” is followed by the base form of the verb.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-a2-comparative",
+    "skill": "grammar",
+    "level": "A2",
+    "questionType": "grammar",
+    "prompt": "This road is ___ than the old one.",
+    "options": [
+      "wide",
+      "wider",
+      "widest",
+      "more wide"
+    ],
+    "correctIndex": 1,
+    "explanation": "The comparative form of the short adjective “wide” is “wider.”",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-a2-going-to",
+    "skill": "grammar",
+    "level": "A2",
+    "questionType": "grammar",
+    "prompt": "Look at those dark clouds! It ___ rain.",
+    "options": [
+      "goes to",
+      "is going to",
+      "will going",
+      "is go to"
+    ],
+    "correctIndex": 1,
+    "explanation": "Use “be going to” for a prediction based on present evidence.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-b1-relative-clause",
+    "skill": "grammar",
+    "level": "B1",
+    "questionType": "grammar",
+    "prompt": "The woman ___ teaches us science is from Erbil.",
+    "options": [
+      "which",
+      "whose",
+      "who",
+      "where"
+    ],
+    "correctIndex": 2,
+    "explanation": "Use “who” as the subject of a relative clause referring to a person.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-b1-used-to",
+    "skill": "grammar",
+    "level": "B1",
+    "questionType": "grammar",
+    "prompt": "I ___ play outside every evening when I was a child.",
+    "options": [
+      "use",
+      "used to",
+      "am used",
+      "was using to"
+    ],
+    "correctIndex": 1,
+    "explanation": "“Used to” describes a repeated past habit that is no longer true.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-b2-third-conditional",
+    "skill": "grammar",
+    "level": "B2",
+    "questionType": "grammar",
+    "prompt": "If we had left earlier, we ___ the train.",
+    "options": [
+      "would catch",
+      "would have caught",
+      "caught",
+      "had caught"
+    ],
+    "correctIndex": 1,
+    "explanation": "The third conditional uses “had” plus a past participle, then “would have” plus a past participle.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-b2-passive-reporting",
+    "skill": "grammar",
+    "level": "B2",
+    "questionType": "grammar",
+    "prompt": "Choose the best formal rewrite: People believe the painting is authentic.",
+    "options": [
+      "The painting believes to be authentic.",
+      "The painting is believed to be authentic.",
+      "The painting was believing authentic.",
+      "The painting is belief as authentic."
+    ],
+    "correctIndex": 1,
+    "explanation": "The passive reporting structure is “subject + be + past participle + to-infinitive.”",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-c1-cleft-sentence",
+    "skill": "grammar",
+    "level": "C1",
+    "questionType": "grammar",
+    "prompt": "Choose the sentence that correctly emphasizes the time of the discovery.",
+    "options": [
+      "It was in 2019 that the team discovered the error.",
+      "It in 2019 was that the team discovered the error.",
+      "That was 2019 the team discovered the error.",
+      "It was that in 2019 discovered the team the error."
+    ],
+    "correctIndex": 0,
+    "explanation": "An it-cleft uses “It was + emphasized element + that + clause.”",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-c1-participle-clause",
+    "skill": "grammar",
+    "level": "C1",
+    "questionType": "grammar",
+    "prompt": "___ all the evidence, the panel postponed its decision.",
+    "options": [
+      "Reviewing",
+      "Reviewed",
+      "To have review",
+      "Having reviewed"
+    ],
+    "correctIndex": 3,
+    "explanation": "“Having reviewed” shows that the review was completed before the panel postponed its decision.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-c2-modal-perfect",
+    "skill": "grammar",
+    "level": "C2",
+    "questionType": "grammar",
+    "prompt": "The figures are inconsistent; the analyst ___ an earlier dataset by mistake.",
+    "options": [
+      "must use",
+      "must have used",
+      "had to use",
+      "would use"
+    ],
+    "correctIndex": 1,
+    "explanation": "“Must have used” expresses a strong deduction about a completed past action.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "g-c2-concessive-inversion",
+    "skill": "grammar",
+    "level": "C2",
+    "questionType": "grammar",
+    "prompt": "Choose the grammatically correct concessive sentence.",
+    "options": [
+      "Complex although the issue was, the team resolved it.",
+      "Complex as the issue was, the team resolved it.",
+      "As complex the issue was, the team resolved it.",
+      "The issue as was complex, the team resolved it."
+    ],
+    "correctIndex": 1,
+    "explanation": "Formal concessive inversion can use “adjective + as + subject + verb.”",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-a1-cafe-hours",
+    "skill": "reading",
+    "level": "A1",
+    "questionType": "reading-comprehension",
+    "prompt": "When does the café close on Friday?",
+    "options": [
+      "At four",
+      "At five",
+      "At six",
+      "At seven"
+    ],
+    "correctIndex": 2,
+    "explanation": "The notice says the café closes at six on Friday.",
+    "passage": "Campus café: Open Monday to Thursday until 5:00. On Friday, we close at 6:00.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-a2-club-meeting",
+    "skill": "reading",
+    "level": "A2",
+    "questionType": "reading-comprehension",
+    "prompt": "What should new members bring?",
+    "options": [
+      "A photograph",
+      "A notebook",
+      "Some food",
+      "A sports uniform"
+    ],
+    "correctIndex": 1,
+    "explanation": "The message asks new members to bring a notebook.",
+    "passage": "The English Club meets in Room 12 every Tuesday at 3:30. New members are welcome. Please bring a notebook, but you do not need to prepare anything before your first meeting.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-b1-community-garden",
+    "skill": "reading",
+    "level": "B1",
+    "questionType": "reading-comprehension",
+    "prompt": "Why did the organizers introduce a booking system?",
+    "options": [
+      "To sell vegetables online",
+      "To make fair use of the limited space",
+      "To reduce the number of volunteers",
+      "To close the garden during winter"
+    ],
+    "correctIndex": 1,
+    "explanation": "The plots were limited, so booking allowed residents to share them fairly.",
+    "passage": "The community garden became more popular than expected, but it had only twelve growing plots. Organizers introduced an online booking system so residents could reserve two-hour sessions. This allowed more families to use the limited space fairly.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-b2-remote-consultations",
+    "skill": "reading",
+    "level": "B2",
+    "questionType": "reading-comprehension",
+    "prompt": "What is the writer's main argument?",
+    "options": [
+      "Remote consultations should replace every clinic visit.",
+      "Digital appointments are unsuitable for routine questions.",
+      "Remote care is useful when matched to the right situation.",
+      "Technology has made medical staff unnecessary."
+    ],
+    "correctIndex": 2,
+    "explanation": "The passage supports remote care for suitable cases while preserving in-person examination when needed.",
+    "passage": "Remote consultations can save travel time and help patients ask routine questions quickly. They are not appropriate for every case, however, because some symptoms require a physical examination. The most effective services decide carefully which type of appointment each patient needs.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-b2-library-redesign",
+    "skill": "reading",
+    "level": "B2",
+    "questionType": "reading-comprehension",
+    "prompt": "Which outcome surprised the library staff?",
+    "options": [
+      "Students stopped borrowing books.",
+      "Quiet-zone use increased after more group rooms opened.",
+      "The redesign cost less than expected.",
+      "Group rooms were never used."
+    ],
+    "correctIndex": 1,
+    "explanation": "Staff expected more group work, but were surprised that quiet-zone use also rose.",
+    "passage": "The university library converted one floor into reservable group rooms. Staff expected collaborative study to increase, but they also noticed an unexpected rise in the use of quiet zones. With conversations moved into enclosed rooms, the rest of the building became calmer.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-c1-research-replication",
+    "skill": "reading",
+    "level": "C1",
+    "questionType": "reading-comprehension",
+    "prompt": "What does the passage imply about a failed replication?",
+    "options": [
+      "It automatically proves fraud.",
+      "It can reveal limits in how broadly a result applies.",
+      "It has no value unless the original authors agree.",
+      "It always means the new study was badly designed."
+    ],
+    "correctIndex": 1,
+    "explanation": "The passage says failed replication may expose conditions under which an original finding does not hold.",
+    "passage": "Replication is sometimes described as a test that research either passes or fails. In practice, a different result may expose hidden assumptions, measurement differences, or conditions under which the original finding does not generalize. Careful replication therefore refines knowledge even when it does not reproduce an earlier effect.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-c1-public-consultation",
+    "skill": "reading",
+    "level": "C1",
+    "questionType": "reading-comprehension",
+    "prompt": "Which criticism does the writer make?",
+    "options": [
+      "Public consultation always delays necessary projects.",
+      "Collecting responses is insufficient if they do not influence decisions.",
+      "Technical evidence should never be shared with the public.",
+      "Only experts should comment on local planning."
+    ],
+    "correctIndex": 1,
+    "explanation": "The writer distinguishes genuine participation from merely collecting comments.",
+    "passage": "A consultation cannot be judged solely by the number of responses it receives. If the process begins after every important choice has already been made, participation becomes symbolic. Meaningful consultation shows where public evidence altered a proposal and explains transparently why other suggestions were not adopted.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-c2-algorithmic-audit",
+    "skill": "reading",
+    "level": "C2",
+    "questionType": "reading-comprehension",
+    "prompt": "What tension is central to the passage?",
+    "options": [
+      "Speed versus storage capacity",
+      "Commercial confidentiality versus meaningful accountability",
+      "Public ownership versus private investment",
+      "Accuracy versus mathematical complexity"
+    ],
+    "correctIndex": 1,
+    "explanation": "The passage weighs protection of proprietary information against the need for evidence sufficient to support accountability.",
+    "passage": "Organizations often invoke commercial confidentiality when asked to explain automated decisions. Yet an audit that cannot inspect relevant data, assumptions, or failure patterns risks becoming ceremonial. The challenge is not to disclose every proprietary detail, but to provide enough independent access for accountability to be substantive rather than performative.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-c2-policy-proxy",
+    "skill": "reading",
+    "level": "C2",
+    "questionType": "reading-comprehension",
+    "prompt": "Why is the reported improvement potentially misleading?",
+    "options": [
+      "The target was never measured.",
+      "The proxy may improve without the underlying condition improving.",
+      "The policy was implemented too slowly.",
+      "The researchers used qualitative evidence."
+    ],
+    "correctIndex": 1,
+    "explanation": "A proxy is an indirect measure, so optimizing it may not produce the intended real-world outcome.",
+    "passage": "The programme's success was assessed through a convenient proxy: the number of appointments scheduled. That figure rose sharply, but waiting times and completed treatments did not improve. Once a proxy becomes a target, institutions may optimize the measure while leaving the condition it was meant to represent unchanged.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "r-c2-heritage-adaptation",
+    "skill": "reading",
+    "level": "C2",
+    "questionType": "reading-comprehension",
+    "prompt": "Which principle best summarizes the architect's position?",
+    "options": [
+      "Preservation requires preventing every alteration.",
+      "New uses should erase evidence of earlier construction.",
+      "Adaptation can sustain heritage when changes remain legible and reversible.",
+      "Historic buildings should serve only cultural functions."
+    ],
+    "correctIndex": 2,
+    "explanation": "The architect supports compatible new use while keeping interventions identifiable and capable of being undone.",
+    "passage": "The architect rejects the idea that preservation means freezing a building in time. Continued use can secure its maintenance, provided new interventions do not imitate the original fabric deceptively. Where possible, additions should be legible as contemporary work and reversible without destroying significant historic material.",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-a1-library-closes",
+    "skill": "listening",
+    "level": "A1",
+    "questionType": "listening-comprehension",
+    "prompt": "What time does the library close today?",
+    "options": [
+      "At four",
+      "At five",
+      "At six",
+      "At seven"
+    ],
+    "correctIndex": 1,
+    "explanation": "The recording says the library closes at five o'clock.",
+    "audioText": "The library closes at five o'clock today. Please return your books before then.",
+    "audioSrc": "/audio/assessment/l-a1-library-closes.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-a2-bus-stop",
+    "skill": "listening",
+    "level": "A2",
+    "questionType": "listening-comprehension",
+    "prompt": "Where should passengers wait for the number eight bus?",
+    "options": [
+      "Outside the bank",
+      "Beside the park",
+      "At the station",
+      "Near the university gate"
+    ],
+    "correctIndex": 3,
+    "explanation": "The recording directs passengers to the temporary stop near the university gate.",
+    "audioText": "The number eight bus will not stop outside the bank today. Please use the temporary stop near the university gate.",
+    "audioSrc": "/audio/assessment/l-a2-bus-stop.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-b1-study-room",
+    "skill": "listening",
+    "level": "B1",
+    "questionType": "listening-comprehension",
+    "prompt": "Why was the student's booking changed?",
+    "options": [
+      "The library is closing early.",
+      "The original room has a faulty projector.",
+      "The student requested a larger room.",
+      "Another group paid for the room."
+    ],
+    "correctIndex": 1,
+    "explanation": "A projector problem in Room 4 caused the booking to move to Room 6.",
+    "audioText": "Your study-room booking has been moved from Room Four to Room Six because the projector in Room Four is not working. The time of your booking remains unchanged.",
+    "audioSrc": "/audio/assessment/l-b1-study-room.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-b2-field-trip",
+    "skill": "listening",
+    "level": "B2",
+    "questionType": "listening-comprehension",
+    "prompt": "What is the speaker mainly clarifying?",
+    "options": [
+      "Why the field trip was cancelled",
+      "Which costs the department will and will not cover",
+      "How students should write their reports",
+      "Where the class will meet next week"
+    ],
+    "correctIndex": 1,
+    "explanation": "Transport is covered, while students must buy their own lunch.",
+    "audioText": "The department will cover the cost of transport for Friday's field trip, so you do not need to buy a bus ticket. Lunch, however, is not included, and students should either bring food or purchase it at the visitor centre.",
+    "audioSrc": "/audio/assessment/l-b2-field-trip.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-b2-research-interview",
+    "skill": "listening",
+    "level": "B2",
+    "questionType": "listening-comprehension",
+    "prompt": "What must participants do before the interview?",
+    "options": [
+      "Read the final report",
+      "Choose the interview questions",
+      "Complete and return a consent form",
+      "Send a copy of their passport"
+    ],
+    "correctIndex": 2,
+    "explanation": "The recording says a signed consent form must be returned in advance.",
+    "audioText": "Before your research interview, please read the information sheet carefully and return the signed consent form. We cannot begin the recorded interview until we have received it.",
+    "audioSrc": "/audio/assessment/l-b2-research-interview.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-c1-policy-pilot",
+    "skill": "listening",
+    "level": "C1",
+    "questionType": "listening-comprehension",
+    "prompt": "Why does the speaker recommend a pilot programme?",
+    "options": [
+      "To avoid gathering any evidence",
+      "To test effects before committing to a wider rollout",
+      "To replace the policy permanently",
+      "To limit participation to senior staff"
+    ],
+    "correctIndex": 1,
+    "explanation": "A limited pilot would provide evidence before a large-scale commitment.",
+    "audioText": "The proposal is promising, but the evidence comes from institutions quite different from ours. A six-month pilot would let us examine the effects in our own context before committing resources to a university-wide rollout.",
+    "audioSrc": "/audio/assessment/l-c1-policy-pilot.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-c1-exhibition-delay",
+    "skill": "listening",
+    "level": "C1",
+    "questionType": "listening-comprehension",
+    "prompt": "What is the curator's attitude toward the delay?",
+    "options": [
+      "Entirely disappointed",
+      "Indifferent to its consequences",
+      "Regretful but aware of a possible benefit",
+      "Certain that the exhibition should be cancelled"
+    ],
+    "correctIndex": 2,
+    "explanation": "The curator regrets the delay but says it enables more careful conservation work.",
+    "audioText": "Naturally, we regret postponing the exhibition, particularly after visitors planned their journeys. Still, the delay gives conservators time to stabilize two fragile works that otherwise could not have been displayed safely.",
+    "audioSrc": "/audio/assessment/l-c1-exhibition-delay.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-c2-causal-claim",
+    "skill": "listening",
+    "level": "C2",
+    "questionType": "listening-comprehension",
+    "prompt": "What methodological caution does the speaker emphasize?",
+    "options": [
+      "The sample is too large to interpret.",
+      "An association does not by itself establish causation.",
+      "Qualitative data cannot support any conclusion.",
+      "The variables were never measured."
+    ],
+    "correctIndex": 1,
+    "explanation": "The speaker warns against treating correlation as proof of a causal effect.",
+    "audioText": "The association is statistically robust, but we should resist presenting it as causal. Participants were not randomly assigned, and an unmeasured factor may have influenced both their programme attendance and their eventual outcomes.",
+    "audioSrc": "/audio/assessment/l-c2-causal-claim.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-c2-urban-consultation",
+    "skill": "listening",
+    "level": "C2",
+    "questionType": "listening-comprehension",
+    "prompt": "What concern is implicit in the speaker's comment?",
+    "options": [
+      "The consultation received too many detailed responses.",
+      "The revised plan may cite participation without reflecting it.",
+      "Residents were unwilling to attend any meetings.",
+      "The original plan had no technical evidence."
+    ],
+    "correctIndex": 1,
+    "explanation": "The speaker questions whether public input changed the plan rather than merely being acknowledged.",
+    "audioText": "The report lists how many residents attended, but it does not identify a single design decision altered by their evidence. Participation should shape the plan, not simply decorate the account of how the plan was produced.",
+    "audioSrc": "/audio/assessment/l-c2-urban-consultation.wav",
+    "bankVersion": "2026.10.3"
+  },
+  {
+    "id": "l-c2-uncertainty",
+    "skill": "listening",
+    "level": "C2",
+    "questionType": "listening-comprehension",
+    "prompt": "How does the speaker characterize uncertainty?",
+    "options": [
+      "As evidence that the model is useless",
+      "As a reason to postpone every decision",
+      "As information that should be communicated and managed",
+      "As a problem that disappears with larger datasets"
+    ],
+    "correctIndex": 2,
+    "explanation": "The speaker treats uncertainty as decision-relevant information rather than as failure.",
+    "audioText": "Uncertainty is not a defect to conceal; it is information about the range of outcomes we should prepare for. The responsible response is to communicate that range clearly and choose measures that remain useful under several plausible scenarios.",
+    "audioSrc": "/audio/assessment/l-c2-uncertainty.wav",
+    "bankVersion": "2026.10.3"
+  }
+]

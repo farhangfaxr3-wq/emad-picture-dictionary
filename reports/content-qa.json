@@ -1,0 +1,351 @@
+{
+  "generatedAt": "2026-11-03T00:42:04.600Z",
+  "totalWords": 4000,
+  "provisional": 4000,
+  "duplicateSurfaceForms": 116,
+  "duplicateRecords": 254,
+  "missingIpa": 1415,
+  "genericExamples": 0,
+  "topicMismatchCandidates": 0,
+  "definitionWordMismatchCandidates": 0,
+  "outdatedFactFailures": 0,
+  "repeatedDefinitions": 0,
+  "correctionFailures": [],
+  "samples": {
+    "duplicateSurfaceForms": [
+      {
+        "surface": "apple",
+        "ids": [
+          "apple",
+          "home--scene-apple"
+        ],
+        "topics": [
+          "Food",
+          "Home"
+        ]
+      },
+      {
+        "surface": "chair",
+        "ids": [
+          "chair",
+          "classroom--chair",
+          "jobs--scene-chair",
+          "health--scene-chair",
+          "travel--scene-chair",
+          "food--scene-chair"
+        ],
+        "topics": [
+          "Home",
+          "Classroom",
+          "Jobs",
+          "Health",
+          "Travel",
+          "Food"
+        ]
+      },
+      {
+        "surface": "school",
+        "ids": [
+          "school",
+          "places--school"
+        ],
+        "topics": [
+          "School",
+          "Places"
+        ]
+      },
+      {
+        "surface": "book",
+        "ids": [
+          "book",
+          "home--scene-book"
+        ],
+        "topics": [
+          "Classroom",
+          "Home"
+        ]
+      },
+      {
+        "surface": "pencil",
+        "ids": [
+          "pencil",
+          "school--pencil"
+        ],
+        "topics": [
+          "Classroom",
+          "School"
+        ]
+      },
+      {
+        "surface": "doctor",
+        "ids": [
+          "doctor",
+          "jobs--doctor"
+        ],
+        "topics": [
+          "Health",
+          "Jobs"
+        ]
+      },
+      {
+        "surface": "teacher",
+        "ids": [
+          "teacher",
+          "school--teacher",
+          "classroom--scene-teacher"
+        ],
+        "topics": [
+          "Jobs",
+          "School",
+          "Classroom"
+        ]
+      },
+      {
+        "surface": "park",
+        "ids": [
+          "park",
+          "community--park"
+        ],
+        "topics": [
+          "Places",
+          "Community"
+        ]
+      },
+      {
+        "surface": "library",
+        "ids": [
+          "library",
+          "school--library",
+          "community--library"
+        ],
+        "topics": [
+          "Places",
+          "School",
+          "Community"
+        ]
+      },
+      {
+        "surface": "flower",
+        "ids": [
+          "flower",
+          "home--scene-flower"
+        ],
+        "topics": [
+          "Nature",
+          "Home"
+        ]
+      },
+      {
+        "surface": "dog",
+        "ids": [
+          "dog",
+          "nature--scene-dog"
+        ],
+        "topics": [
+          "Animals",
+          "Nature"
+        ]
+      },
+      {
+        "surface": "laptop",
+        "ids": [
+          "laptop",
+          "jobs--scene-laptop"
+        ],
+        "topics": [
+          "Technology",
+          "Jobs"
+        ]
+      },
+      {
+        "surface": "airplane",
+        "ids": [
+          "airplane",
+          "transportation--airplane"
+        ],
+        "topics": [
+          "Travel",
+          "Transportation"
+        ]
+      },
+      {
+        "surface": "neighbor",
+        "ids": [
+          "neighbor",
+          "people--neighbor"
+        ],
+        "topics": [
+          "Community",
+          "People"
+        ]
+      },
+      {
+        "surface": "reading",
+        "ids": [
+          "reading",
+          "school--reading"
+        ],
+        "topics": [
+          "Daily Activities",
+          "Academic Writing & Research"
+        ]
+      },
+      {
+        "surface": "chicken",
+        "ids": [
+          "chicken",
+          "animals--chicken"
+        ],
+        "topics": [
+          "Food",
+          "Animals"
+        ]
+      },
+      {
+        "surface": "table",
+        "ids": [
+          "table",
+          "health--scene-table",
+          "food--scene-table"
+        ],
+        "topics": [
+          "Home",
+          "Health",
+          "Food"
+        ]
+      },
+      {
+        "surface": "bed",
+        "ids": [
+          "bed",
+          "health--scene-bed"
+        ],
+        "topics": [
+          "Home",
+          "Health"
+        ]
+      },
+      {
+        "surface": "lamp",
+        "ids": [
+          "lamp",
+          "food--scene-lamp"
+        ],
+        "topics": [
+          "Home",
+          "Food"
+        ]
+      },
+      {
+        "surface": "door",
+        "ids": [
+          "door",
+          "transportation--scene-door"
+        ],
+        "topics": [
+          "Home",
+          "Transportation"
+        ]
+      },
+      {
+        "surface": "window",
+        "ids": [
+          "window",
+          "classroom--scene-window",
+          "travel--scene-window",
+          "food--scene-window",
+          "transportation--scene-window"
+        ],
+        "topics": [
+          "Home",
+          "Classroom",
+          "Travel",
+          "Food",
+          "Transportation"
+        ]
+      },
+      {
+        "surface": "clock",
+        "ids": [
+          "clock",
+          "classroom--clock",
+          "travel--scene-clock",
+          "jobs--scene-clock"
+        ],
+        "topics": [
+          "Home",
+          "Classroom",
+          "Travel",
+          "Jobs"
+        ]
+      },
+      {
+        "surface": "desk",
+        "ids": [
+          "desk",
+          "home--desk",
+          "jobs--scene-desk"
+        ],
+        "topics": [
+          "Classroom",
+          "Home",
+          "Jobs"
+        ]
+      },
+      {
+        "surface": "whiteboard",
+        "ids": [
+          "whiteboard",
+          "jobs--scene-whiteboard"
+        ],
+        "topics": [
+          "Classroom",
+          "Jobs"
+        ]
+      },
+      {
+        "surface": "notebook",
+        "ids": [
+          "notebook",
+          "school--notebook"
+        ],
+        "topics": [
+          "Classroom",
+          "School"
+        ]
+      }
+    ],
+    "missingIpa": [
+      "food--pear",
+      "food--peach",
+      "food--plum",
+      "food--mango",
+      "food--pineapple",
+      "food--cucumber",
+      "food--lettuce",
+      "food--broccoli",
+      "food--spinach",
+      "food--beef",
+      "food--lamb",
+      "food--turkey",
+      "food--pork",
+      "food--salmon",
+      "food--tuna",
+      "food--shrimp",
+      "food--yogurt",
+      "food--butter",
+      "food--cream",
+      "food--cottage-cheese",
+      "food--ice-cream",
+      "food--lemonade",
+      "food--smoothie",
+      "food--hot-chocolate",
+      "food--sparkling-water"
+    ],
+    "repeatedDefinitions": []
+  },
+  "notes": [
+    "Duplicate surface forms remain explicit topic aliases in source data; learner dictionary results are deduplicated by surface form.",
+    "Missing IPA and provisional CEFR records remain marked for educator review and are not reported as verified."
+  ]
+}

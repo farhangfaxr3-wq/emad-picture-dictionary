@@ -29,6 +29,7 @@ type ChatAccount = {
   restricted_until: string | null
   created_at: string
 }
+type Pagination = { page: number; limit: number; total: number; pages: number }
 
 const card = "rounded-2xl border border-border bg-card"
 
@@ -48,24 +49,33 @@ export default function ChatModerationPanel({ active }: { active: boolean }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [busy, setBusy] = useState("")
+  const [reportPage, setReportPage] = useState(1)
+  const [accountPage, setAccountPage] = useState(1)
+  const [reportPagination, setReportPagination] = useState<Pagination>({ page: 1, limit: 20, total: 0, pages: 1 })
+  const [accountPagination, setAccountPagination] = useState<Pagination>({ page: 1, limit: 20, total: 0, pages: 1 })
 
   const load = useCallback(async () => {
     if (!active) return
     setLoading(true)
     setError("")
     try {
-      const result = (await request("/api/admin/chat")) as {
+      const result = (await request(`/api/admin/chat?reportPage=${reportPage}&accountPage=${accountPage}&limit=20`)) as {
         reports: ChatReport[]
         accounts: ChatAccount[]
+        pagination?: { reports: Pagination; accounts: Pagination }
       }
       setReports(result.reports)
       setAccounts(result.accounts)
+      if (result.pagination) {
+        setReportPagination(result.pagination.reports)
+        setAccountPagination(result.pagination.accounts)
+      }
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Chat moderation could not be loaded.")
     } finally {
       setLoading(false)
     }
-  }, [active])
+  }, [active, reportPage, accountPage])
 
   useEffect(() => {
     void load()
@@ -156,6 +166,13 @@ export default function ChatModerationPanel({ active }: { active: boolean }) {
               ))}
             </div>
           )}
+          {reportPagination.total > 0 && (
+            <nav aria-label="Chat report pages" className="mt-4 flex items-center justify-between gap-2 text-[10px]">
+              <button type="button" disabled={reportPage <= 1} onClick={() => setReportPage((current) => Math.max(1, current - 1))} className="rounded-lg border border-border px-3 py-2 font-semibold disabled:opacity-40">Previous</button>
+              <span>{reportPagination.page} / {reportPagination.pages} · {reportPagination.total}</span>
+              <button type="button" disabled={reportPage >= reportPagination.pages} onClick={() => setReportPage((current) => current + 1)} className="rounded-lg border border-border px-3 py-2 font-semibold disabled:opacity-40">Load more</button>
+            </nav>
+          )}
         </div>
 
         <div>
@@ -173,6 +190,13 @@ export default function ChatModerationPanel({ active }: { active: boolean }) {
               </div>
             ))}
           </div>
+          {accountPagination.total > 0 && (
+            <nav aria-label="Chat account pages" className="mt-4 flex items-center justify-between gap-2 text-[10px]">
+              <button type="button" disabled={accountPage <= 1} onClick={() => setAccountPage((current) => Math.max(1, current - 1))} className="rounded-lg border border-border px-3 py-2 font-semibold disabled:opacity-40">Previous</button>
+              <span>{accountPagination.page} / {accountPagination.pages} · {accountPagination.total}</span>
+              <button type="button" disabled={accountPage >= accountPagination.pages} onClick={() => setAccountPage((current) => current + 1)} className="rounded-lg border border-border px-3 py-2 font-semibold disabled:opacity-40">Load more</button>
+            </nav>
+          )}
           <p className="mt-4 flex gap-2 text-[9px] leading-5 text-muted-foreground"><ShieldCheck className="mt-0.5 shrink-0 text-primary" size={13} /> Passkey credentials, session tokens, and private report identities never appear in this panel.</p>
         </div>
       </div>

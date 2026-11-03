@@ -29,7 +29,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Respiratory disease characterized by inflammation of the lung parenchyma (excluding the bronchi) with congestion caused by viruses or bacteria or irritants.",
-    "The lesson uses “pneumonia” in a carefully reviewed vocabulary context."
+    "“pneumonia” means respiratory disease characterized by inflammation of the lung parenchyma (excluding the bronchi) with congestion caused by viruses or bacteria or irritants."
   ],
   [
     "poem",
@@ -39,7 +39,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A composition written in metrical feet forming rhythmical lines.",
-    "The lesson uses “poem” in a carefully reviewed vocabulary context."
+    "“poem” means a composition written in metrical feet forming rhythmical lines."
   ],
   [
     "poetry",
@@ -49,7 +49,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Literature in metrical form.",
-    "The lesson uses “poetry” in a carefully reviewed vocabulary context."
+    "“poetry” means literature in metrical form."
   ],
   [
     "point",
@@ -69,7 +69,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Any substance that causes injury or illness or death of a living organism.",
-    "The lesson uses “poison” in a carefully reviewed vocabulary context."
+    "“poison” means any substance that causes injury or illness or death of a living organism."
   ],
   [
     "pole",
@@ -79,7 +79,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A long (usually round) rod of wood or metal or plastic.",
-    "The lesson uses “pole” in a carefully reviewed vocabulary context."
+    "“pole” means a long (usually round) rod of wood or metal or plastic."
   ],
   [
     "policy",
@@ -99,7 +99,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A person active in party politics.",
-    "The lesson uses “politician” in a carefully reviewed vocabulary context."
+    "“politician” means a person active in party politics."
   ],
   [
     "politics",
@@ -119,7 +119,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "The counting of votes (as in an election).",
-    "The lesson uses “poll” in a carefully reviewed vocabulary context."
+    "“poll” means the counting of votes (as in an election)."
   ],
   [
     "pony",
@@ -129,7 +129,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Any of various breeds of small gentle horses usually less than five feet high at the shoulder.",
-    "The lesson uses “pony” in a carefully reviewed vocabulary context."
+    "“pony” means any of various breeds of small gentle horses usually less than five feet high at the shoulder."
   ],
   [
     "pool",
@@ -149,7 +149,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Music of general appeal to teenagers; a bland watered-down version of rock'n'roll with more rhythm and harmony and an emphasis on romantic love.",
-    "The lesson uses “pop” in a carefully reviewed vocabulary context."
+    "“pop” means music of general appeal to teenagers; a bland watered-down version of rock'n'roll with more rhythm and harmony and an emphasis on romantic love."
   ],
   [
     "population",
@@ -169,7 +169,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A person employed to carry luggage and supplies.",
-    "The lesson uses “porter” in a carefully reviewed vocabulary context."
+    "“porter” means a person employed to carry luggage and supplies."
   ],
   [
     "portion",
@@ -199,7 +199,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The act of putting something in a certain place.",
-    "The lesson uses “position” in a carefully reviewed vocabulary context."
+    "“position” means the act of putting something in a certain place."
   ],
   [
     "possession",
@@ -209,7 +209,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The act of having and controlling property.",
-    "The lesson uses “possession” in a carefully reviewed vocabulary context."
+    "“possession” means the act of having and controlling property."
   ],
   [
     "possibility",
@@ -239,7 +239,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Metal or earthenware cooking vessel that is usually round and deep; often has a handle and lid.",
-    "The lesson uses “pot” in a carefully reviewed vocabulary context."
+    "“pot” means metal or earthenware cooking vessel that is usually round and deep; often has a handle and lid."
   ],
   [
     "potential",
@@ -249,7 +249,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The inherent capacity for coming into being.",
-    "The lesson uses “potential” in a carefully reviewed vocabulary context."
+    "“potential” means the inherent capacity for coming into being."
   ],
   [
     "pottery",
@@ -259,7 +259,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Ceramic ware made from clay and baked in a kiln.",
-    "The lesson uses “pottery” in a carefully reviewed vocabulary context."
+    "“pottery” means ceramic ware made from clay and baked in a kiln."
   ],
   [
     "pound",
@@ -279,7 +279,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A solid substance in the form of tiny loose particles; a solid that has been pulverized.",
-    "The lesson uses “powder” in a carefully reviewed vocabulary context."
+    "“powder” means a solid substance in the form of tiny loose particles; a solid that has been pulverized."
   ],
   [
     "power",
@@ -289,7 +289,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A state powerful enough to influence events throughout the world.",
-    "The lesson uses “power” in a carefully reviewed vocabulary context."
+    "“power” means a state powerful enough to influence events throughout the world."
   ],
   [
     "practice",
@@ -329,7 +329,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "An example that is used to justify similar occurrences at a later time.",
-    "The lesson uses “precedent” in a carefully reviewed vocabulary context."
+    "“precedent” means an example that is used to justify similar occurrences at a later time."
   ],
   [
     "precision",
@@ -349,7 +349,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Any animal that lives by preying on other animals.",
-    "The lesson uses “predator” in a carefully reviewed vocabulary context."
+    "“predator” means any animal that lives by preying on other animals."
   ],
   [
     "predecessor",
@@ -359,7 +359,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "One who precedes you in time (as in holding a position or office).",
-    "The lesson uses “predecessor” in a carefully reviewed vocabulary context."
+    "“predecessor” means one who precedes you in time (as in holding a position or office)."
   ],
   [
     "preference",
@@ -379,7 +379,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A partiality that prevents objective consideration of an issue or situation.",
-    "The lesson uses “prejudice” in a carefully reviewed vocabulary context."
+    "“prejudice” means a partiality that prevents objective consideration of an issue or situation."
   ],
   [
     "premium",
@@ -389,7 +389,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Payment for insurance.",
-    "The lesson uses “premium” in a carefully reviewed vocabulary context."
+    "“premium” means payment for insurance."
   ],
   [
     "preoccupation",
@@ -399,7 +399,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "An idea that preoccupies the mind and holds the attention.",
-    "The lesson uses “preoccupation” in a carefully reviewed vocabulary context."
+    "“preoccupation” means an idea that preoccupies the mind and holds the attention."
   ],
   [
     "preparation",
@@ -419,7 +419,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Dignified manner or conduct.",
-    "The lesson uses “presence” in a carefully reviewed vocabulary context."
+    "“presence” means dignified manner or conduct."
   ],
   [
     "preservation",
@@ -429,7 +429,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "The condition of being (well or ill) preserved.",
-    "The lesson uses “preservation” in a carefully reviewed vocabulary context."
+    "“preservation” means the condition of being (well or ill) preserved."
   ],
   [
     "presidency",
@@ -449,7 +449,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The chief executive of a republic.",
-    "The lesson uses “president” in a carefully reviewed vocabulary context."
+    "“president” means the chief executive of a republic."
   ],
   [
     "press",
@@ -459,7 +459,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A machine used for printing.",
-    "The lesson uses “press” in a carefully reviewed vocabulary context."
+    "“press” means a machine used for printing."
   ],
   [
     "pressure",
@@ -499,7 +499,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Animal hunted or caught for food.",
-    "The lesson uses “prey” in a carefully reviewed vocabulary context."
+    "“prey” means animal hunted or caught for food."
   ],
   [
     "price",
@@ -529,7 +529,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A male member of a royal family other than the sovereign (especially the son of a sovereign).",
-    "The lesson uses “prince” in a carefully reviewed vocabulary context."
+    "“prince” means a male member of a royal family other than the sovereign (especially the son of a sovereign)."
   ],
   [
     "princess",
@@ -539,7 +539,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A female member of a royal family other than the queen (especially the daughter of a sovereign).",
-    "The lesson uses “princess” in a carefully reviewed vocabulary context."
+    "“princess” means a female member of a royal family other than the queen (especially the daughter of a sovereign)."
   ],
   [
     "principle",
@@ -559,7 +559,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A picture or design printed from an engraving.",
-    "The lesson uses “print” in a carefully reviewed vocabulary context."
+    "“print” means a picture or design printed from an engraving."
   ],
   [
     "priority",
@@ -574,12 +574,12 @@ const entries: BatchEntry[] = [
   [
     "prison",
     "/ˈpɹɪzən/",
-    "Home",
-    "Objects & equipment",
+    "Law & Government",
+    "Justice & institutions",
     "noun",
     "A2",
     "A correctional institution where persons are confined while on trial or for punishment.",
-    "The lesson uses “prison” in a carefully reviewed vocabulary context."
+    "The court sentenced him to three years in prison."
   ],
   [
     "prisoner",
@@ -589,7 +589,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A person who is confined; especially a prisoner of war.",
-    "The lesson uses “prisoner” in a carefully reviewed vocabulary context."
+    "“prisoner” means a person who is confined; especially a prisoner of war."
   ],
   [
     "privilege",
@@ -599,7 +599,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A special advantage or immunity or benefit not enjoyed by all.",
-    "The lesson uses “privilege” in a carefully reviewed vocabulary context."
+    "“privilege” means a special advantage or immunity or benefit not enjoyed by all."
   ],
   [
     "prize",
@@ -609,7 +609,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Something given as a token of victory.",
-    "The lesson uses “prize” in a carefully reviewed vocabulary context."
+    "“prize” means something given as a token of victory."
   ],
   [
     "probability",
@@ -639,7 +639,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A mode of conducting legal and parliamentary proceedings.",
-    "The lesson uses “procedure” in a carefully reviewed vocabulary context."
+    "“procedure” means a mode of conducting legal and parliamentary proceedings."
   ],
   [
     "process",
@@ -659,7 +659,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Fresh fruits and vegetable grown for the market.",
-    "The lesson uses “produce” in a carefully reviewed vocabulary context."
+    "“produce” means fresh fruits and vegetable grown for the market."
   ],
   [
     "producer",
@@ -669,7 +669,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Someone who finds financing for and supervises the making and presentation of a show (play or film or program or similar work).",
-    "The lesson uses “producer” in a carefully reviewed vocabulary context."
+    "“producer” means someone who finds financing for and supervises the making and presentation of a show (play or film or program or similar work)."
   ],
   [
     "product",
@@ -699,7 +699,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "An occupation requiring special education (especially in the liberal arts or sciences).",
-    "The lesson uses “profession” in a carefully reviewed vocabulary context."
+    "“profession” means an occupation requiring special education (especially in the liberal arts or sciences)."
   ],
   [
     "profile",
@@ -709,7 +709,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An outline of something (especially a human face as seen from one side).",
-    "The lesson uses “profile” in a carefully reviewed vocabulary context."
+    "“profile” means an outline of something (especially a human face as seen from one side)."
   ],
   [
     "profit",
@@ -719,7 +719,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The advantageous quality of being beneficial.",
-    "The lesson uses “profit” in a carefully reviewed vocabulary context."
+    "“profit” means the advantageous quality of being beneficial."
   ],
   [
     "program",
@@ -749,7 +749,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A prediction made by extrapolating from past observations.",
-    "The lesson uses “projection” in a carefully reviewed vocabulary context."
+    "“projection” means a prediction made by extrapolating from past observations."
   ],
   [
     "promise",
@@ -759,7 +759,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A verbal commitment by one person to another agreeing to do (or not to do) something in the future.",
-    "The lesson uses “promise” in a carefully reviewed vocabulary context."
+    "“promise” means a verbal commitment by one person to another agreeing to do (or not to do) something in the future."
   ],
   [
     "proof",

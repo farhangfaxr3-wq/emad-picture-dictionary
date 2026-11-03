@@ -169,7 +169,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "Lacking or deprived of the sense of hearing wholly or in part.",
-    "The lesson uses “deaf” in a carefully reviewed vocabulary context."
+    "“deaf” means lacking or deprived of the sense of hearing wholly or in part."
   ],
   [
     "decisive",
@@ -709,7 +709,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Having experience; having knowledge or skill from observation or participation.",
-    "The lesson uses “experienced” in a carefully reviewed vocabulary context."
+    "“experienced” means having experience; having knowledge or skill from observation or participation."
   ],
   [
     "experimental",
@@ -989,7 +989,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Pleasant-smelling.",
-    "The lesson uses “fragrant” in a carefully reviewed vocabulary context."
+    "“fragrant” means pleasant-smelling."
   ],
   [
     "frank",

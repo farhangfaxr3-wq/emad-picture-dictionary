@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   AlertCircle,
   CheckCircle2,
@@ -11,53 +11,53 @@ import {
 } from "lucide-react"
 import {
   assessmentSkillLabels,
-  generateVocabularyQuestionCandidates,
-  type AssessmentQuestion,
-} from "./assessment"
-import { cefrLabels } from "./cefr"
+  type AssessmentSkill,
+} from "./assessmentPublic"
+import { cefrLabels, type CEFRLevel } from "./cefr"
 
 type ReviewStatus = "draft" | "approved" | "rejected" | "needs-review"
-type ReviewQuestion = AssessmentQuestion & {
+type ReviewQuestion = {
+  id: string
+  bankVersion: string
+  skill: AssessmentSkill
+  level: CEFRLevel
+  prompt: string
+  options: string[]
+  correctIndex: number
+  explanation: string
+  passage?: string
+  audioText?: string
+  sourceLabel?: string
+  sourceConfidence?: "low" | "medium" | "high"
   status: ReviewStatus
   createdAt?: string
   reviewedAt?: string | null
 }
 
 const card = "rounded-2xl border border-border bg-card text-card-foreground shadow-sm"
-const SYNC_KEY = "emad-assessment-candidate-fingerprint"
-
-function fingerprint(items: AssessmentQuestion[]) {
-  let hash = 2166136261
-  for (const item of items) {
-    const value = `${item.id}|${item.level}|${item.prompt}|${item.options.join("|")}`
-    for (let index = 0; index < value.length; index += 1) {
-      hash ^= value.charCodeAt(index)
-      hash = Math.imul(hash, 16777619)
-    }
-  }
-  return `${items.length}:${hash >>> 0}`
-}
-
+type Pagination = { page: number; limit: number; total: number; pages: number }
 export default function AssessmentReviewPanel({ active }: { active: boolean }) {
-  const candidates = useMemo(() => generateVocabularyQuestionCandidates(), [])
   const [records, setRecords] = useState<ReviewQuestion[]>([])
   const [filter, setFilter] = useState<ReviewStatus>("draft")
   const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">("idle")
   const [message, setMessage] = useState("")
   const [syncing, setSyncing] = useState(false)
+  const [page, setPage] = useState(1)
+  const [pagination, setPagination] = useState<Pagination>({ page: 1, limit: 20, total: 0, pages: 1 })
 
   const load = async (nextFilter = filter) => {
     setStatus("loading")
     setMessage("")
     try {
       const response = await fetch(
-        `/api/admin/assessment/questions?status=${nextFilter}`,
+        `/api/admin/assessment/questions?status=${nextFilter}&page=${page}&limit=20`,
       )
       const result = await response.json()
       if (!response.ok || !Array.isArray(result.questions)) {
         throw new Error(result.message || "Assessment questions could not be loaded.")
       }
       setRecords(result.questions)
+      setPagination(result.pagination || { page, limit: 20, total: result.questions.length, pages: 1 })
       setStatus("ready")
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to load the assessment bank.")
@@ -66,23 +66,20 @@ export default function AssessmentReviewPanel({ active }: { active: boolean }) {
   }
 
   const syncCandidates = async (force = false) => {
-    const currentFingerprint = fingerprint(candidates)
-    if (!force && localStorage.getItem(SYNC_KEY) === currentFingerprint) return
+    if (!force) return
     setSyncing(true)
     setMessage("")
     try {
-      let created = 0
-      for (let index = 0; index < candidates.length; index += 60) {
-        const response = await fetch("/api/admin/assessment/questions/sync", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ questions: candidates.slice(index, index + 60) }),
-        })
-        const result = await response.json()
-        if (!response.ok) throw new Error(result.message || "Candidate sync failed.")
-        created += Number(result.created || 0)
+      const response = await fetch("/api/admin/assessment/questions/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.message || "Candidate sync failed.")
       }
-      localStorage.setItem(SYNC_KEY, currentFingerprint)
+      const created = Number(result.created || 0)
       setMessage(
         created
           ? `${created} new draft question candidate${created === 1 ? "" : "s"} prepared for review.`
@@ -98,13 +95,8 @@ export default function AssessmentReviewPanel({ active }: { active: boolean }) {
   }
 
   useEffect(() => {
-    if (!active) return
-    void syncCandidates()
-  }, [active])
-
-  useEffect(() => {
     if (active) void load(filter)
-  }, [active, filter])
+  }, [active, filter, page])
 
   const review = async (record: ReviewQuestion, nextStatus: ReviewStatus) => {
     setMessage("")
@@ -145,7 +137,10 @@ export default function AssessmentReviewPanel({ active }: { active: boolean }) {
         <div className="flex flex-wrap gap-2">
           <select
             value={filter}
-            onChange={(event) => setFilter(event.target.value as ReviewStatus)}
+            onChange={(event) => {
+              setFilter(event.target.value as ReviewStatus)
+              setPage(1)
+            }}
             aria-label="Filter assessment question status"
             className="rounded-xl border border-border bg-background px-4 py-3 text-xs"
           >
@@ -222,6 +217,13 @@ export default function AssessmentReviewPanel({ active }: { active: boolean }) {
             </article>
           ))}
         </div>
+      )}
+      {status === "ready" && pagination.total > 0 && (
+        <nav aria-label="Assessment question pages" className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-xs">
+          <button type="button" disabled={page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))} className="rounded-xl border border-border px-4 py-2.5 font-semibold disabled:opacity-40">Previous</button>
+          <span>Page {pagination.page} of {pagination.pages} · {pagination.total} total</span>
+          <button type="button" disabled={page >= pagination.pages} onClick={() => setPage((current) => current + 1)} className="rounded-xl border border-border px-4 py-2.5 font-semibold disabled:opacity-40">Load more</button>
+        </nav>
       )}
     </section>
   )

@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "test:bundle": "vite build && node scripts/check-bundle-size.mjs",
     "test:vocabulary": "node scripts/validate-vocabulary.mjs",
+    "test:content": "node scripts/validate-content-quality.mjs",
     "test:imagery": "node scripts/validate-imagery.mjs && tsx scripts/validate-practice-imagery.ts",
     "test:assessment-audio": "node scripts/validate-assessment-audio.mjs",
     "test:assessment": "tsx scripts/validate-assessment-bank.ts",
@@ -25,6 +26,9 @@
     "check:cloudflare": "node scripts/check-cloudflare-config.mjs",
     "deploy:cloudflare": "pnpm check:cloudflare && pnpm build && wrangler deploy",
     "test:submissions": "node --test worker/index.test.js",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxfmt --check e2e playwright.config.ts src/app/RouteMetadata.tsx src/app/assessmentPublic.ts src/app/categoryActivities.ts src/app/learningStore.ts worker/http.js scripts/repair-generic-examples.mjs scripts/validate-content-quality.mjs",
     "format": "oxfmt"
   },
   "dependencies": {
@@ -36,6 +40,7 @@
     "react-router": "^7.18.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/vite": "^4.0.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",

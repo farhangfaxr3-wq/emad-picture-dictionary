@@ -167,8 +167,8 @@ export function VocabularyPhoto({
       src={image.src}
       alt={
         image.kind === "context"
-          ? `${word.word}: a real-life ${word.topic.toLowerCase()} context. ${image.description}`
-          : `Photograph of ${word.word}`
+          ? `Real-life ${word.topic.toLowerCase()} setting illustrating ${word.word}`
+          : `Photograph illustrating ${word.word}`
       }
       title={`${image.author} · ${image.license}. ${
         image.kind === "context"

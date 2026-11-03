@@ -89,7 +89,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Worth remembering.",
-    "The lesson uses “memorable” in a carefully reviewed vocabulary context."
+    "“memorable” means worth remembering."
   ],
   [
     "mental",
@@ -109,7 +109,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Occupying a socioeconomic position intermediate between those of the lower classes and the wealthy.",
-    "The lesson uses “middle-class” in a carefully reviewed vocabulary context."
+    "“middle-class” means occupying a socioeconomic position intermediate between those of the lower classes and the wealthy."
   ],
   [
     "mild",
@@ -289,7 +289,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Absolutely essential.",
-    "The lesson uses “necessary” in a carefully reviewed vocabulary context."
+    "“necessary” means absolutely essential."
   ],
   [
     "negative",
@@ -319,7 +319,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Possessing no distinctive quality or characteristics.",
-    "The lesson uses “neutral” in a carefully reviewed vocabulary context."
+    "“neutral” means possessing no distinctive quality or characteristics."
   ],
   [
     "new",
@@ -449,7 +449,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "Not divisible by two.",
-    "The lesson uses “odd” in a carefully reviewed vocabulary context."
+    "“odd” means not divisible by two."
   ],
   [
     "offensive",
@@ -529,7 +529,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Possible but not necessary; left to personal choice.",
-    "The lesson uses “optional” in a carefully reviewed vocabulary context."
+    "“optional” means possible but not necessary; left to personal choice."
   ],
   [
     "oral",
@@ -639,7 +639,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Affected with paralysis.",
-    "The lesson uses “paralyzed” in a carefully reviewed vocabulary context."
+    "“paralyzed” means affected with paralysis."
   ],
   [
     "parental",
@@ -679,7 +679,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Having or expressing strong emotions.",
-    "The lesson uses “passionate” in a carefully reviewed vocabulary context."
+    "“passionate” means having or expressing strong emotions."
   ],
   [
     "passive",
@@ -889,7 +889,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Capable of being foretold.",
-    "The lesson uses “predictable” in a carefully reviewed vocabulary context."
+    "“predictable” means capable of being foretold."
   ],
   [
     "pregnant",
@@ -899,7 +899,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Carrying developing offspring within the body or being about to produce new life.",
-    "The lesson uses “pregnant” in a carefully reviewed vocabulary context."
+    "“pregnant” means carrying developing offspring within the body or being about to produce new life."
   ],
   [
     "premature",

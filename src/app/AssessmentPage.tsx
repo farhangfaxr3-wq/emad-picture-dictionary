@@ -21,16 +21,13 @@ import {
 } from "lucide-react"
 import { cefrLabels, cefrLevels, type CEFRLevel } from "./cefr"
 import {
-  ASSESSMENT_BANK_VERSION,
   ASSESSMENT_QUESTION_COUNT,
   assessmentSkillLabels,
   resultRecommendations,
-  scoreAssessment,
-  selectAssessmentQuestions,
-  type AssessmentQuestion,
   type AssessmentResult,
   type AssessmentSkill,
-} from "./assessment"
+  type PublicAssessmentQuestion,
+} from "./assessmentPublic"
 
 const HISTORY_KEY = "emad-level-assessment-history"
 const card =
@@ -87,11 +84,13 @@ function SkillIcon({ skill }: { skill: AssessmentSkill }) {
 function IntroScreen({
   history,
   loading,
+  error,
   onBegin,
 }: {
   history: AssessmentResult[]
   loading: boolean
-  onBegin: () => void
+  error: string
+  onBegin: () => Promise<void>
 }) {
   const latest = history[0]
   const skills: {
@@ -148,6 +147,14 @@ function IntroScreen({
             {loading ? "Preparing your assessment…" : "Test My English Level"}
             {!loading && <ArrowRight size={17} />}
           </button>
+          {error && (
+            <p
+              role="alert"
+              className="mt-4 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-xs leading-5 text-white/85"
+            >
+              {error}
+            </p>
+          )}
         </div>
         <div className="pointer-events-none absolute -bottom-24 -right-20 h-72 w-72 rounded-full bg-[#75ceb5]/10" />
         <div className="pointer-events-none absolute right-10 top-10 hidden h-28 w-28 rotate-12 rounded-[30px] border border-white/10 bg-white/5 lg:block" />
@@ -242,14 +249,13 @@ function AssessmentQuestionView({
   selected,
   onSelect,
 }: {
-  item: AssessmentQuestion
+  item: PublicAssessmentQuestion
   selected: number | undefined
   onSelect: (index: number) => void
 }) {
   const [audioState, setAudioState] =
     useState<"idle" | "loading" | "playing" | "error">("idle")
   const audio = useRef<HTMLAudioElement | null>(null)
-  const utterance = useRef<SpeechSynthesisUtterance | null>(null)
 
   useEffect(
     () => () => {
@@ -258,45 +264,17 @@ function AssessmentQuestionView({
         audio.current.src = ""
         audio.current = null
       }
-      if ("speechSynthesis" in window) window.speechSynthesis.cancel()
     },
     [item.id],
   )
-
-  const playSpeechFallback = () => {
-    if (!("speechSynthesis" in window) || !item.audioText) {
-      setAudioState("error")
-      return
-    }
-    const synthesis = window.speechSynthesis
-    synthesis.cancel()
-    const next = new SpeechSynthesisUtterance(item.audioText)
-    next.lang = "en-GB"
-    next.rate = 0.88
-    next.volume = 1
-    const voices = synthesis.getVoices()
-    next.voice =
-      voices.find((voice) => voice.lang.toLowerCase() === "en-gb") ||
-      voices.find((voice) => voice.lang.toLowerCase().startsWith("en")) ||
-      null
-    next.onstart = () => setAudioState("playing")
-    next.onend = () => setAudioState("idle")
-    next.onerror = () => setAudioState("error")
-    utterance.current = next
-    setAudioState("loading")
-    synthesis.speak(next)
-    window.setTimeout(() => synthesis.resume(), 80)
-  }
 
   const play = async () => {
     if (audio.current) {
       audio.current.pause()
       audio.current.currentTime = 0
     }
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel()
-
     if (!item.audioSrc) {
-      playSpeechFallback()
+      setAudioState("error")
       return
     }
 
@@ -305,20 +283,17 @@ function AssessmentQuestionView({
     next.preload = "auto"
     next.volume = 1
     audio.current = next
-    let usedFallback = false
-    const fallback = () => {
-      if (usedFallback) return
-      usedFallback = true
-      audio.current = null
-      playSpeechFallback()
-    }
     next.onplaying = () => setAudioState("playing")
     next.onended = () => setAudioState("idle")
-    next.onerror = fallback
+    next.onerror = () => {
+      audio.current = null
+      setAudioState("error")
+    }
     try {
       await next.play()
     } catch {
-      fallback()
+      audio.current = null
+      setAudioState("error")
     }
   }
 
@@ -639,47 +614,71 @@ export default function AssessmentPage() {
   const [screen, setScreen] = useState<"intro" | "assessment" | "result">(
     "intro",
   )
-  const [approved, setApproved] = useState<AssessmentQuestion[]>([])
-  const [questions, setQuestions] = useState<AssessmentQuestion[]>([])
+  const [questions, setQuestions] = useState<PublicAssessmentQuestion[]>([])
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [currentIndex, setCurrentIndex] = useState(0)
   const [confirmSubmit, setConfirmSubmit] = useState(false)
   const [result, setResult] = useState<AssessmentResult | null>(null)
   const [history, setHistory] = useState<AssessmentResult[]>(readHistory)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState("")
+  const [attemptId, setAttemptId] = useState("")
+  const [bankVersion, setBankVersion] = useState("")
 
-  useEffect(() => {
-    let active = true
-    fetch("/api/assessment/questions")
-      .then(async (response) => {
-        if (!response.ok) return []
-        const payload = await response.json()
-        return Array.isArray(payload.questions) ? payload.questions : []
+  const begin = async () => {
+    setLoading(true)
+    setError("")
+    try {
+      const response = await fetch("/api/assessment/attempts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
       })
-      .then((items) => {
-        if (active) setApproved(items)
-      })
-      .catch(() => {})
-      .finally(() => {
-        if (active) setLoading(false)
-      })
-    return () => {
-      active = false
+      const payload = await response.json()
+      if (
+        !response.ok ||
+        typeof payload.attemptId !== "string" ||
+        !Array.isArray(payload.questions) ||
+        payload.questions.length !== ASSESSMENT_QUESTION_COUNT
+      ) {
+        throw new Error(
+          payload.message || "The assessment could not be prepared.",
+        )
+      }
+      setAttemptId(payload.attemptId)
+      setBankVersion(String(payload.bankVersion || ""))
+      setQuestions(payload.questions)
+      setAnswers({})
+      setCurrentIndex(0)
+      setResult(null)
+      setConfirmSubmit(false)
+      setScreen("assessment")
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "The assessment could not be prepared.",
+      )
+    } finally {
+      setLoading(false)
     }
-  }, [])
-
-  const begin = () => {
-    const selected = selectAssessmentQuestions(approved)
-    setQuestions(selected)
-    setAnswers({})
-    setCurrentIndex(0)
-    setResult(null)
-    setConfirmSubmit(false)
-    setScreen("assessment")
   }
 
-  const finish = () => {
-    const next = scoreAssessment(questions, answers)
+  const finish = async () => {
+    setSubmitting(true)
+    setError("")
+    try {
+      const response = await fetch("/api/assessment/attempts/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ attemptId, answers }),
+      })
+      const payload = await response.json()
+      if (!response.ok || !payload.result) {
+        throw new Error(payload.message || "The assessment could not be scored.")
+      }
+      const next = payload.result as AssessmentResult
     const nextHistory = [next, ...history].slice(0, 12)
     try {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(nextHistory))
@@ -690,6 +689,16 @@ export default function AssessmentPage() {
     setConfirmSubmit(false)
     setScreen("result")
     window.scrollTo({ top: 0, behavior: "smooth" })
+    } catch (caught) {
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : "The assessment could not be scored.",
+      )
+      setConfirmSubmit(false)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const current = questions[currentIndex]
@@ -717,7 +726,14 @@ export default function AssessmentPage() {
   )
 
   if (screen === "intro") {
-    return <IntroScreen history={history} loading={loading} onBegin={begin} />
+    return (
+      <IntroScreen
+        history={history}
+        loading={loading}
+        error={error}
+        onBegin={begin}
+      />
+    )
   }
 
   if (screen === "result" && result) {
@@ -728,6 +744,14 @@ export default function AssessmentPage() {
 
   return (
     <div className="mx-auto max-w-4xl">
+      {error && (
+        <p
+          role="alert"
+          className="mb-5 rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-xs leading-5 text-danger"
+        >
+          {error}
+        </p>
+      )}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <button
           type="button"
@@ -737,7 +761,7 @@ export default function AssessmentPage() {
           <ArrowLeft size={15} /> Exit assessment
         </button>
         <p className="text-[10px] text-muted-foreground">
-          Bank {ASSESSMENT_BANK_VERSION} · Results stay on this device
+          Bank {bankVersion} · Results stay on this device
         </p>
       </div>
 
@@ -852,10 +876,12 @@ export default function AssessmentPage() {
             <div className="mt-6 flex flex-col gap-2 sm:flex-row-reverse">
               <button
                 type="button"
-                onClick={finish}
+                onClick={() => void finish()}
+                disabled={submitting}
                 className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-semibold text-primary-foreground"
               >
-                Submit assessment <ArrowRight size={15} />
+                {submitting ? "Scoring assessment…" : "Submit assessment"}
+                {!submitting && <ArrowRight size={15} />}
               </button>
               <button
                 type="button"

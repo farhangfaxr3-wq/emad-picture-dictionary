@@ -219,7 +219,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "Resisting weight or pressure.",
-    "The lesson uses “hard” in a carefully reviewed vocabulary context."
+    "“hard” means resisting weight or pressure."
   ],
   [
     "harsh",
@@ -289,7 +289,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "Belonging to or derived from or associated with a divine power.",
-    "The lesson uses “holy” in a carefully reviewed vocabulary context."
+    "“holy” means belonging to or derived from or associated with a divine power."
   ],
   [
     "horizontal",
@@ -379,7 +379,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Relating to or conferring immunity (to disease or infection).",
-    "The lesson uses “immune” in a carefully reviewed vocabulary context."
+    "“immune” means relating to or conferring immunity (to disease or infection)."
   ],
   [
     "imperial",
@@ -619,7 +619,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Used especially of drugs or muscles that work together so the total effect is greater than the sum of the two (or more).",
-    "The lesson uses “interactive” in a carefully reviewed vocabulary context."
+    "“interactive” means used especially of drugs or muscles that work together so the total effect is greater than the sum of the two (or more)."
   ],
   [
     "interesting",
@@ -629,7 +629,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Arousing or holding the attention.",
-    "The lesson uses “interesting” in a carefully reviewed vocabulary context."
+    "“interesting” means arousing or holding the attention."
   ],
   [
     "intermediate",
@@ -719,7 +719,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Younger; lower in rank; shorter in length of tenure or service.",
-    "The lesson uses “junior” in a carefully reviewed vocabulary context."
+    "“junior” means younger; lower in rank; shorter in length of tenure or service."
   ],
   [
     "just",
@@ -769,7 +769,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "In the current fashion or style.",
-    "The lesson uses “latest” in a carefully reviewed vocabulary context."
+    "“latest” means in the current fashion or style."
   ],
   [
     "lazy",
@@ -789,7 +789,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "Of or belonging to the political or intellectual left.",
-    "The lesson uses “left” in a carefully reviewed vocabulary context."
+    "“left” means of or belonging to the political or intellectual left."
   ],
   [
     "legal",
@@ -799,7 +799,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Established by or founded upon law or official or accepted rules.",
-    "The lesson uses “legal” in a carefully reviewed vocabulary context."
+    "“legal” means established by or founded upon law or official or accepted rules."
   ],
   [
     "legislative",
@@ -819,7 +819,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Tolerant of change; not bound by authoritarianism, orthodoxy, or tradition.",
-    "The lesson uses “liberal” in a carefully reviewed vocabulary context."
+    "“liberal” means tolerant of change; not bound by authoritarianism, orthodoxy, or tradition."
   ],
   [
     "light",

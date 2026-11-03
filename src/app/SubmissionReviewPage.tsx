@@ -28,6 +28,7 @@ interface SubmissionRecord {
 }
 
 const card = "rounded-2xl border border-border bg-card shadow-sm"
+type Pagination = { page: number; limit: number; total: number; pages: number }
 
 export default function SubmissionReviewPage() {
   const [records, setRecords] = useState<SubmissionRecord[]>([])
@@ -44,11 +45,20 @@ export default function SubmissionReviewPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [page, setPage] = useState(1)
+  const [pagination, setPagination] = useState<Pagination>({
+    page: 1,
+    limit: 20,
+    total: 0,
+    pages: 1,
+  })
 
   const load = async () => {
     setStatus("loading")
     try {
-      const response = await fetch(`/api/admin/submissions?status=${filter}`)
+      const response = await fetch(
+        `/api/admin/submissions?status=${filter}&page=${page}&limit=20`,
+      )
       const result = await response.json()
       if (response.status === 401) {
         setRecords([])
@@ -62,6 +72,7 @@ export default function SubmissionReviewPage() {
       }
       setReviewer(typeof result.reviewer === "string" ? result.reviewer : "")
       setRecords(result.submissions)
+      setPagination(result.pagination || { page, limit: 20, total: result.submissions.length, pages: 1 })
       setDrafts(
         Object.fromEntries(
           result.submissions.map((record: SubmissionRecord) => [
@@ -81,7 +92,7 @@ export default function SubmissionReviewPage() {
 
   useEffect(() => {
     void load()
-  }, [filter])
+  }, [filter, page])
 
   const signIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -273,7 +284,10 @@ export default function SubmissionReviewPage() {
               <select
                 aria-label="Filter submission status"
                 value={filter}
-                onChange={(event) => setFilter(event.target.value)}
+                onChange={(event) => {
+                  setFilter(event.target.value)
+                  setPage(1)
+                }}
                 className="rounded-xl border border-border bg-background px-4 py-3 text-xs"
               >
                 <option value="pending">Pending</option>
@@ -436,6 +450,17 @@ export default function SubmissionReviewPage() {
               </article>
             ))}
           </div>
+        )}
+        {status === "ready" && pagination.total > 0 && (
+          <nav aria-label="Submission pages" className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-xs">
+            <button type="button" disabled={page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))} className="rounded-xl border border-border px-4 py-2.5 font-semibold disabled:opacity-40">
+              Previous
+            </button>
+            <span>Page {pagination.page} of {pagination.pages} · {pagination.total} total</span>
+            <button type="button" disabled={page >= pagination.pages} onClick={() => setPage((current) => current + 1)} className="rounded-xl border border-border px-4 py-2.5 font-semibold disabled:opacity-40">
+              Load more
+            </button>
+          </nav>
         )}
       </section>
       <AssessmentReviewPanel active={Boolean(reviewer) && status === "ready"} />

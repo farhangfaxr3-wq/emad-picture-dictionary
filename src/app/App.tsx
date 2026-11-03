@@ -102,6 +102,15 @@ import {
 } from "./cefr"
 
 import { topicNames } from "./topicCatalog"
+import RouteMetadata from "./RouteMetadata"
+import {
+  STORE_KEY,
+  normalizeStore,
+  readStore,
+  type Preferences,
+  type ReviewOutcome,
+  type Stored,
+} from "./learningStore"
 
 import {
   resolveDictionaryImageFilter,
@@ -187,10 +196,14 @@ function Illustration({
   word,
 
   className = "",
+
+  altText,
 }: {
   word: string
 
   className?: string
+
+  altText?: string
 }) {
   const item =
     wordById.get(word) || vocabulary.find((item) => item.word === word)
@@ -201,6 +214,7 @@ function Illustration({
       word={item?.word || word}
       topic={item?.topic}
       className={className}
+      altText={altText}
     />
   )
 }
@@ -805,304 +819,6 @@ function KitchenScene() {
       className="h-full w-full rounded-2xl object-cover"
     />
   )
-}
-
-type Preferences = {
-  name: string
-
-  language: string
-
-  audio: boolean
-
-  speed: string
-
-  dark: boolean
-
-  notifications: boolean
-
-  goal: number
-
-  reduceMotion: boolean
-
-  largeText: boolean
-
-  cefrLevel: CEFRLevel | "All levels"
-}
-
-interface WordMastery {
-  attempts: number
-
-  correct: number
-
-  streak: number
-
-  lastReviewed: string
-
-  nextReview: string
-}
-
-export interface ReviewOutcome {
-  id: string
-
-  correct: boolean
-
-  answer?: string
-}
-
-interface LastLesson {
-  category: string
-
-  section: string
-
-  url: string
-}
-
-export type Stored = {
-  schemaVersion: number
-
-  lastLesson: LastLesson | null
-
-  favorites: string[]
-
-  learned: string[]
-
-  recent: string[]
-
-  reviewed: string[]
-
-  explored: string[]
-
-  mastery: Record<string, WordMastery>
-
-  mistakes: string[]
-
-  sceneProgress: Record<string, string[]>
-
-  sceneScores: Record<string, number>
-
-  categoryCards: Record<string, Record<string, "known" | "review">>
-
-  activity: {
-    date: string
-
-    type: "learned" | "reviewed" | "topic"
-
-    target: string
-  }[]
-
-  sessions: {
-    date: string
-
-    score: number
-
-    total: number
-
-    mode?: string
-
-    topic?: string
-
-    section?: "practice" | "write" | "flashcards" | "games"
-  }[]
-
-  preferences: Preferences
-}
-
-const STORE_KEY = "emad-dictionary"
-
-const STORE_VERSION = 2
-
-const initial: Stored = {
-  schemaVersion: STORE_VERSION,
-
-  lastLesson: null,
-
-  favorites: [],
-
-  learned: [],
-
-  recent: [],
-
-  reviewed: [],
-
-  explored: [],
-
-  mastery: {},
-
-  mistakes: [],
-
-  sceneProgress: {},
-
-  sceneScores: {},
-
-  categoryCards: {},
-
-  activity: [],
-
-  sessions: [],
-
-  preferences: {
-    name: "",
-
-    language: "English",
-
-    audio: true,
-
-    speed: "Normal",
-
-    dark: false,
-
-    notifications: false,
-
-    goal: 10,
-
-    reduceMotion: false,
-
-    largeText: false,
-
-    cefrLevel: "All levels",
-  },
-}
-
-function normalizeStore(saved: any): Stored {
-  return saved && typeof saved === "object"
-    ? {
-        ...initial,
-
-        ...saved,
-
-        schemaVersion: STORE_VERSION,
-
-        lastLesson:
-          saved.lastLesson &&
-          topicNames.includes(saved.lastLesson.category) &&
-          ["vocabulary", "practice", "write", "flashcards", "games"].includes(
-            saved.lastLesson.section,
-          ) &&
-          typeof saved.lastLesson.url === "string" &&
-          saved.lastLesson.url.startsWith("/topics/")
-            ? saved.lastLesson
-            : null,
-
-        favorites: Array.isArray(saved.favorites)
-          ? saved.favorites.filter((id: string) => wordById.has(id))
-          : [],
-
-        learned: Array.isArray(saved.learned)
-          ? saved.learned.filter((id: string) => wordById.has(id))
-          : [],
-
-        recent: Array.isArray(saved.recent)
-          ? saved.recent.filter((id: string) => wordById.has(id))
-          : [],
-
-        reviewed: Array.isArray(saved.reviewed)
-          ? saved.reviewed.filter((id: string) => wordById.has(id))
-          : [],
-
-        explored: Array.isArray(saved.explored)
-          ? saved.explored.filter((topic: string) => topicNames.includes(topic))
-          : [],
-
-        mastery: Object.fromEntries(
-          Object.entries(saved.mastery || {}).filter(([id, value]) => {
-            const entry = value as WordMastery
-
-            return (
-              wordById.has(id) &&
-              entry &&
-              Number.isFinite(entry.attempts) &&
-              Number.isFinite(entry.correct) &&
-              Number.isFinite(entry.streak) &&
-              !Number.isNaN(new Date(entry.nextReview).getTime()) &&
-              !Number.isNaN(new Date(entry.lastReviewed).getTime())
-            )
-          }),
-        ) as Record<string, WordMastery>,
-
-        mistakes: Array.isArray(saved.mistakes)
-          ? saved.mistakes.filter((id: string) => wordById.has(id))
-          : [],
-
-        sceneProgress: Object.fromEntries(
-          scenes.map((scene) => [
-            scene.id,
-
-            Array.isArray(saved.sceneProgress?.[scene.id])
-              ? saved.sceneProgress[scene.id].filter((id: string) =>
-                  scene.objects.some((object) => object.id === id),
-                )
-              : [],
-          ]),
-        ),
-
-        sceneScores: Object.fromEntries(
-          scenes.map((scene) => [
-            scene.id,
-
-            Number.isFinite(saved.sceneScores?.[scene.id])
-              ? Math.max(
-                  0,
-
-                  Math.min(scene.objects.length, saved.sceneScores[scene.id]),
-                )
-              : 0,
-          ]),
-        ),
-
-        categoryCards: Object.fromEntries(
-          topicNames.map((topic) => [
-            topic,
-
-            Object.fromEntries(
-              Object.entries(saved.categoryCards?.[topic] || {}).filter(
-                ([id, status]) =>
-                  wordById.get(id)?.topic === topic &&
-                  ["known", "review"].includes(status as string),
-              ),
-            ),
-          ]),
-        ),
-
-        activity: Array.isArray(saved.activity)
-          ? saved.activity
-
-              .filter(
-                (item: Stored["activity"][number]) =>
-                  item && !Number.isNaN(new Date(item.date).getTime()),
-              )
-
-              .slice(-100)
-          : [],
-
-        sessions: Array.isArray(saved.sessions)
-          ? saved.sessions.filter(
-              (session: Stored["sessions"][number]) =>
-                session &&
-                Number.isFinite(session.score) &&
-                session.total > 0 &&
-                !Number.isNaN(new Date(session.date).getTime()),
-            )
-          : [],
-
-        preferences: {
-          ...initial.preferences,
-
-          ...saved.preferences,
-
-          cefrLevel: isCEFRLevel(saved.preferences?.cefrLevel)
-            ? saved.preferences.cefrLevel
-            : "All levels",
-        },
-      }
-    : initial
-}
-
-function readStore(): Stored {
-  try {
-    return normalizeStore(JSON.parse(localStorage.getItem(STORE_KEY) || "null"))
-  } catch {
-    return initial
-  }
 }
 
 function reviewDue(data: Stored) {
@@ -3081,6 +2797,7 @@ function TopicsPage() {
 
   return (
     <>
+      <RouteMetadata />
       <PageHeading
         eyebrow="Discover your world"
         title="One topic. So many possibilities."
@@ -3775,8 +3492,8 @@ function TopicDetail() {
       openWord={openWord}
       visitWord={visitWord}
       favorite={favorite}
-      art={(word, className) => (
-        <Illustration word={word.id} className={className} />
+      art={(word, className, altText) => (
+        <Illustration word={word.id} className={className} altText={altText} />
       )}
       audio={(text) => <AudioButton word={text} />}
       topicArt={<TopicArt topic={category} />}
@@ -4291,7 +4008,7 @@ function DictionaryPage() {
 
   const dueIds = new Set(reviewDue(data).map((word) => word.id))
 
-  const results = vocabulary
+  const matchingResults = vocabulary
 
     .filter((word) => {
       const text = [
@@ -4352,6 +4069,21 @@ function DictionaryPage() {
 
       return first.word.localeCompare(second.word)
     })
+
+  const results = [
+    ...matchingResults
+      .reduce((unique, word) => {
+        const key = word.word.trim().toLowerCase()
+        const existing = unique.get(key)
+
+        if (!existing || word.id.length < existing.id.length) {
+          unique.set(key, word)
+        }
+
+        return unique
+      }, new Map<string, Word>())
+      .values(),
+  ]
 
   const pageSize = 24
 
@@ -4600,6 +4332,7 @@ function DictionaryPage() {
           </div>
         </div>
       </div>
+      <h2 className="sr-only">Dictionary results</h2>
       <div
         className={
           view === "grid"
@@ -5235,7 +4968,12 @@ function PracticePage() {
   )
 
   const [selectedLevel, setSelectedLevel] = useState<CEFRLevel | "All levels">(
-    resolveCEFRSelection(params.get("level"), data.preferences.cefrLevel),
+    params.get("favorites") ||
+      params.get("word") ||
+      params.get("scene") ||
+      params.get("collection")
+      ? "All levels"
+      : resolveCEFRSelection(params.get("level"), data.preferences.cefrLevel),
   )
 
   const [sessionTopic, setSessionTopic] = useState("")
@@ -5915,7 +5653,7 @@ function PracticePage() {
                     <button
                       key={word.id}
                       disabled={matched.includes(word.id) || !matchLeft}
-                      aria-label={`Match picture of ${word.word}`}
+                      aria-label="Match this picture to the selected word"
                       onClick={() => match(word.id)}
                       className={`flex min-h-[100px] flex-col items-center justify-center rounded-xl border-2 p-2 disabled:opacity-60 ${
                         matched.includes(word.id)
@@ -5925,7 +5663,11 @@ function PracticePage() {
                             : "border-border hover:border-primary/40"
                       }`}
                     >
-                      <Illustration word={word.id} className="h-24 w-28" />
+                      <Illustration
+                        word={word.id}
+                        className="h-24 w-28"
+                        altText="Picture answer option"
+                      />
                       <span className="max-w-[210px] text-[10px] leading-4 text-muted-foreground">
                         {word.definition}
                       </span>
@@ -6012,6 +5754,7 @@ function PracticePage() {
                     <Illustration
                       word={current.word}
                       className="h-[210px] w-[245px]"
+                      altText="Vocabulary question image"
                     />
                   </div>
                 )
@@ -6095,7 +5838,7 @@ function PracticePage() {
                       onClick={() => submit(word.word)}
                       aria-label={
                         questionMode === "word"
-                          ? `Choose picture of ${word.word}`
+                          ? "Choose this picture answer"
                           : `Choose ${word.word}`
                       }
                       className={`rounded-xl border-2 p-4 text-sm font-semibold disabled:cursor-default ${
@@ -6110,6 +5853,7 @@ function PracticePage() {
                         <Illustration
                           word={word.word}
                           className="mx-auto h-[115px] w-[130px]"
+                          altText="Picture answer option"
                         />
                       ) : (
                         word.word
@@ -6570,18 +6314,22 @@ function ProgressPage() {
         />
         <div className="flex flex-wrap gap-2">
           {data.favorites.length ? (
-            data.favorites.map((id) => (
-              <button
-                key={id}
-                className={secondaryButton}
-                onClick={() =>
-                  openWord(vocabulary.find((word) => word.id === id)!)
-                }
-              >
-                <Heart size={13} className="text-primary" />
-                {id}
-              </button>
-            ))
+            data.favorites.map((id) => {
+              const word = wordById.get(id)
+
+              if (!word) return null
+
+              return (
+                <button
+                  key={id}
+                  className={secondaryButton}
+                  onClick={() => openWord(word)}
+                >
+                  <Heart size={13} className="text-primary" />
+                  {word.word}
+                </button>
+              )
+            })
           ) : (
             <p className="text-xs text-muted-foreground">
               Save your favorites by tapping the heart on a word card.

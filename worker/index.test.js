@@ -1,5 +1,7 @@
 import test from "node:test"
+
 import assert from "node:assert/strict"
+
 import {
   createAdminSession,
   derivePasswordHash,
@@ -10,6 +12,8 @@ import {
   isLocalOwnerPreview,
   hashAdminAccessCode,
   normalizeWord,
+  scoreServerAssessment,
+  selectServerAssessmentQuestions,
   validateAssessmentQuestion,
   validateChatMessage,
   validateDisplayName,
@@ -18,6 +22,7 @@ import {
   validateTurnstileResult,
   verifyAdminSession,
 } from "./index.js"
+
 import worker from "./index.js"
 
 function startedAt() {
@@ -31,51 +36,82 @@ test("normalizes suggested words consistently", () => {
 test("accepts safe chat identities and English-only messages", () => {
   assert.deepEqual(validateDisplayName("Emad Learner_24"), {
     displayName: "Emad Learner_24",
+
     key: "emad learner_24",
   })
+
   assert.equal(
     validateChatMessage("I learned a useful word at university today."),
+
     "I learned a useful word at university today.",
   )
 })
 
 test("protects English Chat from contact sharing, abuse, and non-English messages", () => {
   assert.throws(() => validateDisplayName("admin"), /safe display name/i)
-  assert.throws(() => validateChatMessage("Email me at learner@example.com"), /privacy/i)
+
+  assert.throws(
+    () => validateChatMessage("Email me at learner@example.com"),
+    /privacy/i,
+  )
+
   assert.throws(() => validateChatMessage("You are stupid"), /respectful/i)
-  assert.throws(() => validateChatMessage("سڵاو چۆنی"), /English messages only/i)
+
+  assert.throws(
+    () => validateChatMessage("سڵاو چۆنی"),
+    /English messages only/i,
+  )
 })
 
 test("accepts valid feedback without collecting an email", () => {
   const result = validateSubmission({
     kind: "feedback",
+
     category: "General feedback",
+
     message: "The practice activity was clear and useful.",
+
     formStartedAt: startedAt(),
   })
+
   assert.equal(result.kind, "feedback")
+
   assert.equal(result.email, null)
 })
 
 test("accepts a complete versioned assessment question", () => {
   const result = validateAssessmentQuestion({
     id: "auto-vocabulary-reliable-v1",
+
     bankVersion: "auto-vocabulary-v1",
+
     skill: "vocabulary",
+
     level: "B1",
+
     prompt: "Which definition best matches reliable?",
+
     options: [
       "Able to be trusted",
+
       "Easy to forget",
+
       "Very expensive",
+
       "Recently invented",
     ],
+
     correctIndex: 0,
+
     explanation: "Reliable means able to be trusted.",
+
     sourceId: "reliable",
+
     sourceConfidence: "high",
   })
+
   assert.equal(result.level, "B1")
+
   assert.equal(result.options.length, 4)
 })
 
@@ -84,25 +120,230 @@ test("rejects ambiguous or incomplete assessment questions", () => {
     () =>
       validateAssessmentQuestion({
         id: "bad-question",
+
         bankVersion: "v1",
+
         skill: "listening",
+
         level: "B2",
+
         prompt: "Choose the correct answer.",
+
         options: ["Same", "Same", "Third", "Fourth"],
+
         correctIndex: 0,
+
         explanation: "This question is not valid.",
       }),
+
     /four unique answer options|audio text/i,
   )
+})
+
+test("builds a balanced 50-question assessment across every skill and CEFR level", () => {
+  const questions = selectServerAssessmentQuestions()
+
+  assert.equal(questions.length, 50)
+
+  assert.deepEqual(
+    Object.fromEntries(
+      ["vocabulary", "grammar", "reading", "listening"].map((skill) => [
+        skill,
+
+        questions.filter((question) => question.skill === skill).length,
+      ]),
+    ),
+
+    { vocabulary: 20, grammar: 12, reading: 9, listening: 9 },
+  )
+
+  for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) {
+    assert.ok(questions.some((question) => question.level === level))
+  }
+})
+
+test("keeps assessment answers server-side and prevents attempt replay", async () => {
+  let storedAttempt = null
+
+  const database = {
+    prepare(statement) {
+      let values = []
+
+      return {
+        bind(...nextValues) {
+          values = nextValues
+
+          return this
+        },
+
+        async all() {
+          return { results: [] }
+        },
+
+        async first() {
+          if (!statement.includes("FROM assessment_attempts")) return null
+
+          return storedAttempt
+        },
+
+        async run() {
+          if (statement.includes("INSERT INTO assessment_attempts")) {
+            storedAttempt = {
+              id: values[0],
+
+              bank_version: values[1],
+
+              scoring_json: values[2],
+
+              expires_at: values[3],
+
+              completed_at: null,
+            }
+          } else if (statement.includes("UPDATE assessment_attempts")) {
+            if (storedAttempt?.completed_at) return { meta: { changes: 0 } }
+
+            storedAttempt.completed_at = new Date().toISOString()
+          }
+
+          return { meta: { changes: 1 } }
+        },
+      }
+    },
+  }
+
+  const env = {
+    SUBMISSION_HASH_SECRET:
+      "a-secure-test-hash-secret-that-is-at-least-32-characters",
+
+    SUBMISSION_RATE_LIMITER: { limit: async () => ({ success: true }) },
+
+    SUBMISSIONS_DB: database,
+  }
+
+  const headers = {
+    "Content-Type": "application/json",
+
+    Origin: "https://learn.example",
+
+    "Sec-Fetch-Site": "same-origin",
+
+    "CF-Connecting-IP": "192.0.2.44",
+  }
+
+  const start = await worker.fetch(
+    new Request("https://learn.example/api/assessment/attempts", {
+      method: "POST",
+
+      headers,
+
+      body: "{}",
+    }),
+
+    env,
+  )
+
+  assert.equal(start.status, 201)
+
+  const publicAttempt = await start.json()
+
+  assert.equal(publicAttempt.questions.length, 50)
+
+  for (const question of publicAttempt.questions) {
+    assert.equal("correctIndex" in question, false)
+
+    assert.equal("explanation" in question, false)
+
+    assert.equal("audioText" in question, false)
+  }
+
+  const scoring = JSON.parse(storedAttempt.scoring_json)
+
+  const answers = Object.fromEntries(
+    scoring.map((question) => [question.id, question.correctIndex]),
+  )
+
+  const submitRequest = () =>
+    new Request("https://learn.example/api/assessment/attempts/submit", {
+      method: "POST",
+
+      headers,
+
+      body: JSON.stringify({ attemptId: publicAttempt.attemptId, answers }),
+    })
+
+  const submitted = await worker.fetch(submitRequest(), env)
+
+  assert.equal(submitted.status, 200)
+
+  const submittedBody = await submitted.json()
+
+  assert.equal(submittedBody.result.correct, 50)
+
+  assert.equal(submittedBody.result.total, 50)
+
+  const replay = await worker.fetch(submitRequest(), env)
+
+  assert.equal(replay.status, 409)
+})
+
+test("rejects cross-site assessment attempts and exposes metadata without answer keys", async () => {
+  const env = {
+    SUBMISSION_HASH_SECRET:
+      "a-secure-test-hash-secret-that-is-at-least-32-characters",
+
+    SUBMISSION_RATE_LIMITER: { limit: async () => ({ success: true }) },
+
+    SUBMISSIONS_DB: {
+      prepare() {
+        return {
+          async all() {
+            return { results: [] }
+          },
+        }
+      },
+    },
+  }
+
+  const rejected = await worker.fetch(
+    new Request("https://learn.example/api/assessment/attempts", {
+      method: "POST",
+
+      headers: { Origin: "https://attacker.example" },
+
+      body: "{}",
+    }),
+
+    env,
+  )
+
+  assert.equal(rejected.status, 403)
+
+  const metadata = await worker.fetch(
+    new Request("https://learn.example/api/assessment/questions"),
+
+    env,
+  )
+
+  assert.equal(metadata.status, 200)
+
+  const body = await metadata.json()
+
+  assert.equal("questions" in body, false)
+
+  assert.equal(JSON.stringify(body).includes("correctIndex"), false)
 })
 
 test("accepts a bounded vocabulary suggestion", () => {
   const result = validateSubmission({
     kind: "suggestion",
+
     word: "sustainability",
+
     meaning: "Using resources without harming the future.",
+
     formStartedAt: startedAt(),
   })
+
   assert.equal(result.normalizedWord, "sustainability")
 })
 
@@ -111,10 +352,14 @@ test("rejects the honeypot field", () => {
     () =>
       validateSubmission({
         kind: "suggestion",
+
         word: "example",
+
         website: "spam.example",
+
         formStartedAt: startedAt(),
       }),
+
     /could not be verified/,
   )
 })
@@ -124,11 +369,16 @@ test("rejects invalid email addresses", () => {
     () =>
       validateSubmission({
         kind: "feedback",
+
         category: "General feedback",
+
         message: "This is a valid length feedback message.",
+
         email: "not-an-email",
+
         formStartedAt: startedAt(),
       }),
+
     /valid email/,
   )
 })
@@ -138,9 +388,12 @@ test("rejects a form submitted too quickly", () => {
     () =>
       validateSubmission({
         kind: "suggestion",
+
         word: "example",
+
         formStartedAt: new Date().toISOString(),
       }),
+
     /take a moment/,
   )
 })
@@ -148,26 +401,35 @@ test("rejects a form submitted too quickly", () => {
 test("accepts valid feedback when the client clock is ahead", () => {
   const result = validateSubmission({
     kind: "feedback",
+
     category: "Technical problem",
+
     message: "The feedback form should work across devices and time zones.",
+
     formStartedAt: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString(),
   })
+
   assert.equal(result.kind, "feedback")
+
   assert.equal(result.category, "Technical problem")
 })
 
 test("normalizes owner edits before editorial approval", () => {
   const result = validateEditedSuggestion({
     word: "  Renewable   energy ",
+
     meaning: "Energy from sources that can be naturally replaced.",
   })
+
   assert.equal(result.normalizedWord, "renewable energy")
+
   assert.equal(result.edited.word, "Renewable   energy")
 })
 
 test("rejects an empty owner edit", () => {
   assert.throws(
     () => validateEditedSuggestion({ word: "!" }),
+
     /at least two characters/,
   )
 })
@@ -178,21 +440,26 @@ test("allows same-origin requests and rejects cross-site requests", () => {
       new Request("https://example.com/api/submissions", {
         headers: {
           Origin: "https://example.com",
+
           "Sec-Fetch-Site": "same-origin",
         },
       }),
     ),
+
     true,
   )
+
   assert.equal(
     isTrustedRequestOrigin(
       new Request("https://example.com/api/submissions", {
         headers: {
           Origin: "https://attacker.example",
+
           "Sec-Fetch-Site": "cross-site",
         },
       }),
     ),
+
     false,
   )
 })
@@ -201,28 +468,36 @@ test("allows the owner bypass only on explicit local development hosts", () => {
   assert.equal(
     isLocalOwnerPreview(
       new Request("http://localhost:8787/review-submissions"),
+
       {
         LOCAL_DEV_ADMIN: "true",
       },
     ),
+
     true,
   )
+
   assert.equal(
     isLocalOwnerPreview(
       new Request("https://learn.example/review-submissions"),
+
       {
         LOCAL_DEV_ADMIN: "true",
       },
     ),
+
     false,
   )
+
   assert.equal(
     isLocalOwnerPreview(
       new Request("http://localhost:8787/review-submissions"),
+
       {
         LOCAL_DEV_ADMIN: "false",
       },
     ),
+
     false,
   )
 })
@@ -232,11 +507,14 @@ test("parses every configured administrator email safely", () => {
     getAdminEmails({
       ADMIN_EMAILS: " FarhangFaxr3@gmail.com, em20323115@soran.edu.iq ",
     }),
+
     ["farhangfaxr3@gmail.com", "em20323115@soran.edu.iq"],
   )
+
   assert.deepEqual(getAdminEmails({ ADMIN_EMAIL: "legacy@example.com" }), [
     "legacy@example.com",
   ])
+
   assert.deepEqual(getAdminEmails({}), [])
 })
 
@@ -246,39 +524,52 @@ test("parses only well-formed administrator password records", () => {
       ADMIN_PASSWORD_HASHES: JSON.stringify({
         "Owner@Example.com": {
           salt: "c2FsdA",
+
           hash: "aGFzaA",
+
           iterations: 210000,
         },
+
         "invalid@example.com": { salt: "missing-fields" },
       }),
     }),
+
     {
       "owner@example.com": {
         salt: "c2FsdA",
+
         hash: "aGFzaA",
+
         iterations: 210000,
       },
     },
   )
+
   assert.deepEqual(getAdminCredentialMap({ ADMIN_PASSWORD_HASHES: "{" }), {})
 
   const encodedCredentials = Buffer.from(
     JSON.stringify({
       "encoded@example.com": {
         salt: "c2FsdA",
+
         hash: "aGFzaA",
+
         iterations: 210000,
       },
     }),
   ).toString("base64url")
+
   assert.deepEqual(
     getAdminCredentialMap({
       ADMIN_PASSWORD_HASHES: `v1.${encodedCredentials}`,
     }),
+
     {
       "encoded@example.com": {
         salt: "c2FsdA",
+
         hash: "aGFzaA",
+
         iterations: 210000,
       },
     },
@@ -287,33 +578,45 @@ test("parses only well-formed administrator password records", () => {
 
 test("parses and hashes secure administrator access codes", async () => {
   const code = "EPD-very-long-random-access-code-123456789"
+
   const hash = await hashAdminAccessCode(code)
+
   const encoded = Buffer.from(
     JSON.stringify({ "owner@example.com": hash }),
   ).toString("base64url")
+
   assert.deepEqual(
     getAdminAccessCodeHashMap({
       ADMIN_ACCESS_CODE_HASHES: `v1.${encoded}`,
     }),
+
     { "owner@example.com": hash },
   )
+
   assert.equal(await hashAdminAccessCode("too-short"), "")
 })
 
 test("derives stable password hashes", async () => {
   const first = await derivePasswordHash(
     "A long test password! 42",
+
     "c2FsdC12YWx1ZQ",
   )
+
   const second = await derivePasswordHash(
     "A long test password! 42",
+
     "c2FsdC12YWx1ZQ",
   )
+
   const different = await derivePasswordHash(
     "A different password! 42",
+
     "c2FsdC12YWx1ZQ",
   )
+
   assert.equal(first, second)
+
   assert.notEqual(first, different)
 })
 
@@ -322,18 +625,28 @@ test("signs, verifies, expires, and rejects tampered owner sessions", async () =
     ADMIN_SESSION_SECRET:
       "a-secure-test-session-secret-that-is-at-least-32-characters",
   }
+
   const now = Date.UTC(2026, 9, 16, 12, 0, 0)
+
   const token = await createAdminSession("Owner@Example.com", env, now)
+
   const session = await verifyAdminSession(token, env, now + 1000)
+
   assert.equal(session.email, "owner@example.com")
+
   assert.equal(
     await verifyAdminSession(token, env, now + 8 * 60 * 60 * 1000 + 1000),
+
     null,
   )
+
   const [payload, signature] = token.split(".")
+
   const changedPayload = `${payload[0] === "A" ? "B" : "A"}${payload.slice(1)}`
+
   assert.equal(
     await verifyAdminSession(`${changedPayload}.${signature}`, env, now),
+
     null,
   )
 })
@@ -341,151 +654,321 @@ test("signs, verifies, expires, and rejects tampered owner sessions", async () =
 test("keeps the review data API private without an owner session", async () => {
   const response = await worker.fetch(
     new Request("https://learn.example/api/admin/submissions"),
+
     {
       ADMIN_EMAILS: "owner@example.com",
+
       ADMIN_PASSWORD_HASHES: JSON.stringify({
         "owner@example.com": {
           salt: "c2FsdA",
+
           hash: "aGFzaA",
+
           iterations: 210000,
         },
       }),
+
       ADMIN_SESSION_SECRET:
         "a-secure-test-session-secret-that-is-at-least-32-characters",
+
       SUBMISSIONS_DB: {},
     },
   )
+
   assert.equal(response.status, 401)
 })
 
-test("completes the owner sign-in, private queue, and sign-out flow", async () => {
-  const password = "Strong owner password! 42"
-  const salt = "c2VjdXJlLXRlc3Qtc2FsdA"
-  const credential = {
-    salt,
-    hash: await derivePasswordHash(password, salt),
-    iterations: 210000,
+test("paginates every protected admin collection with totals", async () => {
+  const env = {
+    ADMIN_EMAILS: "owner@example.com",
+
+    ADMIN_PASSWORD_HASHES: JSON.stringify({
+      "owner@example.com": {
+        salt: "c2VjdXJlLXRlc3Qtc2FsdA",
+        hash: "dGVzdC1jcmVkZW50aWFsLWhhc2g",
+        iterations: 210000,
+      },
+    }),
+
+    ADMIN_SESSION_SECRET:
+      "a-secure-test-session-secret-that-is-at-least-32-characters",
   }
+
+  const token = await createAdminSession("owner@example.com", env)
+
   const database = {
     prepare(statement) {
       return {
         bind() {
           return this
         },
+
         async first() {
-          if (statement.includes("COUNT(*)")) return { count: 0 }
-          return null
+          return statement.includes("COUNT(*)") ? { total: 21 } : null
         },
-        async run() {
-          return { meta: { changes: 1 } }
-        },
+
         async all() {
           return { results: [] }
         },
       }
     },
   }
+
+  const protectedEnv = { ...env, SUBMISSIONS_DB: database }
+
+  const headers = { Cookie: `__Host-emad_admin=${token}` }
+
+  const submissions = await worker.fetch(
+    new Request(
+      "https://learn.example/api/admin/submissions?status=pending&page=2&limit=10",
+
+      { headers },
+    ),
+
+    protectedEnv,
+  )
+
+  assert.equal(submissions.status, 200)
+
+  assert.deepEqual((await submissions.json()).pagination, {
+    page: 2,
+
+    limit: 10,
+
+    total: 21,
+
+    pages: 3,
+  })
+
+  const assessment = await worker.fetch(
+    new Request(
+      "https://learn.example/api/admin/assessment/questions?status=draft&page=2&limit=10",
+
+      { headers },
+    ),
+
+    protectedEnv,
+  )
+
+  assert.equal(assessment.status, 200)
+
+  assert.deepEqual((await assessment.json()).pagination, {
+    page: 2,
+
+    limit: 10,
+
+    total: 21,
+
+    pages: 3,
+  })
+
+  const chat = await worker.fetch(
+    new Request(
+      "https://learn.example/api/admin/chat?reportPage=2&accountPage=2&limit=10",
+
+      { headers },
+    ),
+
+    protectedEnv,
+  )
+
+  assert.equal(chat.status, 200)
+
+  assert.deepEqual((await chat.json()).pagination, {
+    reports: { page: 2, limit: 10, total: 21, pages: 3 },
+
+    accounts: { page: 2, limit: 10, total: 21, pages: 3 },
+  })
+})
+
+test("completes the owner sign-in, private queue, and sign-out flow", async () => {
+  const password = "Strong owner password! 42"
+
+  const salt = "c2VjdXJlLXRlc3Qtc2FsdA"
+
+  const credential = {
+    salt,
+
+    hash: await derivePasswordHash(password, salt),
+
+    iterations: 210000,
+  }
+
+  const database = {
+    prepare(statement) {
+      return {
+        bind() {
+          return this
+        },
+
+        async first() {
+          if (statement.includes("COUNT(*)")) return { count: 0 }
+
+          return null
+        },
+
+        async run() {
+          return { meta: { changes: 1 } }
+        },
+
+        async all() {
+          return { results: [] }
+        },
+      }
+    },
+  }
+
   const env = {
     ADMIN_EMAILS: "owner@example.com",
+
     ADMIN_PASSWORD_HASHES: JSON.stringify({
       "owner@example.com": credential,
     }),
+
     ADMIN_SESSION_SECRET:
       "a-secure-test-session-secret-that-is-at-least-32-characters",
+
     SUBMISSION_HASH_SECRET:
       "a-secure-test-hash-secret-that-is-at-least-32-characters",
+
     SUBMISSION_RATE_LIMITER: { limit: async () => ({ success: true }) },
+
     SUBMISSIONS_DB: database,
   }
+
   const headers = {
     "Content-Type": "application/json",
+
     Origin: "https://learn.example",
+
     "Sec-Fetch-Site": "same-origin",
+
     "CF-Connecting-IP": "192.0.2.10",
   }
 
   const rejected = await worker.fetch(
     new Request("https://learn.example/api/admin/login", {
       method: "POST",
+
       headers,
+
       body: JSON.stringify({
         email: "owner@example.com",
+
         password: "incorrect password",
       }),
     }),
+
     env,
   )
+
   assert.equal(rejected.status, 401)
+
   assert.equal(
     (await rejected.json()).message,
+
     "Email or password is incorrect.",
   )
 
   const login = await worker.fetch(
     new Request("https://learn.example/api/admin/login", {
       method: "POST",
+
       headers,
+
       body: JSON.stringify({ email: "owner@example.com", password }),
     }),
+
     env,
   )
+
   assert.equal(login.status, 200)
+
   const setCookie = login.headers.get("set-cookie")
+
   assert.match(setCookie, /^__Host-emad_admin=/)
+
   assert.match(setCookie, /HttpOnly/)
+
   assert.match(setCookie, /Secure/)
+
   assert.match(setCookie, /SameSite=Strict/)
 
   const sessionCookie = setCookie.split(";")[0]
+
   const queue = await worker.fetch(
     new Request("https://learn.example/api/admin/submissions?status=pending", {
       headers: { Cookie: sessionCookie },
     }),
+
     env,
   )
+
   assert.equal(queue.status, 200)
+
   assert.deepEqual(await queue.json(), {
     reviewer: "owner@example.com",
+
     submissions: [],
+
+    pagination: { page: 1, limit: 20, total: 0, pages: 1 },
   })
 
   const logout = await worker.fetch(
     new Request("https://learn.example/api/admin/logout", {
       method: "POST",
+
       headers,
     }),
+
     env,
   )
+
   assert.equal(logout.status, 200)
+
   assert.match(logout.headers.get("set-cookie"), /Max-Age=0/)
 })
 
 test("lets the short-lived setup proof verify new credentials without consuming the login limiter", async () => {
   const password = "Fresh setup password! 42"
+
   const salt = "c2V0dXAtdGVzdC1zYWx0"
+
   const setupProof = `${Date.now() + 5 * 60 * 1000}.temporary-setup-proof`
+
   const response = await worker.fetch(
     new Request("https://learn.example/api/admin/login", {
       method: "POST",
+
       headers: {
         "Content-Type": "application/json",
+
         Origin: "https://learn.example",
+
         "X-Emad-Admin-Setup-Proof": setupProof,
       },
+
       body: JSON.stringify({ email: "owner@example.com", password }),
     }),
+
     {
       ADMIN_EMAILS: "owner@example.com",
+
       ADMIN_PASSWORD_HASHES: JSON.stringify({
         "owner@example.com": {
           salt,
+
           hash: await derivePasswordHash(password, salt),
+
           iterations: 210000,
         },
       }),
+
       ADMIN_SESSION_SECRET:
         "a-secure-test-session-secret-that-is-at-least-32-characters",
+
       ADMIN_SETUP_PROOF: setupProof,
+
       SUBMISSION_RATE_LIMITER: {
         limit: async () => {
           throw new Error("The normal limiter must not run during setup.")
@@ -493,40 +976,54 @@ test("lets the short-lived setup proof verify new credentials without consuming 
       },
     },
   )
+
   assert.equal(response.status, 200)
 })
 
 test("signs in with a generated access code when password hashing is unavailable", async () => {
   const code = "EPD-generated-access-code-for-production-123456789"
+
   const response = await worker.fetch(
     new Request("https://learn.example/api/admin/login", {
       method: "POST",
+
       headers: {
         "Content-Type": "application/json",
+
         Origin: "https://learn.example",
+
         "Sec-Fetch-Site": "same-origin",
       },
+
       body: JSON.stringify({ email: "owner@example.com", password: code }),
     }),
+
     {
       ADMIN_EMAILS: "owner@example.com",
+
       ADMIN_ACCESS_CODE_HASHES: JSON.stringify({
         "owner@example.com": await hashAdminAccessCode(code),
       }),
+
       ADMIN_SESSION_SECRET:
         "a-secure-test-session-secret-that-is-at-least-32-characters",
+
       SUBMISSION_HASH_SECRET:
         "a-secure-test-hash-secret-that-is-at-least-32-characters",
+
       SUBMISSION_RATE_LIMITER: { limit: async () => ({ success: true }) },
+
       SUBMISSIONS_DB: {
         prepare() {
           return {
             bind() {
               return this
             },
+
             async first() {
               return { count: 0 }
             },
+
             async run() {
               return { meta: { changes: 1 } }
             },
@@ -535,48 +1032,68 @@ test("signs in with a generated access code when password hashing is unavailable
       },
     },
   )
+
   assert.equal(response.status, 200)
+
   assert.match(response.headers.get("set-cookie"), /^__Host-emad_admin=/)
 })
 
 test("requires the expected Turnstile action and hostname", () => {
   const request = new Request("https://learn.example/api/submissions")
+
   const env = { TURNSTILE_HOSTNAMES: "learn.example,preview.example" }
+
   assert.doesNotThrow(() =>
     validateTurnstileResult(
       {
         success: true,
+
         action: "submit_feedback",
+
         hostname: "learn.example",
       },
+
       request,
+
       env,
     ),
   )
+
   assert.throws(
     () =>
       validateTurnstileResult(
         {
           success: true,
+
           action: "different_action",
+
           hostname: "learn.example",
         },
+
         request,
+
         env,
       ),
+
     /spam protection check failed/i,
   )
+
   assert.throws(
     () =>
       validateTurnstileResult(
         {
           success: true,
+
           action: "submit_feedback",
+
           hostname: "attacker.example",
         },
+
         request,
+
         env,
       ),
+
     /spam protection check failed/i,
   )
 })
@@ -584,23 +1101,32 @@ test("requires the expected Turnstile action and hostname", () => {
 test("accepts Cloudflare's official dummy Turnstile result only on local preview", () => {
   const localEnv = {
     TURNSTILE_HOSTNAMES: "localhost,127.0.0.1",
+
     TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
+
     LOCAL_DEV_ADMIN: "true",
   }
+
   assert.doesNotThrow(() =>
     validateTurnstileResult(
       { success: true, action: "", hostname: "" },
+
       new Request("http://localhost:8787/api/submissions"),
+
       localEnv,
     ),
   )
+
   assert.throws(
     () =>
       validateTurnstileResult(
         { success: true, action: "", hostname: "" },
+
         new Request("https://learn.example/api/submissions"),
+
         localEnv,
       ),
+
     /spam protection check failed/i,
   )
 })
@@ -614,15 +1140,72 @@ test("adds security headers to static responses", async () => {
         }),
     },
   })
+
   assert.equal(response.status, 200)
+
   assert.equal(response.headers.get("x-content-type-options"), "nosniff")
+
   assert.equal(response.headers.get("x-frame-options"), "DENY")
+
   assert.equal(
     response.headers.get("strict-transport-security"),
+
     "max-age=31536000; includeSubDomains",
   )
+
   assert.match(
     response.headers.get("content-security-policy"),
+
     /frame-ancestors 'none'/,
+  )
+})
+
+test("returns a real 404 for unknown SPA routes and caches hashed assets immutably", async () => {
+  const assets = {
+    fetch(request) {
+      const pathname = new URL(request.url).pathname
+
+      if (pathname.startsWith("/assets/")) {
+        return new Response("export default true", {
+          headers: { "Content-Type": "text/javascript" },
+        })
+      }
+
+      return new Response("<main>Single page app</main>", {
+        headers: { "Content-Type": "text/html" },
+      })
+    },
+  }
+
+  const unknown = await worker.fetch(
+    new Request("https://learn.example/not-a-real-page"),
+
+    { ASSETS: assets },
+  )
+
+  assert.equal(unknown.status, 404)
+
+  assert.match(unknown.headers.get("cache-control"), /no-cache/)
+
+  const known = await worker.fetch(
+    new Request("https://learn.example/dictionary"),
+
+    { ASSETS: assets },
+  )
+
+  assert.equal(known.status, 200)
+
+  const hashed = await worker.fetch(
+    new Request("https://learn.example/assets/index-abcd1234.js"),
+
+    { ASSETS: assets },
+  )
+
+  assert.equal(hashed.status, 200)
+
+  assert.equal(
+    hashed.headers.get("cache-control"),
+
+    "public, max-age=31536000, immutable",
   )
 })

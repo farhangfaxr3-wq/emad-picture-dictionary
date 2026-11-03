@@ -9,7 +9,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The drawings and photographs in the layout of a book.",
-    "The lesson uses “graphics” in a carefully reviewed vocabulary context."
+    "“graphics” means the drawings and photographs in the layout of a book."
   ],
   [
     "grave",
@@ -29,7 +29,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Rock fragments and pebbles.",
-    "The lesson uses “gravel” in a carefully reviewed vocabulary context."
+    "“gravel” means rock fragments and pebbles."
   ],
   [
     "gravity",
@@ -39,7 +39,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A manner that is serious and solemn.",
-    "The lesson uses “gravity” in a carefully reviewed vocabulary context."
+    "“gravity” means a manner that is serious and solemn."
   ],
   [
     "grief",
@@ -49,7 +49,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Intense sorrow caused by loss of a loved one (especially by death).",
-    "The lesson uses “grief” in a carefully reviewed vocabulary context."
+    "“grief” means intense sorrow caused by loss of a loved one (especially by death)."
   ],
   [
     "grimace",
@@ -109,7 +109,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A written assurance that some product or service will be provided or will meet certain specifications.",
-    "The lesson uses “guarantee” in a carefully reviewed vocabulary context."
+    "“guarantee” means a written assurance that some product or service will be provided or will meet certain specifications."
   ],
   [
     "guard",
@@ -119,7 +119,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A military unit serving to protect some place or person.",
-    "The lesson uses “guard” in a carefully reviewed vocabulary context."
+    "“guard” means a military unit serving to protect some place or person."
   ],
   [
     "guerrilla",
@@ -129,7 +129,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A member of an irregular armed force that fights a stronger force by sabotage and harassment.",
-    "The lesson uses “guerrilla” in a carefully reviewed vocabulary context."
+    "“guerrilla” means a member of an irregular armed force that fights a stronger force by sabotage and harassment."
   ],
   [
     "guide",
@@ -139,7 +139,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Something that offers basic information or instruction.",
-    "The lesson uses “guide” in a carefully reviewed vocabulary context."
+    "“guide” means something that offers basic information or instruction."
   ],
   [
     "guideline",
@@ -149,7 +149,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A rule or principle that provides guidance to appropriate behavior.",
-    "The lesson uses “guideline” in a carefully reviewed vocabulary context."
+    "“guideline” means a rule or principle that provides guidance to appropriate behavior."
   ],
   [
     "guilt",
@@ -159,7 +159,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The state of having committed an offense.",
-    "The lesson uses “guilt” in a carefully reviewed vocabulary context."
+    "“guilt” means the state of having committed an offense."
   ],
   [
     "guitar",
@@ -169,7 +169,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A stringed instrument usually having six strings; played by strumming or plucking.",
-    "The lesson uses “guitar” in a carefully reviewed vocabulary context."
+    "“guitar” means a stringed instrument usually having six strings; played by strumming or plucking."
   ],
   [
     "gun",
@@ -179,7 +179,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A weapon that discharges a missile at high velocity (especially from a metal tube or barrel).",
-    "The lesson uses “gun” in a carefully reviewed vocabulary context."
+    "“gun” means a weapon that discharges a missile at high velocity (especially from a metal tube or barrel)."
   ],
   [
     "gutter",
@@ -189,7 +189,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A channel along the eaves or on the roof; collects and carries away rainwater.",
-    "The lesson uses “gutter” in a carefully reviewed vocabulary context."
+    "“gutter” means a channel along the eaves or on the roof; collects and carries away rainwater."
   ],
   [
     "habit",
@@ -209,7 +209,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The style in which hair has been cut.",
-    "The lesson uses “haircut” in a carefully reviewed vocabulary context."
+    "“haircut” means the style in which hair has been cut."
   ],
   [
     "half",
@@ -229,7 +229,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A large building for meetings or entertainment.",
-    "The lesson uses “hall” in a carefully reviewed vocabulary context."
+    "“hall” means a large building for meetings or entertainment."
   ],
   [
     "halt",
@@ -249,7 +249,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Meat cut from the thigh of a hog (usually smoked).",
-    "The lesson uses “ham” in a carefully reviewed vocabulary context."
+    "“ham” means meat cut from the thigh of a hog (usually smoked)."
   ],
   [
     "harbour",
@@ -259,7 +259,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A sheltered port where ships can take on or discharge cargo.",
-    "The lesson uses “harbour” in a carefully reviewed vocabulary context."
+    "“harbour” means a sheltered port where ships can take on or discharge cargo."
   ],
   [
     "hardship",
@@ -279,7 +279,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "(computer science) the mechanical, magnetic, electronic, and electrical components making up a computer system.",
-    "The lesson uses “hardware” in a carefully reviewed vocabulary context."
+    "“hardware” means (computer science) the mechanical, magnetic, electronic, and electrical components making up a computer system."
   ],
   [
     "harmony",
@@ -289,7 +289,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Compatibility in opinion and action.",
-    "The lesson uses “harmony” in a carefully reviewed vocabulary context."
+    "“harmony” means compatibility in opinion and action."
   ],
   [
     "harvest",
@@ -299,7 +299,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The season for gathering crops.",
-    "The lesson uses “harvest” in a carefully reviewed vocabulary context."
+    "“harvest” means the season for gathering crops."
   ],
   [
     "hay",
@@ -309,7 +309,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Grass mowed and cured for use as fodder.",
-    "The lesson uses “hay” in a carefully reviewed vocabulary context."
+    "“hay” means grass mowed and cured for use as fodder."
   ],
   [
     "headline",
@@ -319,7 +319,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The heading or caption of a newspaper article.",
-    "The lesson uses “headline” in a carefully reviewed vocabulary context."
+    "“headline” means the heading or caption of a newspaper article."
   ],
   [
     "headquarters",
@@ -369,7 +369,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Any place of complete bliss and delight and peace.",
-    "The lesson uses “heaven” in a carefully reviewed vocabulary context."
+    "“heaven” means any place of complete bliss and delight and peace."
   ],
   [
     "height",
@@ -389,7 +389,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A person who is entitled by law or by the terms of a will to inherit the estate of another.",
-    "The lesson uses “heir” in a carefully reviewed vocabulary context."
+    "“heir” means a person who is entitled by law or by the terms of a will to inherit the estate of another."
   ],
   [
     "hell",
@@ -419,7 +419,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Either half of the cerebrum.",
-    "The lesson uses “hemisphere” in a carefully reviewed vocabulary context."
+    "“hemisphere” means either half of the cerebrum."
   ],
   [
     "hen",
@@ -429,7 +429,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Adult female chicken.",
-    "The lesson uses “hen” in a carefully reviewed vocabulary context."
+    "“hen” means adult female chicken."
   ],
   [
     "herb",
@@ -439,7 +439,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Aromatic potherb used in cookery for its savory qualities.",
-    "The lesson uses “herb” in a carefully reviewed vocabulary context."
+    "“herb” means aromatic potherb used in cookery for its savory qualities."
   ],
   [
     "herd",
@@ -449,7 +449,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A group of cattle or sheep or other domestic mammals all of the same kind that are herded by humans.",
-    "The lesson uses “herd” in a carefully reviewed vocabulary context."
+    "“herd” means a group of cattle or sheep or other domestic mammals all of the same kind that are herded by humans."
   ],
   [
     "hero",
@@ -459,7 +459,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A large sandwich made of a long crusty roll split lengthwise and filled with meats and cheese (and tomato and onion and lettuce and condiments); different names are used in different sections of the United States.",
-    "The lesson uses “hero” in a carefully reviewed vocabulary context."
+    "“hero” means a large sandwich made of a long crusty roll split lengthwise and filled with meats and cheese (and tomato and onion and lettuce and condiments); different names are used in different sections of the United States."
   ],
   [
     "hierarchy",
@@ -469,7 +469,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The organization of people at different ranks in an administrative body.",
-    "The lesson uses “hierarchy” in a carefully reviewed vocabulary context."
+    "“hierarchy” means the organization of people at different ranks in an administrative body."
   ],
   [
     "highlight",
@@ -489,7 +489,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Either side of the body below the waist and above the thigh.",
-    "The lesson uses “hip” in a carefully reviewed vocabulary context."
+    "“hip” means either side of the body below the waist and above the thigh."
   ],
   [
     "historian",
@@ -499,7 +499,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A person who is an authority on history and who studies it and writes about it.",
-    "The lesson uses “historian” in a carefully reviewed vocabulary context."
+    "“historian” means a person who is an authority on history and who studies it and writes about it."
   ],
   [
     "hold",
@@ -519,7 +519,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "An opening into or through something.",
-    "The lesson uses “hole” in a carefully reviewed vocabulary context."
+    "“hole” means an opening into or through something."
   ],
   [
     "holiday",
@@ -549,7 +549,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A sweet yellow liquid produced by bees.",
-    "The lesson uses “honey” in a carefully reviewed vocabulary context."
+    "“honey” means a sweet yellow liquid produced by bees."
   ],
   [
     "honour",
@@ -569,7 +569,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A curved or bent implement for suspending or pulling something.",
-    "The lesson uses “hook” in a carefully reviewed vocabulary context."
+    "“hook” means a curved or bent implement for suspending or pulling something."
   ],
   [
     "hope",
@@ -589,7 +589,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "One of the bony outgrowths on the heads of certain ungulates.",
-    "The lesson uses “horn” in a carefully reviewed vocabulary context."
+    "“horn” means one of the bony outgrowths on the heads of certain ungulates."
   ],
   [
     "horoscope",
@@ -599,7 +599,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A prediction of someone's future based on the relative positions of the planets.",
-    "The lesson uses “horoscope” in a carefully reviewed vocabulary context."
+    "“horoscope” means a prediction of someone's future based on the relative positions of the planets."
   ],
   [
     "horror",
@@ -609,7 +609,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Intense aversion.",
-    "The lesson uses “horror” in a carefully reviewed vocabulary context."
+    "“horror” means intense aversion."
   ],
   [
     "hospitality",
@@ -619,7 +619,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Kindness in welcoming guests or strangers.",
-    "The lesson uses “hospitality” in a carefully reviewed vocabulary context."
+    "“hospitality” means kindness in welcoming guests or strangers."
   ],
   [
     "hostage",
@@ -629,7 +629,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A prisoner who is held by one party to insure that another party will meet specified terms.",
-    "The lesson uses “hostage” in a carefully reviewed vocabulary context."
+    "“hostage” means a prisoner who is held by one party to insure that another party will meet specified terms."
   ],
   [
     "hostility",
@@ -639,7 +639,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Violent action that is hostile and usually unprovoked.",
-    "The lesson uses “hostility” in a carefully reviewed vocabulary context."
+    "“hostility” means violent action that is hostile and usually unprovoked."
   ],
   [
     "hour",
@@ -659,7 +659,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Any of a variety of plants grown indoors for decorative purposes.",
-    "The lesson uses “houseplant” in a carefully reviewed vocabulary context."
+    "“houseplant” means any of a variety of plants grown indoors for decorative purposes."
   ],
   [
     "housewife",
@@ -669,7 +669,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A wife who manages a household while her husband earns the family income.",
-    "The lesson uses “housewife” in a carefully reviewed vocabulary context."
+    "“housewife” means a wife who manages a household while her husband earns the family income."
   ],
   [
     "human body",
@@ -709,7 +709,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Someone who hunts game.",
-    "The lesson uses “hunter” in a carefully reviewed vocabulary context."
+    "“hunter” means someone who hunts game."
   ],
   [
     "hunting",
@@ -719,7 +719,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The pursuit and killing or capture of wild animals regarded as a sport.",
-    "The lesson uses “hunting” in a carefully reviewed vocabulary context."
+    "“hunting” means the pursuit and killing or capture of wild animals regarded as a sport."
   ],
   [
     "hut",
@@ -729,7 +729,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Small crude shelter used as a dwelling.",
-    "The lesson uses “hut” in a carefully reviewed vocabulary context."
+    "“hut” means small crude shelter used as a dwelling."
   ],
   [
     "hypothesis",
@@ -739,7 +739,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A message expressing an opinion based on incomplete evidence.",
-    "The lesson uses “hypothesis” in a carefully reviewed vocabulary context."
+    "“hypothesis” means a message expressing an opinion based on incomplete evidence."
   ],
   [
     "ice",
@@ -769,7 +769,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Model of excellence or perfection of a kind; one having no equal.",
-    "The lesson uses “ideal” in a carefully reviewed vocabulary context."
+    "“ideal” means model of excellence or perfection of a kind; one having no equal."
   ],
   [
     "identification",
@@ -779,7 +779,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "Evidence of identity; something that identifies a person or thing.",
-    "The lesson uses “identification” in a carefully reviewed vocabulary context."
+    "“identification” means evidence of identity; something that identifies a person or thing."
   ],
   [
     "identity",
@@ -799,7 +799,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An orientation that characterizes the thinking of a group or nation.",
-    "The lesson uses “ideology” in a carefully reviewed vocabulary context."
+    "“ideology” means an orientation that characterizes the thinking of a group or nation."
   ],
   [
     "ignorance",
@@ -809,7 +809,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The lack of knowledge or education.",
-    "The lesson uses “ignorance” in a carefully reviewed vocabulary context."
+    "“ignorance” means the lack of knowledge or education."
   ],
   [
     "illness",
@@ -819,7 +819,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Impairment of normal physiological function affecting part or all of an organism.",
-    "The lesson uses “illness” in a carefully reviewed vocabulary context."
+    "“illness” means impairment of normal physiological function affecting part or all of an organism."
   ],
   [
     "illusion",
@@ -839,7 +839,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "A visual representation (a picture or diagram) that is used to make some subject more pleasing or easier to understand.",
-    "The lesson uses “illustration” in a carefully reviewed vocabulary context."
+    "“illustration” means a visual representation (a picture or diagram) that is used to make some subject more pleasing or easier to understand."
   ],
   [
     "image",
@@ -869,7 +869,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A person who comes to a country where they were not born in order to settle there.",
-    "The lesson uses “immigrant” in a carefully reviewed vocabulary context."
+    "“immigrant” means a person who comes to a country where they were not born in order to settle there."
   ],
   [
     "immigration",
@@ -879,7 +879,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Migration into a place (especially migration to a country of which you are not a native in order to settle there).",
-    "The lesson uses “immigration” in a carefully reviewed vocabulary context."
+    "“immigration” means migration into a place (especially migration to a country of which you are not a native in order to settle there)."
   ],
   [
     "impact",
@@ -889,7 +889,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The striking of one body against another.",
-    "The lesson uses “impact” in a carefully reviewed vocabulary context."
+    "“impact” means the striking of one body against another."
   ],
   [
     "implication",
@@ -899,7 +899,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A logical relation between propositions p and q of the form ‘if p then q’; if p is true then q cannot be false.",
-    "The lesson uses “implication” in a carefully reviewed vocabulary context."
+    "“implication” means a logical relation between propositions p and q of the form ‘if p then q’; if p is true then q cannot be false."
   ],
   [
     "import",
@@ -909,7 +909,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Commodities (goods or services) bought from a foreign country.",
-    "The lesson uses “import” in a carefully reviewed vocabulary context."
+    "“import” means commodities (goods or services) bought from a foreign country."
   ],
   [
     "importance",
@@ -949,7 +949,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A positive motivational influence.",
-    "The lesson uses “incentive” in a carefully reviewed vocabulary context."
+    "“incentive” means a positive motivational influence."
   ],
   [
     "inch",
@@ -959,7 +959,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A unit of length equal to one twelfth of a foot.",
-    "The lesson uses “inch” in a carefully reviewed vocabulary context."
+    "“inch” means a unit of length equal to one twelfth of a foot."
   ],
   [
     "incident",
@@ -969,7 +969,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A single distinct event.",
-    "The lesson uses “incident” in a carefully reviewed vocabulary context."
+    "“incident” means a single distinct event."
   ],
   [
     "income",
@@ -979,7 +979,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The financial gain (earned or unearned) accruing over a given period of time.",
-    "The lesson uses “income” in a carefully reviewed vocabulary context."
+    "“income” means the financial gain (earned or unearned) accruing over a given period of time."
   ],
   [
     "increase",
@@ -999,7 +999,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The finger next to the thumb.",
-    "The lesson uses “index” in a carefully reviewed vocabulary context."
+    "“index” means the finger next to the thumb."
   ]
 ]
 

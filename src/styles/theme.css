@@ -8,7 +8,7 @@
   --secondary: #eaf5f0;
   --secondary-foreground: #16796c;
   --muted: #f1f5f3;
-  --muted-foreground: #687975;
+  --muted-foreground: #5d706b;
   --accent: #efab61;
   --accent-foreground: #583916;
   --danger: #923e34;
@@ -50,6 +50,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: 'DM Sans', sans-serif;
-  --font-display: 'Manrope', sans-serif;
+  --font-sans: "Segoe UI", Arial, sans-serif;
+  --font-display: "Segoe UI", Arial, sans-serif;
 }

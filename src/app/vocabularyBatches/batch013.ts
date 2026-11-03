@@ -19,7 +19,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "C1",
     "Having a constant ratio.",
-    "The lesson uses “proportional” in a carefully reviewed vocabulary context."
+    "“proportional” means having a constant ratio."
   ],
   [
     "provincial",
@@ -119,7 +119,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "Not treated with heat to prepare it for eating.",
-    "The lesson uses “raw” in a carefully reviewed vocabulary context."
+    "“raw” means not treated with heat to prepare it for eating."
   ],
   [
     "ready",
@@ -199,7 +199,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Connected by kinship, common origin, or marriage.",
-    "The lesson uses “related” in a carefully reviewed vocabulary context."
+    "“related” means connected by kinship, common origin, or marriage."
   ],
   [
     "relative",
@@ -299,7 +299,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "No longer active in your work or profession.",
-    "The lesson uses “retired” in a carefully reviewed vocabulary context."
+    "“retired” means no longer active in your work or profession."
   ],
   [
     "revolutionary",
@@ -369,7 +369,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Having the shape or form of a circle.",
-    "The lesson uses “round” in a carefully reviewed vocabulary context."
+    "“round” means having the shape or form of a circle."
   ],
   [
     "sacred",
@@ -459,7 +459,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Completely lacking in playfulness.",
-    "The lesson uses “serious” in a carefully reviewed vocabulary context."
+    "“serious” means completely lacking in playfulness."
   ],
   [
     "shallow",
@@ -559,7 +559,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Showing mental alertness and calculation and resourcefulness.",
-    "The lesson uses “smart” in a carefully reviewed vocabulary context."
+    "“smart” means showing mental alertness and calculation and resourcefulness."
   ],
   [
     "smooth",
@@ -599,7 +599,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "Yielding readily to pressure or weight.",
-    "The lesson uses “soft” in a carefully reviewed vocabulary context."
+    "“soft” means yielding readily to pressure or weight."
   ],
   [
     "solar",
@@ -649,7 +649,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A1",
     "Having a sharp biting taste.",
-    "The lesson uses “sour” in a carefully reviewed vocabulary context."
+    "“sour” means having a sharp biting taste."
   ],
   [
     "spatial",
@@ -739,7 +739,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Having the sticky properties of an adhesive.",
-    "The lesson uses “sticky” in a carefully reviewed vocabulary context."
+    "“sticky” means having the sticky properties of an adhesive."
   ],
   [
     "still",
@@ -789,7 +789,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Characterized by strictness, severity, or restraint.",
-    "The lesson uses “strict” in a carefully reviewed vocabulary context."
+    "“strict” means characterized by strictness, severity, or restraint."
   ],
   [
     "strong",
@@ -819,7 +819,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Tenaciously unwilling or marked by tenacious unwillingness to yield.",
-    "The lesson uses “stubborn” in a carefully reviewed vocabulary context."
+    "“stubborn” means tenaciously unwilling or marked by tenacious unwillingness to yield."
   ],
   [
     "stunning",
@@ -839,7 +839,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Lacking or marked by lack of intellectual acuity.",
-    "The lesson uses “stupid” in a carefully reviewed vocabulary context."
+    "“stupid” means lacking or marked by lack of intellectual acuity."
   ],
   [
     "subjective",
@@ -939,7 +939,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Having or denoting the characteristic taste of sugar.",
-    "The lesson uses “sweet” in a carefully reviewed vocabulary context."
+    "“sweet” means having or denoting the characteristic taste of sugar."
   ],
   [
     "sympathetic",

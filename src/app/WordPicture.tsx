@@ -10,9 +10,16 @@ interface Props {
   topic?: string
 
   className?: string
+
+  altText?: string
 }
 
-export default function WordPicture({ word, topic, className = "" }: Props) {
+export default function WordPicture({
+  word,
+  topic,
+  className = "",
+  altText,
+}: Props) {
   const visual = getVerifiedVocabularyImage({ word, topic } as Word)
 
   const [failed, setFailed] = useState(false)
@@ -22,7 +29,7 @@ export default function WordPicture({ word, topic, className = "" }: Props) {
       <div
         data-image-status="pending"
         role="img"
-        aria-label={`No verified image is available for ${word}`}
+        aria-label={altText || "No verified image is available for this item"}
         className={`@container flex flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border border-dashed border-border bg-background text-center ${className}`}
       >
         <span className="text-[7px] text-muted-foreground @[5rem]:hidden">
@@ -42,7 +49,7 @@ export default function WordPicture({ word, topic, className = "" }: Props) {
       data-image-status="verified"
       data-vocabulary-word={word}
       src={visual.src}
-      alt={visual.description || `Photograph of ${word}`}
+      alt={altText || `Photograph illustrating ${word}`}
       title={`Photo for ${word} · ${visual.author} · ${visual.license}`}
       width={900}
       height={600}

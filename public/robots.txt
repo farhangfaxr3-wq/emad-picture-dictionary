@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /review-submissions
+Disallow: /api/admin/
+
+Sitemap: https://emad-picture-dictionary.farhangfaxr3.workers.dev/sitemap.xml

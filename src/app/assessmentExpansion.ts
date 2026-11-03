@@ -338,6 +338,7 @@ const questions: QuestionSeed[] = [
     explanation: "The recording says the library closes at five o'clock.",
     audioText:
       "The library closes at five o'clock today. Please return your books before then.",
+    audioSrc: "/audio/assessment/l-a1-library-closes.wav",
   },
   {
     id: "l-a2-bus-stop",
@@ -356,6 +357,7 @@ const questions: QuestionSeed[] = [
       "The recording directs passengers to the temporary stop near the university gate.",
     audioText:
       "The number eight bus will not stop outside the bank today. Please use the temporary stop near the university gate.",
+    audioSrc: "/audio/assessment/l-a2-bus-stop.wav",
   },
   {
     id: "l-b1-study-room",
@@ -374,6 +376,7 @@ const questions: QuestionSeed[] = [
       "A projector problem in Room 4 caused the booking to move to Room 6.",
     audioText:
       "Your study-room booking has been moved from Room Four to Room Six because the projector in Room Four is not working. The time of your booking remains unchanged.",
+    audioSrc: "/audio/assessment/l-b1-study-room.wav",
   },
   {
     id: "l-b2-field-trip",
@@ -392,6 +395,7 @@ const questions: QuestionSeed[] = [
       "Transport is covered, while students must buy their own lunch.",
     audioText:
       "The department will cover the cost of transport for Friday's field trip, so you do not need to buy a bus ticket. Lunch, however, is not included, and students should either bring food or purchase it at the visitor centre.",
+    audioSrc: "/audio/assessment/l-b2-field-trip.wav",
   },
   {
     id: "l-b2-research-interview",
@@ -410,6 +414,7 @@ const questions: QuestionSeed[] = [
       "The recording says a signed consent form must be returned in advance.",
     audioText:
       "Before your research interview, please read the information sheet carefully and return the signed consent form. We cannot begin the recorded interview until we have received it.",
+    audioSrc: "/audio/assessment/l-b2-research-interview.wav",
   },
   {
     id: "l-c1-policy-pilot",
@@ -428,6 +433,7 @@ const questions: QuestionSeed[] = [
       "A limited pilot would provide evidence before a large-scale commitment.",
     audioText:
       "The proposal is promising, but the evidence comes from institutions quite different from ours. A six-month pilot would let us examine the effects in our own context before committing resources to a university-wide rollout.",
+    audioSrc: "/audio/assessment/l-c1-policy-pilot.wav",
   },
   {
     id: "l-c1-exhibition-delay",
@@ -446,6 +452,7 @@ const questions: QuestionSeed[] = [
       "The curator regrets the delay but says it enables more careful conservation work.",
     audioText:
       "Naturally, we regret postponing the exhibition, particularly after visitors planned their journeys. Still, the delay gives conservators time to stabilize two fragile works that otherwise could not have been displayed safely.",
+    audioSrc: "/audio/assessment/l-c1-exhibition-delay.wav",
   },
   {
     id: "l-c2-causal-claim",
@@ -464,6 +471,7 @@ const questions: QuestionSeed[] = [
       "The speaker warns against treating correlation as proof of a causal effect.",
     audioText:
       "The association is statistically robust, but we should resist presenting it as causal. Participants were not randomly assigned, and an unmeasured factor may have influenced both their programme attendance and their eventual outcomes.",
+    audioSrc: "/audio/assessment/l-c2-causal-claim.wav",
   },
   {
     id: "l-c2-urban-consultation",
@@ -482,6 +490,7 @@ const questions: QuestionSeed[] = [
       "The speaker questions whether public input changed the plan rather than merely being acknowledged.",
     audioText:
       "The report lists how many residents attended, but it does not identify a single design decision altered by their evidence. Participation should shape the plan, not simply decorate the account of how the plan was produced.",
+    audioSrc: "/audio/assessment/l-c2-urban-consultation.wav",
   },
   {
     id: "l-c2-uncertainty",
@@ -500,6 +509,7 @@ const questions: QuestionSeed[] = [
       "The speaker treats uncertainty as decision-relevant information rather than as failure.",
     audioText:
       "Uncertainty is not a defect to conceal; it is information about the range of outcomes we should prepare for. The responsible response is to communicate that range clearly and choose measures that remain useful under several plausible scenarios.",
+    audioSrc: "/audio/assessment/l-c2-uncertainty.wav",
   },
 ]
 

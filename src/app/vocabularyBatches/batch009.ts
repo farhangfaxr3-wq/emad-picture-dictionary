@@ -29,7 +29,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Not being in a specified place.",
-    "The lesson uses “absent” in a carefully reviewed vocabulary context."
+    "“absent” means not being in a specified place."
   ],
   [
     "absolute",
@@ -209,7 +209,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Of a medium to dark brownish yellow color.",
-    "The lesson uses “amber” in a carefully reviewed vocabulary context."
+    "“amber” means of a medium to dark brownish yellow color."
   ],
   [
     "ambiguous",
@@ -229,7 +229,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Having a strong desire for success or achievement.",
-    "The lesson uses “ambitious” in a carefully reviewed vocabulary context."
+    "“ambitious” means having a strong desire for success or achievement."
   ],
   [
     "ample",
@@ -589,7 +589,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Of a color similar to that of wood or earth.",
-    "The lesson uses “brown” in a carefully reviewed vocabulary context."
+    "“brown” means of a color similar to that of wood or earth."
   ],
   [
     "bureaucratic",
@@ -789,7 +789,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Unable to distinguish one or more chromatic colors.",
-    "The lesson uses “color-blind” in a carefully reviewed vocabulary context."
+    "“color-blind” means unable to distinguish one or more chromatic colors."
   ],
   [
     "colourful",
@@ -839,7 +839,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Able to be compared or worthy of comparison.",
-    "The lesson uses “comparable” in a carefully reviewed vocabulary context."
+    "“comparable” means able to be compared or worthy of comparison."
   ],
   [
     "compatible",
@@ -929,7 +929,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "C1",
     "Resistant to change, particularly in relation to politics or religion.",
-    "The lesson uses “conservative” in a carefully reviewed vocabulary context."
+    "“conservative” means resistant to change, particularly in relation to politics or religion."
   ],
   [
     "considerable",

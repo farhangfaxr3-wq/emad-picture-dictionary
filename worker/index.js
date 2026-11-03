@@ -4,6 +4,9 @@ import {
   verifyAuthenticationResponse,
   verifyRegistrationResponse,
 } from "@simplewebauthn/server"
+import staticAssessmentQuestions from "./assessment-bank.json" with { type: "json" }
+import assessmentCandidates from "./assessment-candidates.json" with { type: "json" }
+import { assetResponse, secureResponse } from "./http.js"
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
@@ -41,6 +44,28 @@ const CHAT_CHALLENGE_SECONDS = 5 * 60
 
 const CHAT_MESSAGE_RETENTION_DAYS = 7
 
+const ASSESSMENT_ATTEMPT_SECONDS = 2 * 60 * 60
+
+const ASSESSMENT_QUESTION_COUNT = 50
+
+const ASSESSMENT_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
+
+const ASSESSMENT_SELECTION_PLAN = {
+  vocabulary: { A1: 4, A2: 4, B1: 3, B2: 3, C1: 3, C2: 3 },
+  grammar: { A1: 2, A2: 2, B1: 2, B2: 2, C1: 2, C2: 2 },
+  reading: { A1: 2, A2: 2, B1: 2, B2: 1, C1: 1, C2: 1 },
+  listening: { A1: 2, A2: 2, B1: 2, B2: 1, C1: 1, C2: 1 },
+}
+
+const ASSESSMENT_LEVEL_WEIGHTS = {
+  A1: 1,
+  A2: 2,
+  B1: 3,
+  B2: 4,
+  C1: 5,
+  C2: 6,
+}
+
 const DUMMY_ADMIN_ACCESS_CODE_HASH =
   "u4aGqZxB3wJGvCPk6EKBGfZxK1ZfJw7uRk2vK7gMx5M"
 
@@ -50,21 +75,6 @@ const DUMMY_ADMIN_CREDENTIAL = {
   hash: "UJ67vSdxJgzMa4__vSLzLxoM0p3dsmfLDszcbA7b-kg",
 
   iterations: ADMIN_PASSWORD_ITERATIONS,
-}
-
-const SECURITY_HEADERS = {
-  "content-security-policy":
-    "default-src 'self'; base-uri 'self'; connect-src 'self' https://challenges.cloudflare.com; font-src 'self' data:; form-action 'self'; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; img-src 'self' data:; object-src 'none'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
-
-  "permissions-policy": "camera=(), geolocation=(), microphone=()",
-
-  "referrer-policy": "strict-origin-when-cross-origin",
-
-  "strict-transport-security": "max-age=31536000; includeSubDomains",
-
-  "x-content-type-options": "nosniff",
-
-  "x-frame-options": "DENY",
 }
 
 const FEEDBACK_CATEGORIES = new Set([
@@ -140,22 +150,6 @@ function json(data, status = 200, extraHeaders = {}) {
 
   return new Response(JSON.stringify(data), {
     status,
-
-    headers,
-  })
-}
-
-function secureResponse(response) {
-  const headers = new Headers(response.headers)
-
-  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
-    headers.set(name, value)
-  }
-
-  return new Response(response.body, {
-    status: response.status,
-
-    statusText: response.statusText,
 
     headers,
   })
@@ -1290,11 +1284,19 @@ async function listSubmissions(request, env) {
     ? url.searchParams.get("status")
     : "pending"
 
+  const page = Math.max(1, Number.parseInt(url.searchParams.get("page") || "1", 10) || 1)
+  const limit = Math.min(50, Math.max(10, Number.parseInt(url.searchParams.get("limit") || "20", 10) || 20))
+  const offset = (page - 1) * limit
+
+  const count = await env.SUBMISSIONS_DB.prepare(
+    "SELECT COUNT(*) AS total FROM submissions WHERE status = ?",
+  ).bind(status).first()
+
   const result = await env.SUBMISSIONS_DB.prepare(
-    "SELECT id, kind, status, rating, category, email, normalized_word, payload_json, owner_note, created_at FROM submissions WHERE status = ? ORDER BY created_at DESC LIMIT 100",
+    "SELECT id, kind, status, rating, category, email, normalized_word, payload_json, owner_note, created_at FROM submissions WHERE status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
   )
 
-    .bind(status)
+    .bind(status, limit, offset)
 
     .all()
 
@@ -1308,6 +1310,13 @@ async function listSubmissions(request, env) {
 
       payload_json: undefined,
     })),
+
+    pagination: {
+      page,
+      limit,
+      total: Number(count?.total || 0),
+      pages: Math.max(1, Math.ceil(Number(count?.total || 0) / limit)),
+    },
   })
 }
 
@@ -1444,24 +1453,345 @@ function serializeAssessmentQuestion(record, includeReviewState = false) {
   }
 }
 
-async function listApprovedAssessmentQuestions(env) {
+function shuffled(items) {
+  const result = [...items]
+
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const value = new Uint32Array(1)
+    crypto.getRandomValues(value)
+    const other = value[0] % (index + 1)
+    ;[result[index], result[other]] = [result[other], result[index]]
+  }
+
+  return result
+}
+
+function assessmentPool(dynamicQuestions = []) {
+  const questions = new Map()
+
+  for (const question of [...staticAssessmentQuestions, ...dynamicQuestions]) {
+    try {
+      const validated = validateAssessmentQuestion(question)
+      questions.set(validated.id, {
+        ...validated,
+        audioSrc:
+          question.audioSrc ||
+          (validated.skill === "listening"
+            ? `/audio/assessment/${validated.id}.wav`
+            : undefined),
+      })
+    } catch {
+      // Invalid editorial records never enter a learner assessment.
+    }
+  }
+
+  return [...questions.values()]
+}
+
+export function selectServerAssessmentQuestions(dynamicQuestions = []) {
+  const pool = assessmentPool(dynamicQuestions)
+  const selected = []
+
+  for (const [skill, levels] of Object.entries(ASSESSMENT_SELECTION_PLAN)) {
+    for (const level of ASSESSMENT_LEVELS) {
+      const required = levels[level] || 0
+      const candidates = shuffled(
+        pool.filter(
+          (candidate) =>
+            candidate.skill === skill && candidate.level === level,
+        ),
+      )
+
+      if (candidates.length < required) {
+        throw new RequestError(
+          503,
+          "The balanced assessment bank is temporarily incomplete.",
+        )
+      }
+
+      selected.push(...candidates.slice(0, required))
+    }
+  }
+
+  return shuffled(selected)
+    .slice(0, ASSESSMENT_QUESTION_COUNT)
+    .map((question) => {
+      const choices = shuffled(
+        question.options.map((option, originalIndex) => ({
+          option,
+          originalIndex,
+        })),
+      )
+
+      return {
+        ...question,
+        options: choices.map(({ option }) => option),
+        correctIndex: choices.findIndex(
+          ({ originalIndex }) => originalIndex === question.correctIndex,
+        ),
+      }
+    })
+}
+
+function publicAssessmentQuestion(question) {
+  return {
+    id: question.id,
+    bankVersion: question.bankVersion,
+    skill: question.skill,
+    level: question.level,
+    prompt: question.prompt,
+    options: question.options,
+    passage: question.passage || undefined,
+    audioSrc: question.audioSrc || undefined,
+  }
+}
+
+async function applyAssessmentRateLimit(request, env) {
+  if (!env.SUBMISSION_RATE_LIMITER || !env.SUBMISSION_HASH_SECRET) {
+    throw new RequestError(503, "Assessment protection is not configured.")
+  }
+
+  const address = request.headers.get("CF-Connecting-IP") || "unknown"
+  const identifier = await hashIdentifier(
+    `assessment:${address}`,
+    env.SUBMISSION_HASH_SECRET,
+  )
+  const result = await env.SUBMISSION_RATE_LIMITER.limit({
+    key: `assessment:${identifier}`,
+  })
+
+  if (!result.success) {
+    throw new RequestError(
+      429,
+      "Too many assessment requests. Try again shortly.",
+    )
+  }
+}
+
+async function approvedAssessmentRecords(env) {
   if (!env.SUBMISSIONS_DB) {
-    return json({ questions: [], bankStatus: "curated-only" })
+    throw new RequestError(503, "Assessment storage is not configured.")
   }
 
   const result = await env.SUBMISSIONS_DB.prepare(
     `${ASSESSMENT_SELECT}
      WHERE status = 'approved'
      ORDER BY reviewed_at DESC, created_at DESC
-     LIMIT 240`,
+     LIMIT 500`,
   ).all()
 
-  return json({
-    questions: (result.results || []).map((record) =>
-      serializeAssessmentQuestion(record),
-    ),
+  return (result.results || []).map((record) =>
+    serializeAssessmentQuestion(record),
+  )
+}
 
-    bankStatus: "connected",
+async function createAssessmentAttempt(request, env) {
+  requireTrustedRequestOrigin(request)
+  await applyAssessmentRateLimit(request, env)
+
+  const selected = selectServerAssessmentQuestions(
+    await approvedAssessmentRecords(env),
+  )
+  const attemptId = crypto.randomUUID()
+  const expiresAt = new Date(
+    Date.now() + ASSESSMENT_ATTEMPT_SECONDS * 1000,
+  ).toISOString()
+  const bankVersion =
+    selected[0]?.bankVersion || staticAssessmentQuestions[0]?.bankVersion || "1"
+  const scoring = selected.map((question) => ({
+    id: question.id,
+    skill: question.skill,
+    level: question.level,
+    correctIndex: question.correctIndex,
+  }))
+
+  await env.SUBMISSIONS_DB.prepare(
+    `INSERT INTO assessment_attempts
+      (id, bank_version, scoring_json, expires_at)
+     VALUES (?, ?, ?, ?)`,
+  )
+    .bind(attemptId, bankVersion, JSON.stringify(scoring), expiresAt)
+    .run()
+
+  return json(
+    {
+      attemptId,
+      bankVersion,
+      expiresAt,
+      questions: selected.map(publicAssessmentQuestion),
+    },
+    201,
+  )
+}
+
+export function scoreServerAssessment(scoring, answers, bankVersion) {
+  const skills = Object.fromEntries(
+    [...ASSESSMENT_SKILLS].map((skill) => [
+      skill,
+      { correct: 0, total: 0, percent: 0 },
+    ]),
+  )
+  const levelPerformance = Object.fromEntries(
+    ASSESSMENT_LEVELS.map((level) => [level, { correct: 0, total: 0 }]),
+  )
+  let correct = 0
+  let earnedWeight = 0
+  let possibleWeight = 0
+
+  for (const item of scoring) {
+    const isCorrect = answers[item.id] === item.correctIndex
+    skills[item.skill].total += 1
+    levelPerformance[item.level].total += 1
+    possibleWeight += ASSESSMENT_LEVEL_WEIGHTS[item.level]
+
+    if (isCorrect) {
+      correct += 1
+      skills[item.skill].correct += 1
+      levelPerformance[item.level].correct += 1
+      earnedWeight += ASSESSMENT_LEVEL_WEIGHTS[item.level]
+    }
+  }
+
+  for (const skill of ASSESSMENT_SKILLS) {
+    const result = skills[skill]
+    result.percent = result.total
+      ? Math.round((result.correct / result.total) * 100)
+      : 0
+  }
+
+  const weightedPercent = possibleWeight
+    ? Math.round((earnedWeight / possibleWeight) * 100)
+    : 0
+  const rawLevelIndex =
+    weightedPercent < 24
+      ? 0
+      : weightedPercent < 38
+        ? 1
+        : weightedPercent < 54
+          ? 2
+          : weightedPercent < 69
+            ? 3
+            : weightedPercent < 84
+              ? 4
+              : 5
+  const highestSupportedIndex = ASSESSMENT_LEVELS.reduce(
+    (highest, level, index) => {
+      const performance = levelPerformance[level]
+      return performance.total > 0 &&
+        performance.correct / performance.total >= 0.5
+        ? index
+        : highest
+    },
+    0,
+  )
+  const finalLevelIndex = Math.min(rawLevelIndex, highestSupportedIndex + 1, 5)
+
+  return {
+    id: crypto.randomUUID(),
+    completedAt: new Date().toISOString(),
+    bankVersion,
+    level: ASSESSMENT_LEVELS[finalLevelIndex],
+    correct,
+    total: scoring.length,
+    percent: scoring.length ? Math.round((correct / scoring.length) * 100) : 0,
+    weightedPercent,
+    skills,
+  }
+}
+
+async function submitAssessmentAttempt(request, env) {
+  requireTrustedRequestOrigin(request)
+  await applyAssessmentRateLimit(request, env)
+
+  if (!env.SUBMISSIONS_DB) {
+    throw new RequestError(503, "Assessment storage is not configured.")
+  }
+
+  const body = await readBody(request)
+  const attemptId = cleanText(body?.attemptId, 80)
+  const submittedAnswers = body?.answers
+
+  if (
+    !/^[0-9a-f-]{36}$/i.test(attemptId) ||
+    !submittedAnswers ||
+    typeof submittedAnswers !== "object" ||
+    Array.isArray(submittedAnswers) ||
+    Object.keys(submittedAnswers).length > ASSESSMENT_QUESTION_COUNT
+  ) {
+    throw new RequestError(400, "A valid assessment attempt is required.")
+  }
+
+  const answers = Object.fromEntries(
+    Object.entries(submittedAnswers)
+      .filter(
+        ([id, value]) =>
+          /^[a-z0-9._-]{3,180}$/i.test(id) &&
+          Number.isInteger(value) &&
+          value >= 0 &&
+          value <= 3,
+      )
+      .map(([id, value]) => [id, value]),
+  )
+  const attempt = await env.SUBMISSIONS_DB.prepare(
+    `SELECT id, bank_version, scoring_json, expires_at, completed_at
+     FROM assessment_attempts WHERE id = ? LIMIT 1`,
+  )
+    .bind(attemptId)
+    .first()
+
+  if (!attempt) {
+    throw new RequestError(404, "Assessment attempt not found.")
+  }
+
+  if (attempt.completed_at) {
+    throw new RequestError(409, "This assessment was already submitted.")
+  }
+
+  if (Date.parse(attempt.expires_at) <= Date.now()) {
+    throw new RequestError(410, "This assessment expired. Start a new test.")
+  }
+
+  let scoring
+
+  try {
+    scoring = JSON.parse(attempt.scoring_json)
+  } catch {
+    throw new RequestError(500, "The assessment could not be scored.")
+  }
+
+  if (!Array.isArray(scoring) || scoring.length !== ASSESSMENT_QUESTION_COUNT) {
+    throw new RequestError(500, "The assessment could not be scored.")
+  }
+
+  const result = scoreServerAssessment(
+    scoring,
+    answers,
+    attempt.bank_version,
+  )
+  const update = await env.SUBMISSIONS_DB.prepare(
+    `UPDATE assessment_attempts SET completed_at = datetime('now')
+     WHERE id = ? AND completed_at IS NULL`,
+  )
+    .bind(attemptId)
+    .run()
+
+  if (!update.meta?.changes) {
+    throw new RequestError(409, "This assessment was already submitted.")
+  }
+
+  return json({ result })
+}
+
+async function listApprovedAssessmentQuestions(env) {
+  const records = env.SUBMISSIONS_DB
+    ? await approvedAssessmentRecords(env)
+    : []
+
+  return json({
+    bankStatus: env.SUBMISSIONS_DB ? "connected" : "curated-only",
+    approvedQuestionCount: records.length,
+    staticQuestionCount: staticAssessmentQuestions.length,
+    assessmentQuestionCount: ASSESSMENT_QUESTION_COUNT,
   })
 }
 
@@ -1472,18 +1802,25 @@ async function listAssessmentQuestionsForReview(request, env) {
     throw new RequestError(503, "Assessment storage is not configured.")
   }
 
-  const requested = new URL(request.url).searchParams.get("status")
+  const url = new URL(request.url)
+  const requested = url.searchParams.get("status")
 
   const status = ASSESSMENT_REVIEW_STATUSES.has(requested) ? requested : "draft"
+  const page = Math.max(1, Number.parseInt(url.searchParams.get("page") || "1", 10) || 1)
+  const limit = Math.min(50, Math.max(10, Number.parseInt(url.searchParams.get("limit") || "20", 10) || 20))
+  const offset = (page - 1) * limit
+  const count = await env.SUBMISSIONS_DB.prepare(
+    "SELECT COUNT(*) AS total FROM assessment_questions WHERE status = ?",
+  ).bind(status).first()
 
   const result = await env.SUBMISSIONS_DB.prepare(
     `${ASSESSMENT_SELECT}
      WHERE status = ?
      ORDER BY created_at DESC
-     LIMIT 100`,
+     LIMIT ? OFFSET ?`,
   )
 
-    .bind(status)
+    .bind(status, limit, offset)
 
     .all()
 
@@ -1491,6 +1828,12 @@ async function listAssessmentQuestionsForReview(request, env) {
     questions: (result.results || []).map((record) =>
       serializeAssessmentQuestion(record, true),
     ),
+    pagination: {
+      page,
+      limit,
+      total: Number(count?.total || 0),
+      pages: Math.max(1, Math.ceil(Number(count?.total || 0) / limit)),
+    },
   })
 }
 
@@ -1503,26 +1846,17 @@ async function syncAssessmentQuestions(request, env) {
     throw new RequestError(503, "Assessment storage is not configured.")
   }
 
-  // Owner-only candidate batches include four definitions per vocabulary
-
-  // question. Keep the public submission cap small, but allow this trusted,
-
-  // same-origin review endpoint to accept its documented 60-question batch.
-
   const body = await readBody(request, 128_000)
 
-  if (!Array.isArray(body?.questions) || body.questions.length < 1) {
-    throw new RequestError(400, "At least one question candidate is required.")
+  const source = Array.isArray(body?.questions)
+    ? body.questions
+    : assessmentCandidates
+
+  if (source.length < 1 || source.length > 500) {
+    throw new RequestError(400, "The assessment candidate set is invalid.")
   }
 
-  if (body.questions.length > 60) {
-    throw new RequestError(
-      400,
-      "Sync question candidates in batches of 60 or fewer.",
-    )
-  }
-
-  const questions = body.questions.map(validateAssessmentQuestion)
+  const questions = source.map(validateAssessmentQuestion)
 
   const statements = questions.map((item) =>
     env.SUBMISSIONS_DB.prepare(
@@ -1574,13 +1908,17 @@ async function syncAssessmentQuestions(request, env) {
     ),
   )
 
-  const results = await env.SUBMISSIONS_DB.batch(statements)
+  let created = 0
 
-  const created = results.reduce(
-    (total, result) => total + Number(result.meta?.changes || 0),
-
-    0,
-  )
+  for (let index = 0; index < statements.length; index += 60) {
+    const results = await env.SUBMISSIONS_DB.batch(
+      statements.slice(index, index + 60),
+    )
+    created += results.reduce(
+      (total, result) => total + Number(result.meta?.changes || 0),
+      0,
+    )
+  }
 
   return json({
     message: "Assessment candidates synchronized for private review.",
@@ -2523,6 +2861,20 @@ async function reportChatMessage(request, env, messageId) {
 async function listChatModeration(request, env) {
   await verifyOwner(request, env)
 
+  const url = new URL(request.url)
+  const reportPage = Math.max(1, Number.parseInt(url.searchParams.get("reportPage") || "1", 10) || 1)
+  const accountPage = Math.max(1, Number.parseInt(url.searchParams.get("accountPage") || "1", 10) || 1)
+  const limit = Math.min(50, Math.max(10, Number.parseInt(url.searchParams.get("limit") || "20", 10) || 20))
+  const reportOffset = (reportPage - 1) * limit
+  const accountOffset = (accountPage - 1) * limit
+
+  const reportCount = await env.SUBMISSIONS_DB.prepare(
+    "SELECT COUNT(*) AS total FROM chat_reports",
+  ).first()
+  const accountCount = await env.SUBMISSIONS_DB.prepare(
+    "SELECT COUNT(*) AS total FROM chat_accounts",
+  ).first()
+
   const reports = await env.SUBMISSIONS_DB.prepare(
     `SELECT r.id, r.message_id, r.reason, r.status, r.created_at,
       m.body, author.display_name AS author_name, author.id AS author_id,
@@ -2532,17 +2884,31 @@ async function listChatModeration(request, env) {
      JOIN chat_accounts author ON author.id = m.account_id
      JOIN chat_accounts reporter ON reporter.id = r.reporter_account_id
      ORDER BY CASE r.status WHEN 'pending' THEN 0 ELSE 1 END, r.created_at DESC
-     LIMIT 100`,
-  ).all()
+     LIMIT ? OFFSET ?`,
+  ).bind(limit, reportOffset).all()
 
   const accounts = await env.SUBMISSIONS_DB.prepare(
     `SELECT id, display_name, status, restricted_until, created_at
-     FROM chat_accounts ORDER BY created_at DESC LIMIT 100`,
-  ).all()
+     FROM chat_accounts ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+  ).bind(limit, accountOffset).all()
 
   return json({
     reports: reports.results || [],
     accounts: accounts.results || [],
+    pagination: {
+      reports: {
+        page: reportPage,
+        limit,
+        total: Number(reportCount?.total || 0),
+        pages: Math.max(1, Math.ceil(Number(reportCount?.total || 0) / limit)),
+      },
+      accounts: {
+        page: accountPage,
+        limit,
+        total: Number(accountCount?.total || 0),
+        pages: Math.max(1, Math.ceil(Number(accountCount?.total || 0) / limit)),
+      },
+    },
   })
 }
 
@@ -2680,6 +3046,20 @@ async function handleApi(request, env) {
     return listApprovedAssessmentQuestions(env)
   }
 
+  if (
+    url.pathname === "/api/assessment/attempts" &&
+    request.method === "POST"
+  ) {
+    return createAssessmentAttempt(request, env)
+  }
+
+  if (
+    url.pathname === "/api/assessment/attempts/submit" &&
+    request.method === "POST"
+  ) {
+    return submitAssessmentAttempt(request, env)
+  }
+
   if (url.pathname === "/api/submissions" && request.method === "POST") {
     return createSubmission(request, env)
   }
@@ -2756,7 +3136,11 @@ export default {
         return secureResponse(await handleApi(request, env))
       }
 
-      return secureResponse(await env.ASSETS.fetch(request))
+      if (!["GET", "HEAD"].includes(request.method)) {
+        return secureResponse(json({ message: "Route not found." }, 404))
+      }
+
+      return secureResponse(assetResponse(request, await env.ASSETS.fetch(request)))
     } catch (error) {
       if (error instanceof RequestError) {
         return secureResponse(json({ message: error.message }, error.status))
@@ -2771,6 +3155,15 @@ export default {
   },
 
   async scheduled(_controller, env, context) {
-    context.waitUntil(cleanupChatData(env))
+    context.waitUntil(
+      Promise.all([
+        cleanupChatData(env),
+        env.SUBMISSIONS_DB
+          ? env.SUBMISSIONS_DB.prepare(
+              "DELETE FROM assessment_attempts WHERE expires_at < datetime('now', '-1 day')",
+            ).run()
+          : Promise.resolve(),
+      ]),
+    )
   },
 }

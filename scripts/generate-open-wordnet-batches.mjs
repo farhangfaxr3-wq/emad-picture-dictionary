@@ -202,7 +202,7 @@ try {
         ),
       ) ||
         safeExamples[0] ||
-        `The lesson uses “${word}” in a carefully reviewed vocabulary context`,
+        `“${word}” means ${definition.charAt(0).toLowerCase()}${definition.slice(1)}`,
     )
     const partOfSpeech =
       entry.part === "n"

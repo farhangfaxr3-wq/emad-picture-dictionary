@@ -1,4 +1,3 @@
-@import './styles/fonts.css';
 @import 'tailwindcss';
 @import './styles/theme.css';
 
@@ -44,6 +43,16 @@
 
 @media (max-width: 299px) {
   .turnstile-shell { --turnstile-scale: .6; }
+}
+
+/* Mobile controls must remain comfortably operable by touch and keyboard. */
+@media (max-width: 767px) {
+  button, [role="button"], select, input:not([type="hidden"]), textarea {
+    min-height: 44px;
+  }
+  button, [role="button"] {
+    min-width: 44px;
+  }
 }
 
 @layer base {

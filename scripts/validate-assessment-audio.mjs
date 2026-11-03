@@ -13,9 +13,9 @@ const sources = [...sourceText.matchAll(/audioSrc:\s*"([^"]+)"/g)].map(
   (match) => match[1],
 )
 
-if (sources.length !== 5 || new Set(sources).size !== 5) {
+if (sources.length !== 15 || new Set(sources).size !== 15) {
   throw new Error(
-    `Expected five unique bundled listening recordings; found ${sources.length}.`,
+    `Expected fifteen unique bundled listening recordings; found ${sources.length}.`,
   )
 }
 

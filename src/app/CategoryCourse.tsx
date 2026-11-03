@@ -30,7 +30,7 @@ import {
 
 import type { Word } from "./content"
 
-import type { ReviewOutcome, Stored } from "./App"
+import type { ReviewOutcome, Stored } from "./learningStore"
 
 import { scenes } from "./SceneCanvas"
 
@@ -45,6 +45,11 @@ import {
 import { topicIntroductions } from "./content"
 
 import { cefrLabels, cefrLevels, resolveCEFRSelection } from "./cefr"
+import {
+  gameActivities,
+  practiceActivities,
+  writingActivities,
+} from "./categoryActivities"
 
 type Section = "dashboard" | "vocabulary" | "practice" | "write" | "flashcards" | "games" | "progress"
 
@@ -65,7 +70,7 @@ interface CourseProps {
 
   favorite: (id: string) => void
 
-  art: (word: Word, className?: string) => ReactNode
+  art: (word: Word, className?: string, altText?: string) => ReactNode
 
   audio: (text: string) => ReactNode
 
@@ -163,232 +168,6 @@ const sections = [
     description: "See how far you've come in this category.",
   },
 ] as const
-
-const practiceActivities = [
-  {
-    id: "picture",
-
-    title: "Picture → Word",
-
-    text: "Choose a word from the picture and its clue.",
-
-    icon: Grid2X2,
-  },
-
-  {
-    id: "word",
-
-    title: "Word → Picture",
-
-    text: "Find the picture that represents the word.",
-
-    icon: BookOpen,
-  },
-
-  {
-    id: "multiple",
-
-    title: "Multiple Choice",
-
-    text: "Connect a simple definition to the right word.",
-
-    icon: Target,
-  },
-
-  {
-    id: "listening",
-
-    title: "Listening",
-
-    text: "Listen, then choose the word you hear.",
-
-    icon: Headphones,
-  },
-
-  {
-    id: "matching",
-
-    title: "Matching",
-
-    text: "Connect each word to its illustrated meaning.",
-
-    icon: Layers,
-  },
-
-  {
-    id: "identify",
-
-    title: "Identify the Picture",
-
-    text: "Read a definition and identify its picture.",
-
-    icon: Grid2X2,
-  },
-
-  {
-    id: "choose",
-
-    title: "Choose the Correct Word",
-
-    text: "Use an everyday example to find the word.",
-
-    icon: CheckCircle2,
-  },
-
-  {
-    id: "sentence",
-
-    title: "Complete the Sentence",
-
-    text: "Choose the missing word in a real-world sentence.",
-
-    icon: Pencil,
-  },
-
-  {
-    id: "spelling",
-
-    title: "Spelling",
-
-    text: "Look, listen, and type the whole English word.",
-
-    icon: Pencil,
-  },
-
-  {
-    id: "topic-review",
-
-    title: "Topic Review",
-
-    text: "Mix pictures, listening, spelling, and meanings from this category.",
-
-    icon: Shuffle,
-  },
-
-  {
-    id: "review",
-
-    title: "Quick Review",
-
-    text: "Recall recently studied words, then check what you remembered.",
-
-    icon: RotateCcw,
-  },
-]
-
-const writingActivities = [
-  {
-    id: "spelling",
-
-    title: "Picture Spelling",
-
-    text: "See the picture, then write the whole word.",
-
-    icon: Pencil,
-  },
-
-  {
-    id: "missing",
-
-    title: "Missing Letters",
-
-    text: "Use the visible letters to recover the word.",
-
-    icon: Grid2X2,
-  },
-
-  {
-    id: "complete-word",
-
-    title: "Complete the Word",
-
-    text: "Start with a few letters and finish the word.",
-
-    icon: BookOpen,
-  },
-
-  {
-    id: "dictation",
-
-    title: "Type What You Hear",
-
-    text: "Listen to the pronunciation, then type it.",
-
-    icon: Headphones,
-  },
-]
-
-const gameActivities = [
-  {
-    id: "picture-match",
-
-    title: "Picture Match",
-
-    text: "Match four words with their pictures.",
-
-    icon: Grid2X2,
-  },
-
-  {
-    id: "word-match",
-
-    title: "Word Match",
-
-    text: "Discover related words from the same category.",
-
-    icon: Layers,
-  },
-
-  {
-    id: "memory",
-
-    title: "Memory Game",
-
-    text: "Find hidden word and picture pairs.",
-
-    icon: Sparkles,
-  },
-
-  {
-    id: "speed",
-
-    title: "Speed Round",
-
-    text: "How many can you answer in 60 seconds?",
-
-    icon: Clock,
-  },
-
-  {
-    id: "listen-choose",
-
-    title: "Listen & Choose",
-
-    text: "Listen to a word and pick its picture.",
-
-    icon: Headphones,
-  },
-
-  {
-    id: "builder",
-
-    title: "Word Builder",
-
-    text: "Arrange letter tiles to build a word.",
-
-    icon: Pencil,
-  },
-
-  {
-    id: "picture-challenge",
-
-    title: "Picture Challenge",
-
-    text: "Identify an illustrated word and its meaning.",
-
-    icon: Target,
-  },
-]
 
 function shuffled<Item>(items: Item[]): Item[] {
   const next = [...items]
@@ -1671,7 +1450,7 @@ function QuizSession(props: QuizProps) {
                 : mode === "multiple"
                   ? "Which word matches this definition?"
                   : mode === "word-match"
-                    ? `Explore a word related to “${word.word}”.`
+                    ? `Which word matches the definition related to “${word.word}”?`
                     : mode === "builder"
                       ? "Arrange the letters to build the word."
                       : "Which word matches this picture and clue?"
@@ -1735,7 +1514,7 @@ function QuizSession(props: QuizProps) {
           <div className="mb-5 rounded-2xl bg-secondary/50 p-4">
             <div className="flex justify-center">
               {hasVerifiedVocabularyImage(word) ? (
-                course.art(word, "h-44 w-52")
+                course.art(word, "h-44 w-52", "Vocabulary question image")
               ) : (
                 <span className="flex h-20 w-20 items-center justify-center rounded-full bg-card text-primary">
                   <BookOpen aria-hidden="true" size={30} />
@@ -1913,7 +1692,7 @@ function QuizSession(props: QuizProps) {
               onClick={() => submit(choice.word)}
               aria-label={
                 isPictureChoice
-                  ? `Choose picture: ${choice.word}`
+                  ? "Choose this picture answer"
                   : `Choose word: ${choice.word}`
               }
               className={`rounded-xl border-2 p-3 text-sm font-semibold disabled:cursor-default ${
@@ -1927,7 +1706,7 @@ function QuizSession(props: QuizProps) {
               {isPictureChoice ? (
                 <>
                   <div className="flex justify-center">
-                    {course.art(choice, "h-24 w-28")}
+                    {course.art(choice, "h-24 w-28", "Picture answer option")}
                   </div>
                   <p className="mt-2 text-xs font-normal leading-5 text-muted-foreground">
                     {choice.definition}
@@ -2171,7 +1950,7 @@ function PairGame(props: PairProps) {
                   ) : (
                     <>
                       <div className="flex justify-center">
-                        {course.art(word, "h-20 w-24")}
+                        {course.art(word, "h-20 w-24", "Memory picture card")}
                       </div>
                       <span className="mt-2 block text-xs leading-4 text-muted-foreground">
                         {word.definition}
@@ -2213,7 +1992,7 @@ function PairGame(props: PairProps) {
                 key={word.id}
                 onClick={() => left && check(left, word.id)}
                 disabled={!left || matched.includes(word.id)}
-                aria-label={`Match picture: ${word.word}`}
+                aria-label="Match this picture to the selected word"
                 className={`min-h-28 rounded-xl border-2 p-3 disabled:opacity-60 ${
                   matched.includes(word.id)
                     ? "border-primary bg-secondary"
@@ -2221,7 +2000,7 @@ function PairGame(props: PairProps) {
                 }`}
               >
                 <div className="flex justify-center">
-                  {course.art(word, "h-20 w-24")}
+                  {course.art(word, "h-20 w-24", "Picture matching option")}
                 </div>
                 <span className="mt-1 block text-xs leading-4 text-muted-foreground">
                   {word.definition}

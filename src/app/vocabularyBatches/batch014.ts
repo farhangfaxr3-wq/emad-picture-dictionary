@@ -69,7 +69,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B2",
     "Considerate of the feelings or well-being of others.",
-    "The lesson uses “thoughtful” in a carefully reviewed vocabulary context."
+    "“thoughtful” means considerate of the feelings or well-being of others."
   ],
   [
     "tidy",
@@ -89,7 +89,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "B1",
     "Showing respect for the rights or opinions or practices of others.",
-    "The lesson uses “tolerant” in a carefully reviewed vocabulary context."
+    "“tolerant” means showing respect for the rights or opinions or practices of others."
   ],
   [
     "tough",
@@ -409,7 +409,7 @@ const entries: BatchEntry[] = [
     "adjective",
     "A2",
     "Capable of being done with means at hand and circumstances as they are.",
-    "The lesson uses “viable” in a carefully reviewed vocabulary context."
+    "“viable” means capable of being done with means at hand and circumstances as they are."
   ],
   [
     "vicious",
@@ -609,7 +609,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A monastery ruled by an abbot.",
-    "The lesson uses “abbey” in a carefully reviewed vocabulary context."
+    "“abbey” means a monastery ruled by an abbot."
   ],
   [
     "ability",
@@ -619,7 +619,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The quality of being able to perform; a quality that permits or facilitates achievement or accomplishment.",
-    "The lesson uses “ability” in a carefully reviewed vocabulary context."
+    "“ability” means the quality of being able to perform; a quality that permits or facilitates achievement or accomplishment."
   ],
   [
     "abortion",
@@ -629,7 +629,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Termination of pregnancy.",
-    "The lesson uses “abortion” in a carefully reviewed vocabulary context."
+    "“abortion” means termination of pregnancy."
   ],
   [
     "absence",
@@ -639,7 +639,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Failure to be present.",
-    "The lesson uses “absence” in a carefully reviewed vocabulary context."
+    "“absence” means failure to be present."
   ],
   [
     "absorption",
@@ -649,7 +649,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The mental state of being preoccupied by something.",
-    "The lesson uses “absorption” in a carefully reviewed vocabulary context."
+    "“absorption” means the mental state of being preoccupied by something."
   ],
   [
     "abuse",
@@ -669,7 +669,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A learned establishment for the advancement of knowledge.",
-    "The lesson uses “academy” in a carefully reviewed vocabulary context."
+    "“academy” means a learned establishment for the advancement of knowledge."
   ],
   [
     "acceptance",
@@ -689,7 +689,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The right to enter.",
-    "The lesson uses “access” in a carefully reviewed vocabulary context."
+    "“access” means the right to enter."
   ],
   [
     "accident",
@@ -719,7 +719,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "An increase by natural growth or addition.",
-    "The lesson uses “accumulation” in a carefully reviewed vocabulary context."
+    "“accumulation” means an increase by natural growth or addition."
   ],
   [
     "achievement",
@@ -729,7 +729,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The action of accomplishing something.",
-    "The lesson uses “achievement” in a carefully reviewed vocabulary context."
+    "“achievement” means the action of accomplishing something."
   ],
   [
     "acid",
@@ -739,7 +739,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Any of various water-soluble compounds having a sour taste and capable of turning litmus red and reacting with a base to form a salt.",
-    "The lesson uses “acid” in a carefully reviewed vocabulary context."
+    "“acid” means any of various water-soluble compounds having a sour taste and capable of turning litmus red and reacting with a base to form a salt."
   ],
   [
     "acquaintance",
@@ -749,7 +749,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "Personal knowledge or information about someone or something.",
-    "The lesson uses “acquaintance” in a carefully reviewed vocabulary context."
+    "“acquaintance” means personal knowledge or information about someone or something."
   ],
   [
     "acquisition",
@@ -769,7 +769,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Something that people do or cause to happen.",
-    "The lesson uses “act” in a carefully reviewed vocabulary context."
+    "“act” means something that people do or cause to happen."
   ],
   [
     "action",
@@ -779,7 +779,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A judicial proceeding brought by one party against another; one party prosecutes another for a wrong done or for protection of a right or for prevention of a wrong.",
-    "The lesson uses “action” in a carefully reviewed vocabulary context."
+    "“action” means a judicial proceeding brought by one party against another; one party prosecutes another for a wrong done or for protection of a right or for prevention of a wrong."
   ],
   [
     "activity",
@@ -819,7 +819,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "Someone who administers a business.",
-    "The lesson uses “administrator” in a carefully reviewed vocabulary context."
+    "“administrator” means someone who administers a business."
   ],
   [
     "admiration",
@@ -829,7 +829,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A feeling of delighted approval and liking.",
-    "The lesson uses “admiration” in a carefully reviewed vocabulary context."
+    "“admiration” means a feeling of delighted approval and liking."
   ],
   [
     "admission",
@@ -839,7 +839,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "An acknowledgment of the truth of something.",
-    "The lesson uses “admission” in a carefully reviewed vocabulary context."
+    "“admission” means an acknowledgment of the truth of something."
   ],
   [
     "adoption",
@@ -849,7 +849,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A legal proceeding that creates a parent-child relation between persons not related by blood; the adopted child is entitled to all privileges belonging to a natural child of the adoptive parents (including the right to inherit).",
-    "The lesson uses “adoption” in a carefully reviewed vocabulary context."
+    "“adoption” means a legal proceeding that creates a parent-child relation between persons not related by blood; the adopted child is entitled to all privileges belonging to a natural child of the adoptive parents (including the right to inherit)."
   ],
   [
     "advance",
@@ -859,7 +859,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An amount paid before it is earned.",
-    "The lesson uses “advance” in a carefully reviewed vocabulary context."
+    "“advance” means an amount paid before it is earned."
   ],
   [
     "advantage",
@@ -879,7 +879,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A wild and exciting undertaking (not necessarily lawful).",
-    "The lesson uses “adventure” in a carefully reviewed vocabulary context."
+    "“adventure” means a wild and exciting undertaking (not necessarily lawful)."
   ],
   [
     "advertising",
@@ -889,7 +889,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A public promotion of some product or service.",
-    "The lesson uses “advertising” in a carefully reviewed vocabulary context."
+    "“advertising” means a public promotion of some product or service."
   ],
   [
     "advice",
@@ -899,7 +899,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A proposal for an appropriate course of action.",
-    "The lesson uses “advice” in a carefully reviewed vocabulary context."
+    "“advice” means a proposal for an appropriate course of action."
   ],
   [
     "adviser",
@@ -919,7 +919,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A person who pleads for a cause or propounds an idea.",
-    "The lesson uses “advocate” in a carefully reviewed vocabulary context."
+    "“advocate” means a person who pleads for a cause or propounds an idea."
   ],
   [
     "affair",
@@ -929,7 +929,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A usually secretive or illicit sexual relationship.",
-    "The lesson uses “affair” in a carefully reviewed vocabulary context."
+    "“affair” means a usually secretive or illicit sexual relationship."
   ],
   [
     "affinity",
@@ -959,7 +959,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A business or organization that provides a particular service, especially the mediation of transactions between two parties.",
-    "The lesson uses “agency” in a carefully reviewed vocabulary context."
+    "“agency” means a business or organization that provides a particular service, especially the mediation of transactions between two parties."
   ],
   [
     "agenda",
@@ -969,7 +969,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A list of matters to be taken up (as at a meeting).",
-    "The lesson uses “agenda” in a carefully reviewed vocabulary context."
+    "“agenda” means a list of matters to be taken up (as at a meeting)."
   ],
   [
     "agent",
@@ -979,7 +979,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A representative who acts on behalf of other persons or organizations.",
-    "The lesson uses “agent” in a carefully reviewed vocabulary context."
+    "“agent” means a representative who acts on behalf of other persons or organizations."
   ],
   [
     "agony",
@@ -999,7 +999,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The practice of cultivating the land or raising stock.",
-    "The lesson uses “agriculture” in a carefully reviewed vocabulary context."
+    "“agriculture” means the practice of cultivating the land or raising stock."
   ]
 ]
 

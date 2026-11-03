@@ -17,6 +17,7 @@ export interface Scene {
   photographer: string
   username: string
   photoId: string
+  locationLabel?: string
   objects: SceneObject[]
 }
 const object = (
@@ -247,6 +248,7 @@ export const scenes: Scene[] = [
     photographer: "Alviansyah Kuswidyatama",
     username: "alvianwidyatama",
     photoId: "1693572322416-9ea4b36482ce",
+    locationLabel: "Train station platform",
     objects: [
       object("train", 10, 16, 489, 504, 430, 193),
       object("transportation--platform", 656, 328, 259, 204),
@@ -284,6 +286,11 @@ export default function SceneCanvas({
         loading={interactive ? "eager" : "lazy"}
         className="absolute inset-0 h-full w-full object-cover"
       />
+      {scene.locationLabel && (
+        <span className="absolute left-3 top-3 z-20 rounded-lg bg-card/95 px-3 py-2 text-xs font-semibold text-foreground shadow-sm ring-1 ring-border">
+          Location: {scene.locationLabel}
+        </span>
+      )}
       {interactive &&
         scene.objects
           .filter((item) => item.id === selectedId)

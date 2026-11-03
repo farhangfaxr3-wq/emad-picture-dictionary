@@ -19,7 +19,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An option that is selected automatically unless an alternative is specified.",
-    "The lesson uses “default” in a carefully reviewed vocabulary context."
+    "“default” means an option that is selected automatically unless an alternative is specified."
   ],
   [
     "defeat",
@@ -29,7 +29,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The feeling that accompanies an experience of being thwarted in attaining your goals.",
-    "The lesson uses “defeat” in a carefully reviewed vocabulary context."
+    "“defeat” means the feeling that accompanies an experience of being thwarted in attaining your goals."
   ],
   [
     "defendant",
@@ -39,7 +39,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A person or institution against whom an action is brought in a court of law; the person being sued or accused.",
-    "The lesson uses “defendant” in a carefully reviewed vocabulary context."
+    "“defendant” means a person or institution against whom an action is brought in a court of law; the person being sued or accused."
   ],
   [
     "deficiency",
@@ -69,7 +69,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A concise explanation of the meaning of a word or phrase or symbol.",
-    "The lesson uses “definition” in a carefully reviewed vocabulary context."
+    "“definition” means a concise explanation of the meaning of a word or phrase or symbol."
   ],
   [
     "delegate",
@@ -79,7 +79,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A person appointed or elected to represent others.",
-    "The lesson uses “delegate” in a carefully reviewed vocabulary context."
+    "“delegate” means a person appointed or elected to represent others."
   ],
   [
     "demand",
@@ -99,7 +99,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A political system in which the supreme power lies in a body of citizens who can elect people to represent them.",
-    "The lesson uses “democracy” in a carefully reviewed vocabulary context."
+    "“democracy” means a political system in which the supreme power lies in a body of citizens who can elect people to represent them."
   ],
   [
     "demonstrator",
@@ -109,7 +109,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "Someone who participates in a public display of group feeling.",
-    "The lesson uses “demonstrator” in a carefully reviewed vocabulary context."
+    "“demonstrator” means someone who participates in a public display of group feeling."
   ],
   [
     "denial",
@@ -119,7 +119,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The act of asserting that something alleged is not true.",
-    "The lesson uses “denial” in a carefully reviewed vocabulary context."
+    "“denial” means the act of asserting that something alleged is not true."
   ],
   [
     "density",
@@ -129,7 +129,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The amount per unit size.",
-    "The lesson uses “density” in a carefully reviewed vocabulary context."
+    "“density” means the amount per unit size."
   ],
   [
     "dependence",
@@ -139,7 +139,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Being abnormally tolerant to and dependent on something that is psychologically or physically habit-forming (especially alcohol or narcotic drugs).",
-    "The lesson uses “dependence” in a carefully reviewed vocabulary context."
+    "“dependence” means being abnormally tolerant to and dependent on something that is psychologically or physically habit-forming (especially alcohol or narcotic drugs)."
   ],
   [
     "deposit",
@@ -149,7 +149,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Matter that has been deposited by some natural process.",
-    "The lesson uses “deposit” in a carefully reviewed vocabulary context."
+    "“deposit” means matter that has been deposited by some natural process."
   ],
   [
     "depression",
@@ -159,7 +159,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A sunken or depressed geological formation.",
-    "The lesson uses “depression” in a carefully reviewed vocabulary context."
+    "“depression” means a sunken or depressed geological formation."
   ],
   [
     "deprivation",
@@ -169,7 +169,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A state of extreme poverty.",
-    "The lesson uses “deprivation” in a carefully reviewed vocabulary context."
+    "“deprivation” means a state of extreme poverty."
   ],
   [
     "deputy",
@@ -179,7 +179,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A person appointed to represent or act on behalf of others.",
-    "The lesson uses “deputy” in a carefully reviewed vocabulary context."
+    "“deputy” means a person appointed to represent or act on behalf of others."
   ],
   [
     "descent",
@@ -209,7 +209,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The feeling that accompanies an unsatisfied state.",
-    "The lesson uses “desire” in a carefully reviewed vocabulary context."
+    "“desire” means the feeling that accompanies an unsatisfied state."
   ],
   [
     "despair",
@@ -229,7 +229,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "An event that completely destroys something.",
-    "The lesson uses “destruction” in a carefully reviewed vocabulary context."
+    "“destruction” means an event that completely destroys something."
   ],
   [
     "detail",
@@ -249,7 +249,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A police officer who investigates crimes.",
-    "The lesson uses “detective” in a carefully reviewed vocabulary context."
+    "“detective” means a police officer who investigates crimes."
   ],
   [
     "detector",
@@ -259,7 +259,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Any device that receives a signal or stimulus (as heat or pressure or light or motion etc.) and responds to it in a distinctive manner.",
-    "The lesson uses “detector” in a carefully reviewed vocabulary context."
+    "“detector” means any device that receives a signal or stimulus (as heat or pressure or light or motion etc.) and responds to it in a distinctive manner."
   ],
   [
     "development",
@@ -289,7 +289,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A drawing intended to explain how something works; a drawing showing the relation between the parts.",
-    "The lesson uses “diagram” in a carefully reviewed vocabulary context."
+    "“diagram” means a drawing intended to explain how something works; a drawing showing the relation between the parts."
   ],
   [
     "dialect",
@@ -309,7 +309,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The lines spoken by characters in drama or fiction.",
-    "The lesson uses “dialogue” in a carefully reviewed vocabulary context."
+    "“dialogue” means the lines spoken by characters in drama or fiction."
   ],
   [
     "diameter",
@@ -319,7 +319,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A straight line connecting the center of a circle with two points on its perimeter (or the center of a sphere with two points on its surface).",
-    "The lesson uses “diameter” in a carefully reviewed vocabulary context."
+    "“diameter” means a straight line connecting the center of a circle with two points on its perimeter (or the center of a sphere with two points on its surface)."
   ],
   [
     "diamond",
@@ -329,7 +329,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A transparent piece of diamond that has been cut and polished and is valued as a precious gem.",
-    "The lesson uses “diamond” in a carefully reviewed vocabulary context."
+    "“diamond” means a transparent piece of diamond that has been cut and polished and is valued as a precious gem."
   ],
   [
     "diet",
@@ -339,7 +339,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "The act of restricting your food intake (or your intake of particular foods).",
-    "The lesson uses “diet” in a carefully reviewed vocabulary context."
+    "“diet” means the act of restricting your food intake (or your intake of particular foods)."
   ],
   [
     "difference",
@@ -379,7 +379,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "State of uncertainty or perplexity especially as requiring a choice between equally unfavorable options.",
-    "The lesson uses “dilemma” in a carefully reviewed vocabulary context."
+    "“dilemma” means state of uncertainty or perplexity especially as requiring a choice between equally unfavorable options."
   ],
   [
     "dimension",
@@ -389,7 +389,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The magnitude of something in a particular direction (especially length or width or height).",
-    "The lesson uses “dimension” in a carefully reviewed vocabulary context."
+    "“dimension” means the magnitude of something in a particular direction (especially length or width or height)."
   ],
   [
     "dinner",
@@ -409,7 +409,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An official engaged in international negotiations.",
-    "The lesson uses “diplomat” in a carefully reviewed vocabulary context."
+    "“diplomat” means an official engaged in international negotiations."
   ],
   [
     "direction",
@@ -429,7 +429,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The person who leads a musical group.",
-    "The lesson uses “director” in a carefully reviewed vocabulary context."
+    "“director” means the person who leads a musical group."
   ],
   [
     "directory",
@@ -439,7 +439,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "An alphabetical list of names and addresses.",
-    "The lesson uses “directory” in a carefully reviewed vocabulary context."
+    "“directory” means an alphabetical list of names and addresses."
   ],
   [
     "disability",
@@ -459,7 +459,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "The quality of having an inferior or less favorable position.",
-    "The lesson uses “disadvantage” in a carefully reviewed vocabulary context."
+    "“disadvantage” means the quality of having an inferior or less favorable position."
   ],
   [
     "disappointment",
@@ -499,7 +499,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A public dance hall for dancing to recorded popular music.",
-    "The lesson uses “disco” in a carefully reviewed vocabulary context."
+    "“disco” means a public dance hall for dancing to recorded popular music."
   ],
   [
     "discount",
@@ -509,7 +509,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The act of reducing the selling price of merchandise.",
-    "The lesson uses “discount” in a carefully reviewed vocabulary context."
+    "“discount” means the act of reducing the selling price of merchandise."
   ],
   [
     "discourse",
@@ -519,7 +519,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "An address of a religious nature (usually delivered during a church service).",
-    "The lesson uses “discourse” in a carefully reviewed vocabulary context."
+    "“discourse” means an address of a religious nature (usually delivered during a church service)."
   ],
   [
     "discovery",
@@ -529,7 +529,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A productive insight.",
-    "The lesson uses “discovery” in a carefully reviewed vocabulary context."
+    "“discovery” means a productive insight."
   ],
   [
     "discrimination",
@@ -539,7 +539,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "Unfair treatment of a person or group on the basis of prejudice.",
-    "The lesson uses “discrimination” in a carefully reviewed vocabulary context."
+    "“discrimination” means unfair treatment of a person or group on the basis of prejudice."
   ],
   [
     "disease",
@@ -549,7 +549,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An impairment of health or a condition of abnormal functioning.",
-    "The lesson uses “disease” in a carefully reviewed vocabulary context."
+    "“disease” means an impairment of health or a condition of abnormal functioning."
   ],
   [
     "dish",
@@ -569,7 +569,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A flat circular plate.",
-    "The lesson uses “disk” in a carefully reviewed vocabulary context."
+    "“disk” means a flat circular plate."
   ],
   [
     "dismissal",
@@ -579,7 +579,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Official notice that you have been fired from your job.",
-    "The lesson uses “dismissal” in a carefully reviewed vocabulary context."
+    "“dismissal” means official notice that you have been fired from your job."
   ],
   [
     "disorder",
@@ -619,7 +619,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The property created by the space between two objects or points.",
-    "The lesson uses “distance” in a carefully reviewed vocabulary context."
+    "“distance” means the property created by the space between two objects or points."
   ],
   [
     "distortion",
@@ -629,7 +629,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The mistake of misrepresenting the facts.",
-    "The lesson uses “distortion” in a carefully reviewed vocabulary context."
+    "“distortion” means the mistake of misrepresenting the facts."
   ],
   [
     "distributor",
@@ -649,7 +649,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A region marked off for administrative or other purposes.",
-    "The lesson uses “district” in a carefully reviewed vocabulary context."
+    "“district” means a region marked off for administrative or other purposes."
   ],
   [
     "disturbance",
@@ -669,7 +669,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A bonus; something extra (especially a share of a surplus).",
-    "The lesson uses “dividend” in a carefully reviewed vocabulary context."
+    "“dividend” means a bonus; something extra (especially a share of a surplus)."
   ],
   [
     "division",
@@ -679,7 +679,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An arithmetic operation that is the inverse of multiplication; the quotient of two numbers is computed.",
-    "The lesson uses “division” in a carefully reviewed vocabulary context."
+    "“division” means an arithmetic operation that is the inverse of multiplication; the quotient of two numbers is computed."
   ],
   [
     "divorce",
@@ -689,7 +689,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The legal dissolution of a marriage.",
-    "The lesson uses “divorce” in a carefully reviewed vocabulary context."
+    "“divorce” means the legal dissolution of a marriage."
   ],
   [
     "doll",
@@ -699,7 +699,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A small replica of a person; used as a toy.",
-    "The lesson uses “doll” in a carefully reviewed vocabulary context."
+    "“doll” means a small replica of a person; used as a toy."
   ],
   [
     "dollar",
@@ -709,7 +709,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A piece of paper money worth one dollar.",
-    "The lesson uses “dollar” in a carefully reviewed vocabulary context."
+    "“dollar” means a piece of paper money worth one dollar."
   ],
   [
     "dome",
@@ -719,7 +719,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A hemispherical roof.",
-    "The lesson uses “dome” in a carefully reviewed vocabulary context."
+    "“dome” means a hemispherical roof."
   ],
   [
     "domination",
@@ -739,7 +739,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "(medicine) someone who gives blood or tissue or an organ to be used in another person (the host).",
-    "The lesson uses “donor” in a carefully reviewed vocabulary context."
+    "“donor” means (medicine) someone who gives blood or tissue or an organ to be used in another person (the host)."
   ],
   [
     "dose",
@@ -749,7 +749,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A measured portion of medicine taken at any one time.",
-    "The lesson uses “dose” in a carefully reviewed vocabulary context."
+    "“dose” means a measured portion of medicine taken at any one time."
   ],
   [
     "double",
@@ -779,7 +779,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A flour mixture stiff enough to knead or roll.",
-    "The lesson uses “dough” in a carefully reviewed vocabulary context."
+    "“dough” means a flour mixture stiff enough to knead or roll."
   ],
   [
     "dozen",
@@ -789,7 +789,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The cardinal number that is the sum of eleven and one.",
-    "The lesson uses “dozen” in a carefully reviewed vocabulary context."
+    "“dozen” means the cardinal number that is the sum of eleven and one."
   ],
   [
     "draft",
@@ -799,7 +799,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Compulsory military service.",
-    "The lesson uses “draft” in a carefully reviewed vocabulary context."
+    "“draft” means compulsory military service."
   ],
   [
     "dragon",
@@ -809,7 +809,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A creature of Teutonic mythology; usually represented as breathing fire and having a reptilian body and sometimes wings.",
-    "The lesson uses “dragon” in a carefully reviewed vocabulary context."
+    "“dragon” means a creature of Teutonic mythology; usually represented as breathing fire and having a reptilian body and sometimes wings."
   ],
   [
     "drain",
@@ -819,7 +819,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A pipe through which liquid is carried away.",
-    "The lesson uses “drain” in a carefully reviewed vocabulary context."
+    "“drain” means a pipe through which liquid is carried away."
   ],
   [
     "drawer",
@@ -829,7 +829,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A boxlike container in a piece of furniture; made so as to slide in and out.",
-    "The lesson uses “drawer” in a carefully reviewed vocabulary context."
+    "“drawer” means a boxlike container in a piece of furniture; made so as to slide in and out."
   ],
   [
     "dream",
@@ -849,7 +849,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A cloth covering for a wound or sore.",
-    "The lesson uses “dressing” in a carefully reviewed vocabulary context."
+    "“dressing” means a cloth covering for a wound or sore."
   ],
   [
     "drift",
@@ -859,7 +859,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A large mass of material that is heaped up by the wind or by water currents.",
-    "The lesson uses “drift” in a carefully reviewed vocabulary context."
+    "“drift” means a large mass of material that is heaped up by the wind or by water currents."
   ],
   [
     "drink",
@@ -899,7 +899,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A substance that is used as a medicine or narcotic.",
-    "The lesson uses “drug” in a carefully reviewed vocabulary context."
+    "“drug” means a substance that is used as a medicine or narcotic."
   ],
   [
     "drum",
@@ -909,7 +909,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A musical percussion instrument; usually consists of a hollow cylinder with a membrane stretched across each end.",
-    "The lesson uses “drum” in a carefully reviewed vocabulary context."
+    "“drum” means a musical percussion instrument; usually consists of a hollow cylinder with a membrane stretched across each end."
   ],
   [
     "duke",
@@ -919,7 +919,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A nobleman (in various countries) of high rank.",
-    "The lesson uses “duke” in a carefully reviewed vocabulary context."
+    "“duke” means a nobleman (in various countries) of high rank."
   ],
   [
     "duration",
@@ -929,7 +929,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The period of time during which something continues.",
-    "The lesson uses “duration” in a carefully reviewed vocabulary context."
+    "“duration” means the period of time during which something continues."
   ],
   [
     "dust",
@@ -959,7 +959,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Shaking and vibration at the surface of the earth resulting from underground movement along a fault plane or from volcanic activity.",
-    "The lesson uses “earthquake” in a carefully reviewed vocabulary context."
+    "“earthquake” means shaking and vibration at the surface of the earth resulting from underground movement along a fault plane or from volcanic activity."
   ],
   [
     "east",
@@ -969,7 +969,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "The cardinal compass point that is at 90 degrees.",
-    "The lesson uses “east” in a carefully reviewed vocabulary context."
+    "“east” means the cardinal compass point that is at 90 degrees."
   ],
   [
     "echo",
@@ -989,7 +989,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The branch of social science that deals with the production and distribution and consumption of goods and services and their management.",
-    "The lesson uses “economics” in a carefully reviewed vocabulary context."
+    "“economics” means the branch of social science that deals with the production and distribution and consumption of goods and services and their management."
   ],
   [
     "economist",
@@ -999,7 +999,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "An expert in the science of economics.",
-    "The lesson uses “economist” in a carefully reviewed vocabulary context."
+    "“economist” means an expert in the science of economics."
   ]
 ]
 

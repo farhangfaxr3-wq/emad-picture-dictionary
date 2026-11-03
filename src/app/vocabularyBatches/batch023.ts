@@ -19,7 +19,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A single organism.",
-    "The lesson uses “individual” in a carefully reviewed vocabulary context."
+    "“individual” means a single organism."
   ],
   [
     "industry",
@@ -59,7 +59,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A message received and understood.",
-    "The lesson uses “information” in a carefully reviewed vocabulary context."
+    "“information” means a message received and understood."
   ],
   [
     "infrastructure",
@@ -69,7 +69,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "The basic structure or features of a system or organization.",
-    "The lesson uses “infrastructure” in a carefully reviewed vocabulary context."
+    "“infrastructure” means the basic structure or features of a system or organization."
   ],
   [
     "ingredient",
@@ -79,7 +79,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A component of a mixture or compound.",
-    "The lesson uses “ingredient” in a carefully reviewed vocabulary context."
+    "“ingredient” means a component of a mixture or compound."
   ],
   [
     "inhabitant",
@@ -89,7 +89,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A person who inhabits a particular place.",
-    "The lesson uses “inhabitant” in a carefully reviewed vocabulary context."
+    "“inhabitant” means a person who inhabits a particular place."
   ],
   [
     "inhibition",
@@ -99,7 +99,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "(psychology) the conscious exclusion of unacceptable thoughts or desires.",
-    "The lesson uses “inhibition” in a carefully reviewed vocabulary context."
+    "“inhibition” means (psychology) the conscious exclusion of unacceptable thoughts or desires."
   ],
   [
     "initial",
@@ -119,7 +119,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The first of a series of actions.",
-    "The lesson uses “initiative” in a carefully reviewed vocabulary context."
+    "“initiative” means the first of a series of actions."
   ],
   [
     "injection",
@@ -129,7 +129,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The forceful insertion of a substance under pressure.",
-    "The lesson uses “injection” in a carefully reviewed vocabulary context."
+    "“injection” means the forceful insertion of a substance under pressure."
   ],
   [
     "inn",
@@ -139,7 +139,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A hotel providing overnight lodging for travelers.",
-    "The lesson uses “inn” in a carefully reviewed vocabulary context."
+    "“inn” means a hotel providing overnight lodging for travelers."
   ],
   [
     "innovation",
@@ -149,7 +149,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A creation (a new device or process) resulting from study and experimentation.",
-    "The lesson uses “innovation” in a carefully reviewed vocabulary context."
+    "“innovation” means a creation (a new device or process) resulting from study and experimentation."
   ],
   [
     "inquest",
@@ -159,7 +159,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An inquiry into the cause of an unexpected death.",
-    "The lesson uses “inquest” in a carefully reviewed vocabulary context."
+    "“inquest” means an inquiry into the cause of an unexpected death."
   ],
   [
     "insect",
@@ -169,7 +169,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Small air-breathing arthropod.",
-    "The lesson uses “insect” in a carefully reviewed vocabulary context."
+    "“insect” means small air-breathing arthropod."
   ],
   [
     "inside",
@@ -179,7 +179,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "The region that is inside of something.",
-    "The lesson uses “inside” in a carefully reviewed vocabulary context."
+    "“inside” means the region that is inside of something."
   ],
   [
     "insider",
@@ -189,7 +189,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "An officer of a corporation or others who have access to private information about the corporation's operations.",
-    "The lesson uses “insider” in a carefully reviewed vocabulary context."
+    "“insider” means an officer of a corporation or others who have access to private information about the corporation's operations."
   ],
   [
     "insight",
@@ -199,7 +199,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The clear (and often sudden) understanding of a complex situation.",
-    "The lesson uses “insight” in a carefully reviewed vocabulary context."
+    "“insight” means the clear (and often sudden) understanding of a complex situation."
   ],
   [
     "insistence",
@@ -229,7 +229,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A sudden intuition as part of solving a problem.",
-    "The lesson uses “inspiration” in a carefully reviewed vocabulary context."
+    "“inspiration” means a sudden intuition as part of solving a problem."
   ],
   [
     "instinct",
@@ -249,7 +249,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A hospital for mentally incompetent or unbalanced person.",
-    "The lesson uses “institution” in a carefully reviewed vocabulary context."
+    "“institution” means a hospital for mentally incompetent or unbalanced person."
   ],
   [
     "instrument",
@@ -259,7 +259,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A device that requires skill for proper use.",
-    "The lesson uses “instrument” in a carefully reviewed vocabulary context."
+    "“instrument” means a device that requires skill for proper use."
   ],
   [
     "insurance",
@@ -269,7 +269,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Protection against future loss.",
-    "The lesson uses “insurance” in a carefully reviewed vocabulary context."
+    "“insurance” means protection against future loss."
   ],
   [
     "integration",
@@ -279,7 +279,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The action of incorporating a racial or religious group into a community.",
-    "The lesson uses “integration” in a carefully reviewed vocabulary context."
+    "“integration” means the action of incorporating a racial or religious group into a community."
   ],
   [
     "integrity",
@@ -299,7 +299,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "The ability to comprehend; to understand and profit from experience.",
-    "The lesson uses “intelligence” in a carefully reviewed vocabulary context."
+    "“intelligence” means the ability to comprehend; to understand and profit from experience."
   ],
   [
     "intention",
@@ -319,7 +319,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A mutual or reciprocal action; interacting.",
-    "The lesson uses “interaction” in a carefully reviewed vocabulary context."
+    "“interaction” means a mutual or reciprocal action; interacting."
   ],
   [
     "interest",
@@ -339,7 +339,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "(computer science) a program that controls a display for the user (usually on a computer monitor) and that allows the user to interact with the system.",
-    "The lesson uses “interface” in a carefully reviewed vocabulary context."
+    "“interface” means (computer science) a program that controls a display for the user (usually on a computer monitor) and that allows the user to interact with the system."
   ],
   [
     "interference",
@@ -349,7 +349,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "Any obstruction that impedes or is burdensome.",
-    "The lesson uses “interference” in a carefully reviewed vocabulary context."
+    "“interference” means any obstruction that impedes or is burdensome."
   ],
   [
     "intervention",
@@ -359,7 +359,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "A policy of intervening in the affairs of other countries.",
-    "The lesson uses “intervention” in a carefully reviewed vocabulary context."
+    "“intervention” means a policy of intervening in the affairs of other countries."
   ],
   [
     "invasion",
@@ -389,7 +389,7 @@ const entries: BatchEntry[] = [
     "noun",
     "C1",
     "Someone who investigates.",
-    "The lesson uses “investigator” in a carefully reviewed vocabulary context."
+    "“investigator” means someone who investigates."
   ],
   [
     "investment",
@@ -399,7 +399,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "Money that is invested with an expectation of profit.",
-    "The lesson uses “investment” in a carefully reviewed vocabulary context."
+    "“investment” means money that is invested with an expectation of profit."
   ],
   [
     "iron",
@@ -409,7 +409,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A heavy ductile magnetic metallic element; is silver-white in pure form but readily rusts; used in construction and tools and armament; plays a role in the transport of oxygen by the blood.",
-    "The lesson uses “iron” in a carefully reviewed vocabulary context."
+    "“iron” means a heavy ductile magnetic metallic element; is silver-white in pure form but readily rusts; used in construction and tools and armament; plays a role in the transport of oxygen by the blood."
   ],
   [
     "irony",
@@ -429,7 +429,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A state of separation between persons or groups.",
-    "The lesson uses “isolation” in a carefully reviewed vocabulary context."
+    "“isolation” means a state of separation between persons or groups."
   ],
   [
     "issue",
@@ -459,7 +459,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A hard smooth ivory colored dentine that makes up most of the tusks of elephants and walruses.",
-    "The lesson uses “ivory” in a carefully reviewed vocabulary context."
+    "“ivory” means a hard smooth ivory colored dentine that makes up most of the tusks of elephants and walruses."
   ],
   [
     "jam",
@@ -469,7 +469,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Preserve of crushed fruit.",
-    "The lesson uses “jam” in a carefully reviewed vocabulary context."
+    "“jam” means preserve of crushed fruit."
   ],
   [
     "jar",
@@ -479,7 +479,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A cylindrical vessel, typically used for storing food.",
-    "The lesson uses “jar” in a carefully reviewed vocabulary context."
+    "“jar” means a cylindrical vessel, typically used for storing food."
   ],
   [
     "jaw",
@@ -489,7 +489,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "The part of the skull of a vertebrate that frames the mouth and holds the teeth.",
-    "The lesson uses “jaw” in a carefully reviewed vocabulary context."
+    "“jaw” means the part of the skull of a vertebrate that frames the mouth and holds the teeth."
   ],
   [
     "jazz",
@@ -499,7 +499,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A genre of popular music that originated in New Orleans around 1900 and developed through increasingly complex styles.",
-    "The lesson uses “jazz” in a carefully reviewed vocabulary context."
+    "“jazz” means a genre of popular music that originated in New Orleans around 1900 and developed through increasingly complex styles."
   ],
   [
     "jelly",
@@ -509,7 +509,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Any substance having the consistency of jelly or gelatin.",
-    "The lesson uses “jelly” in a carefully reviewed vocabulary context."
+    "“jelly” means any substance having the consistency of jelly or gelatin."
   ],
   [
     "jet",
@@ -519,7 +519,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "The occurrence of a sudden discharge (as of liquid).",
-    "The lesson uses “jet” in a carefully reviewed vocabulary context."
+    "“jet” means the occurrence of a sudden discharge (as of liquid)."
   ],
   [
     "jewel",
@@ -529,7 +529,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A precious or semiprecious stone incorporated into a piece of jewelry.",
-    "The lesson uses “jewel” in a carefully reviewed vocabulary context."
+    "“jewel” means a precious or semiprecious stone incorporated into a piece of jewelry."
   ],
   [
     "job",
@@ -549,7 +549,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Someone employed to ride horses in horse races.",
-    "The lesson uses “jockey” in a carefully reviewed vocabulary context."
+    "“jockey” means someone employed to ride horses in horse races."
   ],
   [
     "joke",
@@ -579,7 +579,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "The emotion of great happiness.",
-    "The lesson uses “joy” in a carefully reviewed vocabulary context."
+    "“joy” means the emotion of great happiness."
   ],
   [
     "judge",
@@ -589,7 +589,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A public official authorized to decide questions brought before a court of justice.",
-    "The lesson uses “judge” in a carefully reviewed vocabulary context."
+    "“judge” means a public official authorized to decide questions brought before a court of justice."
   ],
   [
     "judgment",
@@ -599,7 +599,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "(law) the determination by a court of competent jurisdiction on matters submitted to it.",
-    "The lesson uses “judgment” in a carefully reviewed vocabulary context."
+    "“judgment” means (law) the determination by a court of competent jurisdiction on matters submitted to it."
   ],
   [
     "jump",
@@ -619,7 +619,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The place where two or more things come together.",
-    "The lesson uses “junction” in a carefully reviewed vocabulary context."
+    "“junction” means the place where two or more things come together."
   ],
   [
     "jurisdiction",
@@ -639,7 +639,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A body of citizens sworn to give a true verdict according to the evidence presented in a court of law.",
-    "The lesson uses “jury” in a carefully reviewed vocabulary context."
+    "“jury” means a body of citizens sworn to give a true verdict according to the evidence presented in a court of law."
   ],
   [
     "justice",
@@ -649,7 +649,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "The quality of being just or fair.",
-    "The lesson uses “justice” in a carefully reviewed vocabulary context."
+    "“justice” means the quality of being just or fair."
   ],
   [
     "justification",
@@ -669,7 +669,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Metal device shaped in such a way that when it is inserted into the appropriate lock the lock's mechanism can be rotated.",
-    "The lesson uses “key” in a carefully reviewed vocabulary context."
+    "“key” means metal device shaped in such a way that when it is inserted into the appropriate lock the lock's mechanism can be rotated."
   ],
   [
     "kick",
@@ -699,7 +699,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "(chess) the weakest but the most important piece.",
-    "The lesson uses “king” in a carefully reviewed vocabulary context."
+    "“king” means (chess) the weakest but the most important piece."
   ],
   [
     "kingdom",
@@ -709,7 +709,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A monarchy with a king or queen as head of state.",
-    "The lesson uses “kingdom” in a carefully reviewed vocabulary context."
+    "“kingdom” means a monarchy with a king or queen as head of state."
   ],
   [
     "kinship",
@@ -719,7 +719,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "(anthropology) relatedness or connection by blood or marriage or adoption.",
-    "The lesson uses “kinship” in a carefully reviewed vocabulary context."
+    "“kinship” means (anthropology) relatedness or connection by blood or marriage or adoption."
   ],
   [
     "kit",
@@ -729,7 +729,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Gear consisting of a set of articles or tools for a specified purpose.",
-    "The lesson uses “kit” in a carefully reviewed vocabulary context."
+    "“kit” means gear consisting of a set of articles or tools for a specified purpose."
   ],
   [
     "kite",
@@ -739,7 +739,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Plaything consisting of a light frame covered with tissue paper; flown in wind at end of a string.",
-    "The lesson uses “kite” in a carefully reviewed vocabulary context."
+    "“kite” means plaything consisting of a light frame covered with tissue paper; flown in wind at end of a string."
   ],
   [
     "knife",
@@ -749,7 +749,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "Edge tool used as a cutting instrument; has a pointed blade with a sharp edge and a handle.",
-    "The lesson uses “knife” in a carefully reviewed vocabulary context."
+    "“knife” means edge tool used as a cutting instrument; has a pointed blade with a sharp edge and a handle."
   ],
   [
     "knot",
@@ -759,7 +759,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "Any of various fastenings formed by looping and tying a rope (or cord) upon itself or to another rope or to another object.",
-    "The lesson uses “knot” in a carefully reviewed vocabulary context."
+    "“knot” means any of various fastenings formed by looping and tying a rope (or cord) upon itself or to another rope or to another object."
   ],
   [
     "knowledge",
@@ -769,7 +769,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "The psychological result of perception and learning and reasoning.",
-    "The lesson uses “knowledge” in a carefully reviewed vocabulary context."
+    "“knowledge” means the psychological result of perception and learning and reasoning."
   ],
   [
     "label",
@@ -779,7 +779,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "An identifying or descriptive marker that is attached to an object.",
-    "The lesson uses “label” in a carefully reviewed vocabulary context."
+    "“label” means an identifying or descriptive marker that is attached to an object."
   ],
   [
     "labour",
@@ -799,7 +799,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Someone who works with their hands; someone engaged in manual labor.",
-    "The lesson uses “labourer” in a carefully reviewed vocabulary context."
+    "“labourer” means someone who works with their hands; someone engaged in manual labor."
   ],
   [
     "lace",
@@ -809,7 +809,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A delicate decorative fabric woven in an open web of symmetrical patterns.",
-    "The lesson uses “lace” in a carefully reviewed vocabulary context."
+    "“lace” means a delicate decorative fabric woven in an open web of symmetrical patterns."
   ],
   [
     "lack",
@@ -849,7 +849,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A landowner who leases to others.",
-    "The lesson uses “landlord” in a carefully reviewed vocabulary context."
+    "“landlord” means a landowner who leases to others."
   ],
   [
     "landowner",
@@ -859,7 +859,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "A holder or proprietor of land.",
-    "The lesson uses “landowner” in a carefully reviewed vocabulary context."
+    "“landowner” means a holder or proprietor of land."
   ],
   [
     "landscape",
@@ -869,7 +869,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B2",
     "An expanse of scenery that can be seen in a single view.",
-    "The lesson uses “landscape” in a carefully reviewed vocabulary context."
+    "“landscape” means an expanse of scenery that can be seen in a single view."
   ],
   [
     "lane",
@@ -879,7 +879,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A narrow way or road.",
-    "The lesson uses “lane” in a carefully reviewed vocabulary context."
+    "“lane” means a narrow way or road."
   ],
   [
     "language",
@@ -909,7 +909,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "An acronym for light amplification by stimulated emission of radiation; an optical device that produces an intense monochromatic beam of coherent light.",
-    "The lesson uses “laser” in a carefully reviewed vocabulary context."
+    "“laser” means an acronym for light amplification by stimulated emission of radiation; an optical device that produces an intense monochromatic beam of coherent light."
   ],
   [
     "laundry",
@@ -919,7 +919,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "Garments or white goods that can be cleaned by laundering.",
-    "The lesson uses “laundry” in a carefully reviewed vocabulary context."
+    "“laundry” means garments or white goods that can be cleaned by laundering."
   ],
   [
     "law",
@@ -929,7 +929,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A rule or body of rules of conduct inherent in human nature and essential to or binding upon human society.",
-    "The lesson uses “law” in a carefully reviewed vocabulary context."
+    "“law” means a rule or body of rules of conduct inherent in human nature and essential to or binding upon human society."
   ],
   [
     "lawn",
@@ -939,7 +939,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A1",
     "A field of cultivated and mowed grass.",
-    "The lesson uses “lawn” in a carefully reviewed vocabulary context."
+    "“lawn” means a field of cultivated and mowed grass."
   ],
   [
     "layer",
@@ -949,7 +949,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A relatively thin sheetlike expanse or region lying over or under another.",
-    "The lesson uses “layer” in a carefully reviewed vocabulary context."
+    "“layer” means a relatively thin sheetlike expanse or region lying over or under another."
   ],
   [
     "layout",
@@ -959,7 +959,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A plan or design of something that is laid out.",
-    "The lesson uses “layout” in a carefully reviewed vocabulary context."
+    "“layout” means a plan or design of something that is laid out."
   ],
   [
     "lead",
@@ -979,7 +979,7 @@ const entries: BatchEntry[] = [
     "noun",
     "B1",
     "A small book usually having a paper cover.",
-    "The lesson uses “leaflet” in a carefully reviewed vocabulary context."
+    "“leaflet” means a small book usually having a paper cover."
   ],
   [
     "lease",
@@ -989,7 +989,7 @@ const entries: BatchEntry[] = [
     "noun",
     "A2",
     "A contract granting use or occupation of property during a specified time for a specified payment.",
-    "The lesson uses “lease” in a carefully reviewed vocabulary context."
+    "“lease” means a contract granting use or occupation of property during a specified time for a specified payment."
   ],
   [
     "leave",

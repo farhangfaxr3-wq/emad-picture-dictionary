@@ -3,6 +3,10 @@
   "name": "emad-picture-dictionary",
   "main": "worker/index.js",
   "compatibility_date": "2026-10-14",
+  "cache": {
+    "enabled": false,
+    "cross_version_cache": false
+  },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-03T00:42:04.600Z",
+  "generatedAt": "2026-11-03T03:37:22.911Z",
   "totalWords": 4000,
   "provisional": 4000,
   "duplicateSurfaceForms": 116,
   "duplicateRecords": 254,
-  "missingIpa": 1415,
+  "missingIpa": 0,
   "genericExamples": 0,
   "topicMismatchCandidates": 0,
   "definitionWordMismatchCandidates": 0,
@@ -315,33 +315,7 @@
         ]
       }
     ],
-    "missingIpa": [
-      "food--pear",
-      "food--peach",
-      "food--plum",
-      "food--mango",
-      "food--pineapple",
-      "food--cucumber",
-      "food--lettuce",
-      "food--broccoli",
-      "food--spinach",
-      "food--beef",
-      "food--lamb",
-      "food--turkey",
-      "food--pork",
-      "food--salmon",
-      "food--tuna",
-      "food--shrimp",
-      "food--yogurt",
-      "food--butter",
-      "food--cream",
-      "food--cottage-cheese",
-      "food--ice-cream",
-      "food--lemonade",
-      "food--smoothie",
-      "food--hot-chocolate",
-      "food--sparkling-water"
-    ],
+    "missingIpa": [],
     "repeatedDefinitions": []
   },
   "notes": [

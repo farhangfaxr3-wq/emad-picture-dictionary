@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-11-03T03:37:17.591Z",
+  "totalVocabulary": 4000,
+  "missingBefore": 1415,
+  "newMatches": 1354,
+  "totalOverrides": 1354,
+  "unresolvedRecords": 0,
+  "sourceCounts": {
+    "openEnglishWordNet": 569,
+    "ipaDictCmu": 572,
+    "curatedExceptions": 18,
+    "composedFromIpaDictWords": 195
+  },
+  "sources": [
+    {
+      "name": "Open English WordNet 2025",
+      "url": "https://en-word.net/static/english-wordnet-2025.xml.gz",
+      "license": "CC BY 4.0"
+    },
+    {
+      "name": "ipa-dict English (General American), derived from CMUdict",
+      "url": "https://github.com/open-dict-data/ipa-dict/blob/master/data/en_US.txt",
+      "license": "MIT-derived data; CMUdict origin acknowledged"
+    },
+    {
+      "name": "Wiktionary and source-backed component composition",
+      "url": "https://en.wiktionary.org/wiki/hoodie",
+      "license": "CC BY-SA 4.0",
+      "scope": "Eighteen explicitly listed learner terms absent from the source files"
+    }
+  ],
+  "unresolved": [],
+  "note": "Direct entries use exact spelling matches. Multiword expressions are composed only when every written component has a source pronunciation. Unresolved entries stay explicitly marked for review rather than receiving a guessed transcription."
+}

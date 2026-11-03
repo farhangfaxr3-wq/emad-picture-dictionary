@@ -1,5 +1,6 @@
 import type { CEFRLevel } from "../cefr"
 import type { Word } from "../content"
+import { resolvePronunciation } from "../pronunciation"
 
 export type BatchEntry = readonly [
   word: string,
@@ -32,7 +33,7 @@ export function createVocabularyBatch({
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "")}`,
       word,
-      pronunciation,
+      pronunciation: resolvePronunciation(word, partOfSpeech, pronunciation),
       topic,
       group,
       definition,

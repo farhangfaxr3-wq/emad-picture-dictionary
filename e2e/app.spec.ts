@@ -98,6 +98,23 @@ test("home search and dictionary search show deduplicated learner results", asyn
   ).toHaveCount(1)
 })
 
+test("dictionary labels contextual visuals without treating them as answer clues", async ({
+  page,
+}) => {
+  await page.goto("/dictionary?q=tuna&images=all")
+  const contextualImage = page.locator(
+    'img[data-vocabulary-word="tuna"][data-image-status="contextual"]',
+  )
+  await expect(contextualImage).toBeVisible()
+  await expect(contextualImage).toHaveAttribute(
+    "data-image-quality",
+    /contextual|related/,
+  )
+  await expect(
+    page.getByText(/Context image · Not used as an image-answer clue/i).first(),
+  ).toBeVisible()
+})
+
 test("every category practice, writing, flashcard and game mode opens", async ({
   page,
 }) => {

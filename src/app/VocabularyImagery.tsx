@@ -10,6 +10,8 @@ import { getWordVisual } from "./visualAssets"
 
 import library from "./vocabularyPhotos.json"
 
+import contextRepresentatives from "./vocabularyContextRepresentatives.json"
+
 export interface VocabularyImage {
   src: string
 
@@ -25,20 +27,29 @@ export interface VocabularyImage {
 
   filename?: string
 
-  kind: string
+  kind: "object" | "scene-object" | "context"
+
+  contextLabel?: string
 }
 
-const photographs: Record<string, VocabularyImage> = library
+const photographs = library as Record<string, VocabularyImage>
 
-export function getVerifiedVocabularyPhoto(
-  word: Pick<Word, "word" | "topic" | "sourceTopic">,
-): VocabularyImage | undefined {
-  const photograph =
+const representatives: Record<string, string> = contextRepresentatives
+
+function libraryPhotograph(word: Pick<Word, "word" | "topic" | "sourceTopic">) {
+  return (
     photographs[`${word.topic}|${word.word}`] ||
     (word.sourceTopic
       ? photographs[`${word.sourceTopic}|${word.word}`]
       : undefined) ||
     photographs[word.word]
+  )
+}
+
+export function getVerifiedVocabularyPhoto(
+  word: Pick<Word, "word" | "topic" | "sourceTopic">,
+): VocabularyImage | undefined {
+  const photograph = libraryPhotograph(word)
 
   return photograph?.kind === "context" ? undefined : photograph
 }
@@ -75,6 +86,16 @@ export function hasVerifiedVocabularyImage(
   return Boolean(getVerifiedVocabularyImage(word))
 }
 
+export type VocabularyImageQuality = "exact" | "related" | "contextual"
+
+export interface VocabularyImageMatch {
+  image: VocabularyImage
+  quality: VocabularyImageQuality
+  practiceEligible: boolean
+  contextScope?: "word" | "group" | "topic"
+  representativeWord?: string
+}
+
 export function contextPhotograph(word: Word): VocabularyImage {
   const category =
     categoryImages.find((image) => image.category === word.topic) ||
@@ -98,11 +119,66 @@ export function contextPhotograph(word: Word): VocabularyImage {
     description: category.alt,
 
     kind: "context",
+
+    contextLabel: `${word.topic} topic context`,
+  }
+}
+
+export function getVocabularyImageMatch(word: Word): VocabularyImageMatch {
+  const exact = getVerifiedVocabularyImage(word)
+  if (exact) {
+    return { image: exact, quality: "exact", practiceEligible: true }
+  }
+
+  const curatedContext = libraryPhotograph(word)
+  if (curatedContext?.kind === "context") {
+    return {
+      image: {
+        ...curatedContext,
+        contextLabel: `Related real-life context for ${word.word}`,
+      },
+      quality: "related",
+      practiceEligible: false,
+      contextScope: "word",
+    }
+  }
+
+  const representativeWord = representatives[`${word.topic}|${word.group}`]
+  if (
+    representativeWord &&
+    representativeWord.toLowerCase() !== word.word.toLowerCase()
+  ) {
+    const representative = getVerifiedVocabularyImage({
+      word: representativeWord,
+      topic: word.topic,
+      sourceTopic: word.sourceTopic,
+    })
+
+    if (representative) {
+      return {
+        image: {
+          ...representative,
+          kind: "context",
+          contextLabel: `${word.group} context: ${representativeWord}`,
+        },
+        quality: "contextual",
+        practiceEligible: false,
+        contextScope: "group",
+        representativeWord,
+      }
+    }
+  }
+
+  return {
+    image: contextPhotograph(word),
+    quality: "contextual",
+    practiceEligible: false,
+    contextScope: "topic",
   }
 }
 
 export function getVocabularyPhoto(word: Word): VocabularyImage {
-  return getVerifiedVocabularyImage(word) || contextPhotograph(word)
+  return getVocabularyImageMatch(word).image
 }
 
 export function visualVocabulary(words: Word[]): Word[] {
@@ -134,13 +210,15 @@ export function VocabularyPhoto({
 }) {
   const [failed, setFailed] = useState(false)
 
-  const image = failed ? undefined : getVerifiedVocabularyImage(word)
+  const match = failed ? undefined : getVocabularyImageMatch(word)
+
+  const image = match?.image
 
   if (!image)
     return (
       <div
         role="img"
-        aria-label={`No verified image is available for ${word.word}`}
+        aria-label={`The learning image for ${word.word} could not be loaded`}
         className={`relative flex items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-[linear-gradient(145deg,var(--secondary),var(--background))] px-5 py-6 text-center ${className}`}
       >
         <span className="absolute -right-6 -top-8 h-24 w-24 rounded-full border-[16px] border-primary/5" />
@@ -156,7 +234,7 @@ export function VocabularyPhoto({
             {word.topic}
           </span>
           <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
-            <ImageOff aria-hidden="true" size={13} /> Verified photo pending
+            <ImageOff aria-hidden="true" size={13} /> Image unavailable
           </span>
         </div>
       </div>
@@ -166,14 +244,18 @@ export function VocabularyPhoto({
     <img
       src={image.src}
       alt={
-        image.kind === "context"
-          ? `Real-life ${word.topic.toLowerCase()} setting illustrating ${word.word}`
-          : `Photograph illustrating ${word.word}`
+        match.quality === "exact"
+          ? `Photograph illustrating ${word.word}`
+          : match.contextScope === "word"
+            ? `Related real-life context for ${word.word}`
+            : match.contextScope === "group"
+              ? `Context for ${word.group}`
+              : `Context for the ${word.topic} topic`
       }
       title={`${image.author} · ${image.license}. ${
-        image.kind === "context"
-          ? "Context photograph"
-          : "Vocabulary photograph"
+        match.quality === "exact"
+          ? "Checked word-specific photograph"
+          : "Context photograph; not used as an image-answer clue"
       }. Open word details for source and license.`}
       width={600}
       height={450}
@@ -188,22 +270,20 @@ export function VocabularyPhoto({
 }
 
 export function VocabularyPhotoCredit({ word }: { word: Word }) {
-  const image = getVerifiedVocabularyImage(word)
+  const match = getVocabularyImageMatch(word)
 
-  if (!image)
-    return (
-      <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
-        No verified image is shown for this word. Use its definition, example,
-        pronunciation, and learning activities instead.
-      </div>
-    )
+  const image = match.image
 
   return (
     <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
       <p>
-        {image.kind === "context"
-          ? `Context photograph · ${word.topic}. Use the definition and example to understand this word.`
-          : `Real-life vocabulary photograph · ${word.word}`}
+        {match.quality === "exact"
+          ? `Checked word-specific photograph · ${word.word}`
+          : match.contextScope === "word"
+            ? `Related real-life photograph · ${word.word}. This contextual image is not used as an image-answer clue.`
+            : match.contextScope === "group"
+              ? `Learning-group context · ${word.group}. Representative image: ${match.representativeWord}. This image is not used as an answer clue.`
+              : `Topic context · ${word.topic}. This image supports the topic but does not claim to depict ${word.word} exactly.`}
       </p>
       <p className="mt-1 break-words">
         Photo: {image.author} ·{" "}
@@ -255,8 +335,10 @@ export function VocabularyPhotographyCredits() {
         Vocabulary photographs come from Wikimedia Commons and Unsplash, with
         individual licenses and creator attribution. Scene object photographs
         are crops from their credited environment. When an accurate image is
-        unavailable, no substitute photograph is shown. Each displayed image
-        includes its source and license.
+        unavailable, a clearly labeled related, learning-group, or topic context
+        may be shown. Context images are never used as answer clues in
+        image-dependent practice. Each displayed image includes its source and
+        license.
       </p>
       <label
         className="mt-4 block text-xs font-medium"

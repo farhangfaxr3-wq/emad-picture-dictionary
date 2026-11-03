@@ -213,6 +213,8 @@ function Illustration({
       key={item?.id || word}
       word={item?.word || word}
       topic={item?.topic}
+      group={item?.group}
+      sourceTopic={item?.sourceTopic}
       className={className}
       altText={altText}
     />
@@ -2088,7 +2090,7 @@ function WordCard({ word, compact = false }: WordCardProps) {
             </span>
             {getVocabularyPhoto(word).kind === "context" && (
               <p className="mt-2 text-[10px] text-muted-foreground">
-                No verified image yet · Learn from the meaning and example.
+                Context image · Not used as an image-answer clue.
               </p>
             )}
             <p className="mt-2 text-xs leading-5 text-muted-foreground">
@@ -4120,7 +4122,7 @@ function DictionaryPage() {
       <PageHeading
         eyebrow="Your visual vocabulary"
         title="Real words. Pictures you can trust."
-        description={`${verifiedCount} entries have a checked word-specific photograph. ${vocabulary.length - verifiedCount} entries are shown without a substitute image while an accurate photograph is reviewed.`}
+        description={`${verifiedCount} entries have a checked word-specific photograph. ${vocabulary.length - verifiedCount} entries use clearly labeled related, learning-group, or topic context while an exact image is reviewed; context images are excluded from image-answer questions.`}
       />
       <div className={`${card} mb-6 p-5`}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -4130,7 +4132,7 @@ function DictionaryPage() {
 
               { id: "all", label: "All vocabulary" },
 
-              { id: "pending", label: "Images awaiting review" },
+              { id: "pending", label: "Context images" },
             ].map((item) => (
               <button
                 key={item.id}
@@ -7335,6 +7337,56 @@ function AboutPage() {
             </ul>
           </details>
           <VocabularyPhotographyCredits />
+          <details className="mt-4 rounded-xl border border-border p-4">
+            <summary className="cursor-pointer text-xs font-semibold text-primary">
+              Dictionary data &amp; pronunciation sources
+            </summary>
+            <p className="mt-3 text-xs leading-6 text-muted-foreground">
+              Pronunciation transcriptions are checked against open linguistic
+              datasets. American English coverage is based on CMUdict-derived
+              IPA data and supplemented by Open English WordNet. A small,
+              documented exception list covers learner terms and initialisms
+              absent from those source files. CEFR labels remain provisional
+              until educator review; the site does not present automatically
+              estimated levels as verified.
+            </p>
+            <ul className="mt-3 space-y-2 text-xs">
+              <li>
+                <a
+                  href="https://en-word.net/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  Open English WordNet 2025
+                </a>{" "}
+                <span className="text-muted-foreground">· CC BY 4.0</span>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/open-dict-data/ipa-dict"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  ipa-dict English datasets
+                </a>{" "}
+                <span className="text-muted-foreground">
+                  · CMUdict/MIT and documented upstream licenses
+                </span>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cmusphinx/cmudict"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  Carnegie Mellon Pronouncing Dictionary
+                </a>
+              </li>
+            </ul>
+          </details>
           <details className="mt-4 rounded-xl border border-border p-4">
             <summary className="cursor-pointer text-xs font-semibold text-primary">
               Photographic environment credits

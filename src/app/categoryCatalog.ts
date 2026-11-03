@@ -1,4 +1,5 @@
 import type { Word } from "./content"
+import { resolvePronunciation } from "./pronunciation"
 import type { Scene } from "./SceneCanvas"
 import { getVocabularyPhoto } from "./VocabularyImagery"
 import { estimateCEFR } from "./cefr"
@@ -1240,8 +1241,13 @@ export function completeCategoryCatalog(
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/-$/, "")}`,
         word,
-        pronunciation:
-          pronunciations.get(word.toLowerCase()) || "Listen for pronunciation",
+        pronunciation: resolvePronunciation(
+          word,
+          source.category === "Daily Activities"
+            ? "verb phrase"
+            : source.partOfSpeech,
+          pronunciations.get(word.toLowerCase()),
+        ),
         topic: source.category,
         group: source.subcategory,
         definition: `${meaning}.`,

@@ -31,6 +31,7 @@ import { batch025, batch025Metadata } from "./vocabularyBatches/batch025"
 import { batch026, batch026Metadata } from "./vocabularyBatches/batch026"
 import { batch027, batch027Metadata } from "./vocabularyBatches/batch027"
 import { applyExpandedTopicTaxonomy } from "./topicCatalog"
+import { applyWordLearningNotes } from "./wordLearningNotes"
 
 export interface VocabularyValidationIssue {
   severity: "error" | "warning"
@@ -302,7 +303,9 @@ const baseVocabulary = completeCategoryCatalog(
   [...legacyVocabulary, ...stagedBatchWords],
   scenes,
 )
-export const vocabulary = applyExpandedTopicTaxonomy(baseVocabulary)
+export const vocabulary = applyWordLearningNotes(
+  applyExpandedTopicTaxonomy(baseVocabulary),
+)
 export const vocabularyAudit = validateVocabulary(vocabulary)
 
 if (import.meta.env?.DEV && vocabularyAudit.issues.length > 0) {

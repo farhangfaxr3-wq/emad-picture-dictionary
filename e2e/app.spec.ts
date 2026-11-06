@@ -9,6 +9,7 @@ import {
 const publicRoutes = [
   "/",
   "/dictionary",
+  "/confusing-words",
   "/topics",
   "/practice",
   "/assessment",
@@ -113,6 +114,30 @@ test("dictionary labels contextual visuals without treating them as answer clues
   await expect(
     page.getByText(/Context image · Not used as an image-answer clue/i).first(),
   ).toBeVisible()
+})
+
+test("rich word cards and confusing-word lessons are usable", async ({
+  page,
+}) => {
+  await page.goto("/dictionary?q=house&level=all")
+  await page.getByRole("button", { name: "View house" }).first().click()
+  await expect(page.getByText("Use “house” naturally")).toBeVisible()
+  await expect(page.getByText("Common collocations")).toBeVisible()
+  await expect(page.getByText("Grammar patterns")).toBeVisible()
+  await expect(page.getByText("Common mistakes")).toBeVisible()
+
+  await page.goto("/confusing-words")
+  await expect(
+    page.getByRole("heading", { name: "Words people confuse" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "House or home?" }),
+  ).toBeVisible()
+  await page.getByRole("button", { name: "home", exact: true }).first().click()
+  await expect(page.getByText("Correct.")).toBeVisible()
+  await expect(
+    page.locator('a[href^="/dictionary?q="]').first(),
+  ).toHaveAttribute("href", /\/dictionary\?q=/)
 })
 
 test("every category practice, writing, flashcard and game mode opens", async ({

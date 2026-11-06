@@ -103,6 +103,7 @@ import {
 
 import { topicNames } from "./topicCatalog"
 import RouteMetadata from "./RouteMetadata"
+import WordLearningDetails from "./WordLearningDetails"
 import {
   STORE_KEY,
   normalizeStore,
@@ -133,6 +134,8 @@ const SubmissionReviewPage = lazy(() => import("./SubmissionReviewPage"))
 const AssessmentPage = lazy(() => import("./AssessmentPage"))
 
 const EnglishChatPage = lazy(() => import("./EnglishChatPage"))
+
+const ConfusingWordsPage = lazy(() => import("./ConfusingWordsPage"))
 
 const wordById = new Map(vocabulary.map((word) => [word.id, word]))
 
@@ -1096,6 +1099,8 @@ const navigation: {
   { path: "/", label: "Home", icon: Home },
 
   { path: "/dictionary", label: "Dictionary", icon: BookOpen },
+
+  { path: "/confusing-words", label: "Confusing Words", icon: CircleHelp },
 
   { path: "/topics", label: "Topics", icon: Grid2X2 },
 
@@ -4496,6 +4501,7 @@ function WordDialog({ word, onClose }: WordDialogProps) {
             <AudioButton word={word.example} />
           </div>
         </div>
+        <WordLearningDetails word={word} />
         <WordLearningStatus word={word} />
         <p className="mb-2 mt-5 text-xs font-semibold">Explore related words</p>
         <div className="flex flex-wrap gap-2">
@@ -7551,6 +7557,8 @@ const router = createBrowserRouter([
       { index: true, Component: HomePage },
 
       { path: "dictionary", Component: DictionaryPage },
+
+      { path: "confusing-words", Component: ConfusingWordsPage },
 
       { path: "topics", Component: TopicsPage },
 

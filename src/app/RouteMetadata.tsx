@@ -19,6 +19,11 @@ const routeMetadata: Record<string, PageMetadata> = {
     description:
       "Search English words by topic and CEFR level, with definitions, examples, pronunciation and checked imagery.",
   },
+  "/confusing-words": {
+    title: "Words People Confuse | Emad Picture Dictionary",
+    description:
+      "Compare commonly confused English words with clear distinctions, natural examples and short practice activities.",
+  },
   "/topics": {
     title: "English Vocabulary Topics | Emad Picture Dictionary",
     description:

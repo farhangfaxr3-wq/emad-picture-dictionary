@@ -16,6 +16,18 @@ export interface VocabularyAudio {
   text: string
   language: string
 }
+export interface WordFamilyItem {
+  form: string
+  role: string
+}
+export interface WordLearningDetails {
+  collocations?: string[]
+  wordFamily?: WordFamilyItem[]
+  grammarPatterns?: string[]
+  register?: string
+  commonMistakes?: string[]
+  reviewed: true
+}
 export type Word = BaseWord & {
   group: string
   partOfSpeech: string
@@ -25,6 +37,7 @@ export type Word = BaseWord & {
   imageStatus?: "verified" | "pending"
   audio?: VocabularyAudio
   visualKind?: "symbol" | "illustration" | "photo"
+  learningDetails?: WordLearningDetails
 }
 type Entry = [string, string, string, string, string, string, string]
 const entries: Entry[] = [

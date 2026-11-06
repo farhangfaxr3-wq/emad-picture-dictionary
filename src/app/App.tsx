@@ -104,6 +104,7 @@ import {
 import { topicNames } from "./topicCatalog"
 import RouteMetadata from "./RouteMetadata"
 import WordLearningDetails from "./WordLearningDetails"
+import ConfusingWordsPage from "./ConfusingWordsPage"
 import {
   STORE_KEY,
   normalizeStore,
@@ -134,8 +135,6 @@ const SubmissionReviewPage = lazy(() => import("./SubmissionReviewPage"))
 const AssessmentPage = lazy(() => import("./AssessmentPage"))
 
 const EnglishChatPage = lazy(() => import("./EnglishChatPage"))
-
-const ConfusingWordsPage = lazy(() => import("./ConfusingWordsPage"))
 
 const wordById = new Map(vocabulary.map((word) => [word.id, word]))
 

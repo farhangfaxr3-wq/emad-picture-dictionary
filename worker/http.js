@@ -10,7 +10,7 @@ const SECURITY_HEADERS = {
 
 const SPA_ROUTE_PATTERNS = [
   /^\/$/,
-  /^\/(?:dictionary|topics|practice|assessment|chat|progress|favorites|feedback|about|settings|review-submissions)\/?$/,
+  /^\/(?:dictionary|confusing-words|topics|practice|assessment|chat|progress|favorites|feedback|about|settings|review-submissions)\/?$/,
   /^\/topics\/[^/]+\/?$/,
 ]
 

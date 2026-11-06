@@ -1195,6 +1195,14 @@ test("returns a real 404 for unknown SPA routes and caches hashed assets immutab
 
   assert.equal(known.status, 200)
 
+  const confusingWords = await worker.fetch(
+    new Request("https://learn.example/confusing-words"),
+
+    { ASSETS: assets },
+  )
+
+  assert.equal(confusingWords.status, 200)
+
   const hashed = await worker.fetch(
     new Request("https://learn.example/assets/index-abcd1234.js"),
 

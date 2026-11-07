@@ -9,7 +9,17 @@ export interface PronunciationStudioEntry {
   topic: string
   us: string
   uk: string
+  sourceId: "oewn-2025"
+  verified: true
 }
+
+export const pronunciationSources = {
+  "oewn-2025": {
+    name: "Open English WordNet 2025",
+    url: "https://en-word.net/",
+    license: "CC BY 4.0",
+  },
+} as const
 
 export const pronunciationStudioEntries =
   pronunciationStudioData as PronunciationStudioEntry[]

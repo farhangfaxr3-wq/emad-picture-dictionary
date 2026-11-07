@@ -5,6 +5,7 @@ import { createServer } from "vite"
 
 const sourcePath = path.resolve("tmp", "sources", "english-wordnet-2025.xml.gz")
 const outputPath = path.resolve("src", "app", "pronunciationStudioData.json")
+const reportPath = path.resolve("reports", "pronunciation-studio-coverage.json")
 
 if (!fs.existsSync(sourcePath)) {
   throw new Error(`Missing pronunciation source: ${sourcePath}`)
@@ -63,8 +64,7 @@ for (const match of xml.matchAll(lemmaPattern)) {
   )
   const us = pronunciations.get("US")
   const uk = pronunciations.get("GB")
-  if (!us || !uk || !us.includes("ˈ") || !uk.includes("ˈ")) continue
-  if (!/[. ]/.test(us) || !/[. ]/.test(uk)) continue
+  if (!us || !uk) continue
 
   const key = `${normalize(decodeXml(match[1]))}|${match[2]}`
   if (!sourceEntries.has(key)) sourceEntries.set(key, { us, uk })
@@ -78,20 +78,29 @@ const server = await createServer({
 
 try {
   const { vocabulary } = await server.ssrLoadModule("/src/app/vocabulary.ts")
-  const seen = new Set()
   const entries = []
+  const gaps = []
 
   for (const word of vocabulary) {
     const sourcePartOfSpeech = partOfSpeechMap.get(
       word.partOfSpeech.toLocaleLowerCase("en"),
     )
-    if (!sourcePartOfSpeech) continue
+    const key = sourcePartOfSpeech
+      ? `${normalize(word.word)}|${sourcePartOfSpeech}`
+      : ""
+    const pronunciation = key ? sourceEntries.get(key) : undefined
+    if (!pronunciation) {
+      gaps.push({
+        id: word.id,
+        word: word.word,
+        partOfSpeech: word.partOfSpeech,
+        reason: sourcePartOfSpeech
+          ? "No exact paired US/GB record in Open English WordNet 2025"
+          : "Part of speech is outside the source mapping",
+      })
+      continue
+    }
 
-    const key = `${normalize(word.word)}|${sourcePartOfSpeech}`
-    const pronunciation = sourceEntries.get(key)
-    if (!pronunciation || seen.has(normalize(word.word))) continue
-
-    seen.add(normalize(word.word))
     entries.push({
       id: word.id,
       word: word.word,
@@ -99,13 +108,33 @@ try {
       topic: word.topic,
       us: pronunciation.us,
       uk: pronunciation.uk,
+      sourceId: "oewn-2025",
+      verified: true,
     })
   }
 
   entries.sort((first, second) => first.word.localeCompare(second.word, "en"))
   fs.writeFileSync(outputPath, `${JSON.stringify(entries, null, 2)}\n`)
+  const report = {
+    source: {
+      id: "oewn-2025",
+      name: "Open English WordNet 2025",
+      url: "https://en-word.net/static/english-wordnet-2025.xml.gz",
+      license: "CC BY 4.0",
+    },
+    totalVocabulary: vocabulary.length,
+    verifiedPairedRecords: entries.length,
+    awaitingVerification: gaps.length,
+    coveragePercent: Number(
+      ((entries.length / vocabulary.length) * 100).toFixed(2),
+    ),
+    gaps,
+    note: "Only exact word-and-part-of-speech matches with both US and GB IPA are published as verified pairs. Remaining entries retain their existing dictionary pronunciation and are not guessed.",
+  }
+  fs.mkdirSync(path.dirname(reportPath), { recursive: true })
+  fs.writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`)
   console.log(
-    `Wrote ${entries.length} verified US/UK pronunciation records to ${outputPath}`,
+    `Wrote ${entries.length} verified US/UK records; ${gaps.length} entries remain explicitly awaiting verification.`,
   )
 } finally {
   await server.close()

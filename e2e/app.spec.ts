@@ -134,8 +134,28 @@ test("rich word cards and confusing-word lessons are usable", async ({
   await expect(
     page.getByRole("heading", { name: "House or home?" }),
   ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Affect or effect?" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Borrow or lend?" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Cite, site or sight?" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Say, tell, speak or talk?" }),
+  ).toBeVisible()
   await page.getByRole("button", { name: "home", exact: true }).first().click()
-  await expect(page.getByText("Correct.")).toBeVisible()
+  await expect(page.getByText("Correct.", { exact: true })).toBeVisible()
+  await page.getByRole("button", { name: "Fix the sentence" }).click()
+  await page.getByPlaceholder("Search affect, borrow, cite…").fill("affect")
+  await expect(
+    page.getByRole("heading", { name: "Affect or effect?" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "House or home?" }),
+  ).toHaveCount(0)
   await expect(
     page.locator('a[href^="/dictionary?q="]').first(),
   ).toHaveAttribute("href", /\/dictionary\?q=/)
@@ -190,9 +210,11 @@ test("pronunciation studio compares verified accents and supports listen-and-rep
     page.getByRole("heading", { name: "Pronunciation Studio" }),
   ).toBeVisible()
   await expect(page.getByText("/ˈstu.dn̩t/").first()).toBeVisible()
-  await page.getByRole("button", { name: "UK", exact: true }).click()
   await expect(page.getByText("/ˈstjuː.dənt/").first()).toBeVisible()
-  await expect(page.getByText("Your device selected “Test UK”.")).toBeVisible()
+  await expect(
+    page.getByText(/Synthetic audio · device voice “Test UK”/),
+  ).toBeVisible()
+  await page.getByRole("button", { name: "Play UK" }).click()
 
   const search = page.getByPlaceholder("Search by word or topic")
   await search.fill("coffee")
@@ -213,7 +235,15 @@ test("pronunciation studio compares verified accents and supports listen-and-rep
   )
   expect(overflow).toBe(false)
 
-  await page.goto("/pronunciation-studio?word=chair")
+  await expect(page.getByText(/paired records/)).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "See how the sound is formed" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Listen → Compare → Try" }),
+  ).toBeVisible()
+
+  await page.goto("/pronunciation-studio?word=apple")
   await expect(page.getByText(/Nothing has been guessed/)).toBeVisible()
 })
 

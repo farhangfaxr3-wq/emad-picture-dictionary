@@ -5,6 +5,7 @@ import { createServer } from "vite"
 
 const sourcePath = path.resolve("tmp", "sources", "english-wordnet-2025.xml.gz")
 const dataPath = path.resolve("src", "app", "pronunciationStudioData.json")
+const reportPath = path.resolve("reports", "pronunciation-studio-coverage.json")
 
 function normalize(value) {
   return value
@@ -37,7 +38,7 @@ const partOfSpeechMap = new Map([
   ["adverb", "r"],
 ])
 
-for (const filePath of [sourcePath, dataPath]) {
+for (const filePath of [sourcePath, dataPath, reportPath]) {
   if (!fs.existsSync(filePath)) throw new Error(`Missing file: ${filePath}`)
 }
 
@@ -65,12 +66,12 @@ for (const match of xml.matchAll(lemmaPattern)) {
 }
 
 const entries = JSON.parse(fs.readFileSync(dataPath, "utf8"))
-if (!Array.isArray(entries) || entries.length < 150) {
-  throw new Error("Pronunciation Studio needs at least 150 verified records.")
+const report = JSON.parse(fs.readFileSync(reportPath, "utf8"))
+if (!Array.isArray(entries) || entries.length < 500) {
+  throw new Error("Pronunciation Studio needs at least 500 verified records.")
 }
 
 const ids = new Set()
-const words = new Set()
 const server = await createServer({
   appType: "custom",
   logLevel: "error",
@@ -85,10 +86,6 @@ try {
     if (ids.has(entry.id)) throw new Error(`Duplicate studio ID: ${entry.id}`)
     ids.add(entry.id)
     const normalizedWord = normalize(entry.word)
-    if (words.has(normalizedWord)) {
-      throw new Error(`Duplicate studio word: ${entry.word}`)
-    }
-    words.add(normalizedWord)
 
     const vocabularyEntry = vocabularyById.get(entry.id)
     if (!vocabularyEntry || vocabularyEntry.word !== entry.word) {
@@ -98,12 +95,12 @@ try {
       throw new Error(`${entry.id} has a mismatched part of speech.`)
     }
     if (
-      !entry.us.includes("ˈ") ||
-      !entry.uk.includes("ˈ") ||
-      !/[. ]/.test(entry.us) ||
-      !/[. ]/.test(entry.uk)
+      entry.sourceId !== "oewn-2025" ||
+      entry.verified !== true ||
+      !entry.us.startsWith("/") ||
+      !entry.uk.startsWith("/")
     ) {
-      throw new Error(`${entry.id} lacks verified stress or syllable data.`)
+      throw new Error(`${entry.id} lacks a complete verified source record.`)
     }
 
     const sourcePartOfSpeech = partOfSpeechMap.get(
@@ -114,10 +111,27 @@ try {
       throw new Error(`${entry.id} does not exactly match the open source.`)
     }
   }
+
+  const gapIds = new Set(report.gaps.map((gap) => gap.id))
+  if (
+    report.totalVocabulary !== vocabulary.length ||
+    report.verifiedPairedRecords !== entries.length ||
+    report.awaitingVerification !== gapIds.size ||
+    entries.length + gapIds.size !== vocabulary.length
+  ) {
+    throw new Error(
+      "Pronunciation coverage report does not partition the catalogue.",
+    )
+  }
+  for (const word of vocabulary) {
+    if (!ids.has(word.id) && !gapIds.has(word.id)) {
+      throw new Error(`Pronunciation audit omitted ${word.id}.`)
+    }
+  }
 } finally {
   await server.close()
 }
 
 console.log(
-  `Pronunciation Studio QA passed: ${entries.length} unique entries exactly match Open English WordNet US/GB IPA records.`,
+  `Pronunciation Studio QA passed: ${entries.length} records exactly match Open English WordNet US/GB IPA; ${report.awaitingVerification} explicit gaps remain.`,
 )

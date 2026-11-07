@@ -50,6 +50,7 @@ import {
   practiceActivities,
   writingActivities,
 } from "./categoryActivities"
+import { SoraniGloss, SoraniInstruction } from "./SoraniSupport"
 
 type Section = "dashboard" | "vocabulary" | "practice" | "write" | "flashcards" | "games" | "progress"
 
@@ -1132,6 +1133,11 @@ function Result({ course, title, outcomes, retry, onProgress }: ResultProps) {
                 <p className="mt-2 text-xs leading-5 text-muted-foreground">
                   {word.definition}
                 </p>
+                <SoraniGloss
+                  word={word}
+                  enabled={course.data.preferences.soraniHelp}
+                  compact
+                />
               </div>
             )
           })}
@@ -1479,6 +1485,10 @@ function QuizSession(props: QuizProps) {
       <h2 className="mb-5 mt-6 text-center font-display text-xl font-bold">
         {instruction}
       </h2>
+      <SoraniInstruction
+        enabled={course.data.preferences.soraniHelp}
+        mode={mode}
+      />
       {unavailablePicture && (
         <p className="mb-4 rounded-xl bg-secondary p-3 text-center text-xs leading-5 text-muted-foreground">
           This word has no checked photograph yet. This question uses its
@@ -1736,6 +1746,13 @@ function QuizSession(props: QuizProps) {
           <p className="mt-2 text-xs leading-5">
             {course.words.find((item) => item.id === feedback.id)?.example}
           </p>
+          {course.words.find((item) => item.id === feedback.id) && (
+            <SoraniGloss
+              word={course.words.find((item) => item.id === feedback.id)!}
+              enabled={course.data.preferences.soraniHelp}
+              compact
+            />
+          )}
         </div>
       )}
       <div className="mt-5 flex justify-end">
@@ -2260,6 +2277,10 @@ function FlashcardDeck({ course, words, onProgress }: DeckProps) {
               <p className="mx-auto mt-5 max-w-lg text-sm leading-6">
                 {word.definition}
               </p>
+              <SoraniGloss
+                word={word}
+                enabled={course.data.preferences.soraniHelp}
+              />
               <p className="mx-auto mt-4 max-w-lg text-sm italic leading-6 text-muted-foreground">
                 “{word.example}”
               </p>

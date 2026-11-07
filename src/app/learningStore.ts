@@ -14,6 +14,7 @@ export type Preferences = {
   goal: number
   reduceMotion: boolean
   largeText: boolean
+  soraniHelp: boolean
   cefrLevel: CEFRLevel | "All levels"
 }
 
@@ -94,6 +95,7 @@ const initial: Stored = {
     goal: 10,
     reduceMotion: false,
     largeText: false,
+    soraniHelp: false,
     cefrLevel: "All levels",
   },
 }
@@ -219,6 +221,7 @@ export function normalizeStore(saved: unknown): Stored {
     preferences: {
       ...initial.preferences,
       ...candidate.preferences,
+      soraniHelp: candidate.preferences?.soraniHelp === true,
       cefrLevel: isCEFRLevel(candidate.preferences?.cefrLevel)
         ? candidate.preferences.cefrLevel
         : "All levels",

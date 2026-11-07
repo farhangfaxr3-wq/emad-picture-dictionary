@@ -106,6 +106,7 @@ import { topicNames } from "./topicCatalog"
 import RouteMetadata from "./RouteMetadata"
 import WordLearningDetails from "./WordLearningDetails"
 import ConfusingWordsPage from "./ConfusingWordsPage"
+import { SoraniGloss, SoraniInstruction } from "./SoraniSupport"
 import {
   STORE_KEY,
   normalizeStore,
@@ -2113,6 +2114,11 @@ function WordCard({ word, compact = false }: WordCardProps) {
             <p className="mt-2 text-xs leading-5 text-muted-foreground">
               {word.definition}
             </p>
+            <SoraniGloss
+              word={word}
+              enabled={data.preferences.soraniHelp}
+              compact
+            />
             <p className="mt-2 text-[11px] italic leading-5 text-muted-foreground">
               “{word.example}”
             </p>
@@ -3956,6 +3962,11 @@ function WordListRow({ word }: { word: Word }) {
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
           {word.definition}
         </p>
+        <SoraniGloss
+          word={word}
+          enabled={data.preferences.soraniHelp}
+          compact
+        />
         <p className="mt-1 text-xs italic leading-5">“{word.example}”</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {word.related.slice(0, 3).map((id) => (
@@ -4514,6 +4525,7 @@ function WordDialog({ word, onClose }: WordDialogProps) {
           <AudioButton word={word.word} large />
         </div>
         <p className="mt-6 text-sm leading-6">{word.definition}</p>
+        <SoraniGloss word={word} enabled={data.preferences.soraniHelp} />
         <p className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground">
           <Volume2 size={12} />
           {!data.preferences.audio
@@ -5674,6 +5686,10 @@ function PracticePage() {
               <p className="mb-6 text-center text-xs text-muted-foreground">
                 Select a word on the left, then its picture on the right.
               </p>
+              <SoraniInstruction
+                enabled={data.preferences.soraniHelp}
+                mode="matching"
+              />
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-3">
                   {questions.map((word) => (
@@ -5751,6 +5767,10 @@ function PracticePage() {
                           ? "Which word matches this meaning?"
                           : "What's in the picture?"}
               </h2>
+              <SoraniInstruction
+                enabled={data.preferences.soraniHelp}
+                mode={questionMode}
+              />
               {questionMode === "multiple" && (
                 <div className="my-7 rounded-2xl bg-secondary p-8 text-center">
                   <span className="text-[10px] font-semibold tracking-widest text-primary">
@@ -5942,6 +5962,11 @@ function PracticePage() {
                           : `Good try! The word is “${current.word}”.`}
                     </p>
                     <p className="mt-1 text-xs leading-5">{current.example}</p>
+                    <SoraniGloss
+                      word={current}
+                      enabled={data.preferences.soraniHelp}
+                      compact
+                    />
                   </div>
                   <AudioButton word={current.word} />
                 </div>
@@ -5975,7 +6000,7 @@ interface PracticeAnswerReviewProps {
 }
 
 function PracticeAnswerReview({ outcomes }: PracticeAnswerReviewProps) {
-  const { openWord } = useApp()
+  const { data, openWord } = useApp()
 
   return (
     <details className="mb-6 rounded-xl border border-border p-4 text-left">
@@ -6047,6 +6072,11 @@ function PracticeAnswerReview({ outcomes }: PracticeAnswerReviewProps) {
                 </p>
                 <AudioButton word={word.example} />
               </div>
+              <SoraniGloss
+                word={word}
+                enabled={data.preferences.soraniHelp}
+                compact
+              />
             </article>
           )
         })}
@@ -6880,13 +6910,13 @@ function Toggle({
       aria-checked={checked}
       aria-label={label}
       onClick={onChange}
-      className={`flex h-6 w-11 shrink-0 items-center rounded-full p-0.5 ${
+      className={`flex h-11 w-14 shrink-0 items-center rounded-full px-1 ${
         checked ? "bg-primary" : "bg-muted-foreground/30"
       }`}
     >
       <span
-        className={`h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
-          checked ? "translate-x-5" : "translate-x-0"
+        className={`h-6 w-6 rounded-full bg-white shadow-sm transition-transform ${
+          checked ? "translate-x-6" : "translate-x-0"
         }`}
       />
     </button>
@@ -7002,6 +7032,31 @@ function SettingsPage() {
           <p className="mt-2 text-[10px] text-muted-foreground">
             More learning languages are on our wish list.
           </p>
+          <div className="mt-5 rounded-xl border border-border bg-background p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold">
+                  Sorani support (optional)
+                </p>
+                <p className="mt-1 text-[10px] leading-5 text-muted-foreground">
+                  English stays the learning language. Show manually reviewed
+                  Sorani help where it is available.
+                </p>
+              </div>
+              <Toggle
+                checked={preferences.soraniHelp}
+                onChange={() => change("soraniHelp", !preferences.soraniHelp)}
+                label="Sorani support"
+              />
+            </div>
+            <p
+              lang="ckb"
+              dir="rtl"
+              className="mt-3 text-right text-xs leading-6"
+            >
+              یارمەتیی سۆرانی تەنها بۆ وەرگێڕانی پشکنراو نیشان دەدرێت.
+            </p>
+          </div>
           <label
             className="mb-2 mt-6 block text-xs font-medium"
             htmlFor="cefr-level"

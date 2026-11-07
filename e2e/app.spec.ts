@@ -424,6 +424,34 @@ test("scenes, favorites, progress, feedback, settings and assessment remain usab
   await expect(page.getByText("Choose the greeting.")).toBeVisible()
 })
 
+test("optional Sorani help is off by default and shows only reviewed support", async ({
+  page,
+}) => {
+  await page.goto("/settings")
+  const soraniToggle = page.getByRole("switch", { name: "Sorani support" })
+  await expect(soraniToggle).toHaveAttribute("aria-checked", "false")
+
+  await soraniToggle.click()
+  await expect(soraniToggle).toHaveAttribute("aria-checked", "true")
+
+  await page.goto("/dictionary?q=house&level=all")
+  await expect(page.getByTestId("sorani-gloss").first()).toContainText("ماڵ")
+
+  await page.goto("/dictionary?q=planet&level=all")
+  await expect(page.getByText("Sorani gloss unavailable").first()).toBeVisible()
+
+  await page.goto(
+    "/topics/Home?section=practice&activity=multiple&cefr=all&length=5",
+  )
+  await expect(page.getByTestId("sorani-instruction")).toBeVisible()
+
+  const saved = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("emad-dictionary") || "null"),
+  )
+  expect(saved.preferences.language).toBe("English")
+  expect(saved.preferences.soraniHelp).toBe(true)
+})
+
 test("keyboard focus, headings, labels and mobile touch controls are accessible", async ({
   page,
 }) => {

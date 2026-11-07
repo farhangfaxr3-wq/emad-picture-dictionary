@@ -34,11 +34,6 @@ const routeMetadata: Record<string, PageMetadata> = {
     description:
       "Explore English vocabulary courses, illustrated scenes and activities organized by topic.",
   },
-  "/learning-paths": {
-    title: "Goal-based English Learning Paths | Emad Picture Dictionary",
-    description:
-      "Follow guided Everyday English, University English and Travel English routes using existing vocabulary, CEFR levels and activities.",
-  },
   "/practice": {
     title: "English Vocabulary Practice | Emad Picture Dictionary",
     description:

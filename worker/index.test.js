@@ -1203,6 +1203,33 @@ test("returns a real 404 for unknown SPA routes and caches hashed assets immutab
 
   assert.equal(confusingWords.status, 200)
 
+  const retiredLearningPaths = await worker.fetch(
+    new Request("https://learn.example/learning-paths?path=english-for-travel"),
+
+    { ASSETS: assets },
+  )
+
+  assert.equal(retiredLearningPaths.status, 308)
+
+  assert.equal(
+    retiredLearningPaths.headers.get("location"),
+
+    "https://learn.example/topics",
+  )
+
+  assert.equal(
+    retiredLearningPaths.headers.get("x-content-type-options"),
+    "nosniff",
+  )
+
+  const retiredLearningPathsPost = await worker.fetch(
+    new Request("https://learn.example/learning-paths", { method: "POST" }),
+
+    { ASSETS: assets },
+  )
+
+  assert.equal(retiredLearningPathsPost.status, 404)
+
   const hashed = await worker.fetch(
     new Request("https://learn.example/assets/index-abcd1234.js"),
 

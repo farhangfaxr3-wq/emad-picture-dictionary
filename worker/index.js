@@ -3136,6 +3136,15 @@ export default {
         return secureResponse(await handleApi(request, env))
       }
 
+      if (
+        ["GET", "HEAD"].includes(request.method) &&
+        /^\/learning-paths\/?$/.test(url.pathname)
+      ) {
+        return secureResponse(
+          Response.redirect(new URL("/topics", url).toString(), 308),
+        )
+      }
+
       if (!["GET", "HEAD"].includes(request.method)) {
         return secureResponse(json({ message: "Route not found." }, 404))
       }

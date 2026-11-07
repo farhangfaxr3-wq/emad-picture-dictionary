@@ -12,7 +12,6 @@ const publicRoutes = [
   "/pronunciation-studio",
   "/confusing-words",
   "/topics",
-  "/learning-paths",
   "/practice",
   "/assessment",
   "/progress",
@@ -218,10 +217,15 @@ test("pronunciation studio compares verified accents and supports listen-and-rep
   await expect(page.getByText(/Nothing has been guessed/)).toBeVisible()
 })
 
-test("goal-based paths reuse existing activities and preserve learner progress", async ({
+test("retired learning-path links redirect to topics without changing progress", async ({
   page,
 }) => {
   await page.goto("/")
+  await expect(page.getByRole("link", { name: "Learning Paths" })).toHaveCount(
+    0,
+  )
+  await expect(page.getByText("Choose a learning goal")).toHaveCount(0)
+
   await page.evaluate(() => {
     const store = {
       schemaVersion: 2,
@@ -248,41 +252,17 @@ test("goal-based paths reuse existing activities and preserve learner progress",
         goal: 10,
         reduceMotion: false,
         largeText: false,
+        soraniHelp: false,
         cefrLevel: "All levels",
       },
     }
     localStorage.setItem("emad-dictionary", JSON.stringify(store))
   })
 
-  await page.goto("/learning-paths")
-  await expect(
-    page.getByRole("heading", { name: "Goal-based learning paths" }),
-  ).toBeVisible()
-  await expect(
-    page.getByRole("button", { name: /Everyday English/ }),
-  ).toBeVisible()
-  await expect(
-    page.getByRole("button", { name: /English for University/ }),
-  ).toBeVisible()
-  await expect(
-    page.getByRole("button", { name: /English for Travel/ }),
-  ).toBeVisible()
-  await expect(page.getByText(/1 of \d+ words learned/).first()).toBeVisible()
-
-  await page.getByRole("button", { name: /English for University/ }).click()
-  await expect(
-    page.getByRole("heading", { name: "English for University" }),
-  ).toBeVisible()
-  await expect(
-    page.getByRole("heading", { name: "Campus foundations" }).first(),
-  ).toBeVisible()
-  const nextAction = page
-    .getByRole("link", { name: /Explore the words/ })
-    .first()
-  await expect(nextAction).toHaveAttribute(
-    "href",
-    /\/topics\/School\?section=vocabulary&cefr=A2/,
-  )
+  await page.goto("/learning-paths?path=english-for-university")
+  await expect(page).toHaveURL(/\/topics$/)
+  await expect(page.locator("main h1").first()).toBeVisible()
+  await expect(page.getByText("Goal-based learning paths")).toHaveCount(0)
 
   const stored = await page.evaluate(() =>
     JSON.parse(localStorage.getItem("emad-dictionary") || "null"),

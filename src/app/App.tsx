@@ -47,7 +47,6 @@ import {
   Home,
   Leaf,
   LoaderCircle,
-  MapPinned,
   Mail,
   Menu,
   MessageSquare,
@@ -139,8 +138,6 @@ const AssessmentPage = lazy(() => import("./AssessmentPage"))
 const EnglishChatPage = lazy(() => import("./EnglishChatPage"))
 
 const PronunciationStudioPage = lazy(() => import("./PronunciationStudioPage"))
-
-const LearningPathsPage = lazy(() => import("./LearningPathsPage"))
 
 const wordById = new Map(vocabulary.map((word) => [word.id, word]))
 
@@ -1114,8 +1111,6 @@ const navigation: {
   { path: "/confusing-words", label: "Confusing Words", icon: CircleHelp },
 
   { path: "/topics", label: "Topics", icon: Grid2X2 },
-
-  { path: "/learning-paths", label: "Learning Paths", icon: MapPinned },
 
   { path: "/practice", label: "Practice", icon: AudioLines },
 
@@ -2232,30 +2227,6 @@ function HomePage() {
         </div>
         <span className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-xs font-semibold text-primary shadow-sm group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
           Start assessment <ArrowRight size={15} />
-        </span>
-      </Link>
-      <Link
-        to="/learning-paths"
-        className="group flex flex-col gap-5 overflow-hidden rounded-[20px] border border-border bg-card p-5 text-foreground transition hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:p-6"
-      >
-        <div className="flex min-w-0 items-center gap-4">
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
-            <MapPinned size={27} />
-          </span>
-          <div className="min-w-0">
-            <p className="text-[9px] font-semibold uppercase tracking-[.15em] text-primary">
-              3 guided routes · your saved progress
-            </p>
-            <h2 className="mt-1 font-display text-lg font-bold sm:text-xl">
-              Choose a learning goal
-            </h2>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              Everyday English, University English, or English for Travel.
-            </p>
-          </div>
-        </div>
-        <span className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-background px-4 py-3 text-xs font-semibold text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
-          View learning paths <ArrowRight size={15} />
         </span>
       </Link>
       <section className="relative flex min-h-[253px] overflow-hidden rounded-[20px] bg-[#eaf0e8]">
@@ -7569,12 +7540,6 @@ function PronunciationStudioRoute() {
   )
 }
 
-function LearningPathsRoute() {
-  const { data } = useApp()
-
-  return <LearningPathsPage data={data} />
-}
-
 function CategoryLearningHub() {
   return (
     <>
@@ -7680,7 +7645,10 @@ const router = createBrowserRouter([
 
       { path: "topics", Component: TopicsPage },
 
-      { path: "learning-paths", Component: LearningPathsRoute },
+      {
+        path: "learning-paths",
+        Component: () => <Navigate to="/topics" replace />,
+      },
 
       { path: "topics/:topic", Component: TopicDetail },
 

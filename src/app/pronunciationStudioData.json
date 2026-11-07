@@ -1,0 +1,1514 @@
+[
+  {
+    "id": "batch-009--absolute",
+    "word": "absolute",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈæb.səˌlut/",
+    "uk": "/ˈæb.səˌluːt/"
+  },
+  {
+    "id": "batch-014--absorption",
+    "word": "absorption",
+    "partOfSpeech": "noun",
+    "topic": "School",
+    "us": "/æbˈsɔɹp.ʃn̩/",
+    "uk": "/əbˈzɔːp.ʃn̩/"
+  },
+  {
+    "id": "batch-009--abundant",
+    "word": "abundant",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/əˈbʌn.dn̩t/",
+    "uk": "/əˈbʌn.dn̩t/"
+  },
+  {
+    "id": "communication--accurate",
+    "word": "accurate",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈæk.jə.ɹɪt/",
+    "uk": "/ˈæk.jʊ.ɹət/"
+  },
+  {
+    "id": "jobs--actor",
+    "word": "actor",
+    "partOfSpeech": "noun",
+    "topic": "Art, Literature & Culture",
+    "us": "/ˈæk.tɚ/",
+    "uk": "/ˈæk.tə/"
+  },
+  {
+    "id": "batch-009--adequate",
+    "word": "adequate",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈæd.ə.kwɪt/",
+    "uk": "/ˈæd.ɪ.kwət/"
+  },
+  {
+    "id": "batch-014--adoption",
+    "word": "adoption",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/əˈdɑp.ʃən/",
+    "uk": "/əˈdɒp.ʃən/"
+  },
+  {
+    "id": "batch-014--advantage",
+    "word": "advantage",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ədˈvæn.(t)ɪdʒ/",
+    "uk": "/ədˈvɑːn.tɪdʒ/"
+  },
+  {
+    "id": "batch-009--aesthetic",
+    "word": "aesthetic",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ɛs.ˈθɛ.tɪk/",
+    "uk": "/ɪs.ˈθe.tɪk/"
+  },
+  {
+    "id": "batch-014--afternoon",
+    "word": "afternoon",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/ˌæf.tɚ.ˈnun/",
+    "uk": "/ˌɑːf.tə.ˈnuːn/"
+  },
+  {
+    "id": "airport",
+    "word": "airport",
+    "partOfSpeech": "noun",
+    "topic": "Travel",
+    "us": "/ˈɛɹ.pɔɹt/",
+    "uk": "/ˈɛə.pɔːt/"
+  },
+  {
+    "id": "batch-015--alcohol",
+    "word": "alcohol",
+    "partOfSpeech": "noun",
+    "topic": "Food",
+    "us": "/ˈæl.kə.hɔl/",
+    "uk": "/ˈæl.kə.hɒl/"
+  },
+  {
+    "id": "animals--alligator",
+    "word": "alligator",
+    "partOfSpeech": "noun",
+    "topic": "Animals",
+    "us": "/ˈæl.ɪ.ɡeɪ.tɚ/",
+    "uk": "/ˈæl.ɪ.ɡeɪ.tə/"
+  },
+  {
+    "id": "batch-015--altar",
+    "word": "altar",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/ˈɔl.tɚ/",
+    "uk": "/ˈɔːl.tə/"
+  },
+  {
+    "id": "batch-015--aluminium",
+    "word": "aluminium",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˌæl.(j)uˈmɪn.i.əm/",
+    "uk": "/ˌæl.(j)ʊˈmɪn.i.əm/"
+  },
+  {
+    "id": "batch-015--amateur",
+    "word": "amateur",
+    "partOfSpeech": "noun",
+    "topic": "Sports",
+    "us": "/ˈæ.mə.tɚ/",
+    "uk": "/ˈæ.mə.tə/"
+  },
+  {
+    "id": "batch-009--amber",
+    "word": "amber",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈæm.bɚ/",
+    "uk": "/ˈam.bə/"
+  },
+  {
+    "id": "batch-009--appropriate",
+    "word": "appropriate",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/əˈpɹoʊ.pɹi.ɪt/",
+    "uk": "/əˈpɹəʊ.pɹiː.ɪt/"
+  },
+  {
+    "id": "batch-009--arbitrary",
+    "word": "arbitrary",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈɑɹ.bɪ.tɹɛ(ə).ɹi/",
+    "uk": "/ˈɑː.bɪ.tɹə.ɹi/"
+  },
+  {
+    "id": "batch-015--army",
+    "word": "army",
+    "partOfSpeech": "noun",
+    "topic": "Community",
+    "us": "/ˈɑɹ.mi/",
+    "uk": "/ˈɑː.miː/"
+  },
+  {
+    "id": "school--assembly",
+    "word": "assembly",
+    "partOfSpeech": "noun",
+    "topic": "School",
+    "us": "/əˈsɛmb.li/",
+    "uk": "/əˈsɛmb.lɪ/"
+  },
+  {
+    "id": "sports--athlete",
+    "word": "athlete",
+    "partOfSpeech": "noun",
+    "topic": "Sports",
+    "us": "/ˈæθ.lit/",
+    "uk": "/ˈæθ.liːt/"
+  },
+  {
+    "id": "school--auditorium",
+    "word": "auditorium",
+    "partOfSpeech": "noun",
+    "topic": "School",
+    "us": "/ˌɔ.dəˈtɔɹ.i.əm/",
+    "uk": "/ɔː.dɪˈtɔː.ɹi.əm/"
+  },
+  {
+    "id": "batch-015--autonomy",
+    "word": "autonomy",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ɔˈtɑn.əm.i/",
+    "uk": "/ɔːˈtɒn.əm.i/"
+  },
+  {
+    "id": "places--avenue",
+    "word": "avenue",
+    "partOfSpeech": "noun",
+    "topic": "Places",
+    "us": "/ˈæv.əˌn(j)u/",
+    "uk": "/ˈæv.əˌnjuː/"
+  },
+  {
+    "id": "jobs--baker",
+    "word": "baker",
+    "partOfSpeech": "noun",
+    "topic": "Jobs",
+    "us": "/ˈbeɪ.kɚ/",
+    "uk": "/ˈbeɪ.kə(ɹ)/"
+  },
+  {
+    "id": "batch-015--barrier",
+    "word": "barrier",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈbæɹi.əɹ/",
+    "uk": "/ˈbæɹi.ə(ɹ)/"
+  },
+  {
+    "id": "sports--baseball",
+    "word": "baseball",
+    "partOfSpeech": "noun",
+    "topic": "Sports",
+    "us": "/ˈbeɪs.bɔl/",
+    "uk": "/ˈbeɪs.bɔːl/"
+  },
+  {
+    "id": "basketball",
+    "word": "basketball",
+    "partOfSpeech": "noun",
+    "topic": "Sports",
+    "us": "/ˈbæs.kɪt.bɔːl/",
+    "uk": "/ˈbɑːs.kɪt.bɔːl/"
+  },
+  {
+    "id": "batch-016--beneficiary",
+    "word": "beneficiary",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˌbɛn.ɨˈfɪʃ.ɚ.i/",
+    "uk": "/ˌbɛn.ɪˈfɪʃ.əɹ.i/"
+  },
+  {
+    "id": "batch-016--benefit",
+    "word": "benefit",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈbɛn.ə.fɪt/",
+    "uk": "/ˈbɛn.ɪ.fɪt/"
+  },
+  {
+    "id": "food--broccoli",
+    "word": "broccoli",
+    "partOfSpeech": "noun",
+    "topic": "Food",
+    "us": "/ˈbɹɑ.kə.li/",
+    "uk": "/ˈbɹɒ.kə.li/"
+  },
+  {
+    "id": "family--brother-in-law",
+    "word": "brother-in-law",
+    "partOfSpeech": "noun",
+    "topic": "Family",
+    "us": "/ˈbɹʌðɚ ɪn ˌlɔ/",
+    "uk": "/ˈbɹʌðəɹ ɪn ˌlɔː/"
+  },
+  {
+    "id": "jobs--builder",
+    "word": "builder",
+    "partOfSpeech": "noun",
+    "topic": "Jobs",
+    "us": "/ˈbɪl.dɚ/",
+    "uk": "/ˈbɪl.də/"
+  },
+  {
+    "id": "home--cabinet",
+    "word": "cabinet",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/ˈkæ.bɪ.nɪt/",
+    "uk": "/ˈkæ.bɪ.nɪt/"
+  },
+  {
+    "id": "classroom--calendar",
+    "word": "calendar",
+    "partOfSpeech": "noun",
+    "topic": "Classroom",
+    "us": "/ˈkæl.ən.dɚ/",
+    "uk": "/ˈkæl.ən.də/"
+  },
+  {
+    "id": "batch-016--candidate",
+    "word": "candidate",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˈkæn.dɪ.deɪt/",
+    "uk": "/ˈkæn.dɪdət/"
+  },
+  {
+    "id": "sports--captain",
+    "word": "captain",
+    "partOfSpeech": "noun",
+    "topic": "Sports",
+    "us": "/ˈkæp.tən/",
+    "uk": "/ˈkæp.tɪn/"
+  },
+  {
+    "id": "batch-016--carrier",
+    "word": "carrier",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˈkæ.ɹɪ.ɚ/",
+    "uk": "/ˈkæ.ɹɪ.ə/"
+  },
+  {
+    "id": "carrot",
+    "word": "carrot",
+    "partOfSpeech": "noun",
+    "topic": "Food",
+    "us": "/ˈkɛɹ.ət/",
+    "uk": "/ˈkæɹ.ət/"
+  },
+  {
+    "id": "batch-016--catalogue",
+    "word": "catalogue",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈkæɾ.əˌlɔɡ/",
+    "uk": "/ˈkæt.əˌlɒɡ/"
+  },
+  {
+    "id": "batch-017--cemetery",
+    "word": "cemetery",
+    "partOfSpeech": "noun",
+    "topic": "Places",
+    "us": "/ˈsɛm.ɪˌtɛɹ.i/",
+    "uk": "/ˈsɛm.ɪˌtɹi/"
+  },
+  {
+    "id": "batch-017--center",
+    "word": "center",
+    "partOfSpeech": "noun",
+    "topic": "Architecture & Construction",
+    "us": "/ˈsɛn.tɚ/",
+    "uk": "/ˈsɛn.tə(ɹ)/"
+  },
+  {
+    "id": "batch-017--chaos",
+    "word": "chaos",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈkeɪ.ɑs/",
+    "uk": "/ˈkeɪ.ɒs/"
+  },
+  {
+    "id": "cinema",
+    "word": "cinema",
+    "partOfSpeech": "noun",
+    "topic": "Places",
+    "us": "/ˈsɪn.ə.mə/",
+    "uk": "/ˈsɪn.ɪ.mə/"
+  },
+  {
+    "id": "batch-017--civilization",
+    "word": "civilization",
+    "partOfSpeech": "noun",
+    "topic": "Community",
+    "us": "/ˌsɪv.ə.ləˈzeɪ.ʃən/",
+    "uk": "/ˌsɪv.ɪ.laɪˈzeɪ.ʃən/"
+  },
+  {
+    "id": "coffee",
+    "word": "coffee",
+    "partOfSpeech": "noun",
+    "topic": "Food",
+    "us": "/ˈkɔ.fi/",
+    "uk": "/ˈkɒ.fi/"
+  },
+  {
+    "id": "clothing--collar",
+    "word": "collar",
+    "partOfSpeech": "noun",
+    "topic": "Clothing",
+    "us": "/ˈkɑ.lɚ/",
+    "uk": "/ˈkɒl.ə/"
+  },
+  {
+    "id": "batch-017--colony",
+    "word": "colony",
+    "partOfSpeech": "noun",
+    "topic": "Places",
+    "us": "/ˈkɔ.lə.ni/",
+    "uk": "/ˈkɒ.lə.ni/"
+  },
+  {
+    "id": "batch-017--comfort",
+    "word": "comfort",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/ˈkʌm.fɚt/",
+    "uk": "/ˈkʌm.fət/"
+  },
+  {
+    "id": "batch-017--commerce",
+    "word": "commerce",
+    "partOfSpeech": "noun",
+    "topic": "Business & Economics",
+    "us": "/ˈkɑm.ɚs/",
+    "uk": "/ˈkɒm.əs/"
+  },
+  {
+    "id": "batch-017--communist",
+    "word": "communist",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˈkɑː.m.jə.nɪst/",
+    "uk": "/ˈkɒ.mjʊ.nɪst/"
+  },
+  {
+    "id": "batch-009--comprehensive",
+    "word": "comprehensive",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˌkɑːm.pɹəˈhɛn.sɪv/",
+    "uk": "/ˌkɒm.pɹɪˈhɛn.sɪv/"
+  },
+  {
+    "id": "batch-017--conference",
+    "word": "conference",
+    "partOfSpeech": "noun",
+    "topic": "Community",
+    "us": "/ˈkɑn.fə.ɹəns/",
+    "uk": "/ˈkɒn.fɹəns/"
+  },
+  {
+    "id": "people--confident",
+    "word": "confident",
+    "partOfSpeech": "adjective",
+    "topic": "Psychology & Human Behavior",
+    "us": "/ˈkɑn.fɪ.dənt/",
+    "uk": "/ˈkɒn.fɪ.dənt/"
+  },
+  {
+    "id": "batch-018--conflict",
+    "word": "conflict",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈkɑn.flɪkt/",
+    "uk": "/ˈkɒn.flɪkt/"
+  },
+  {
+    "id": "batch-018--conglomerate",
+    "word": "conglomerate",
+    "partOfSpeech": "noun",
+    "topic": "Community",
+    "us": "/kənˈɡlɑm.(ə)ɹ.ət/",
+    "uk": "/kənˈɡlɒm.(ə)ɹ.ət/"
+  },
+  {
+    "id": "batch-009--conscious",
+    "word": "conscious",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈkɑn.ʃəs/",
+    "uk": "/ˈkɒn.ʃəs/"
+  },
+  {
+    "id": "batch-018--constellation",
+    "word": "constellation",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˌkɑn.stəˈleɪ.ʃən/",
+    "uk": "/ˌkɒn.stəˈleɪ.ʃən/"
+  },
+  {
+    "id": "batch-018--contest",
+    "word": "contest",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/ˈkɑn.tɛst/",
+    "uk": "/ˈkɒn.tɛst/"
+  },
+  {
+    "id": "batch-018--context",
+    "word": "context",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈ kɑːn.tɛkst/",
+    "uk": "/ˈ kɒn.tɛkst/"
+  },
+  {
+    "id": "batch-018--contraction",
+    "word": "contraction",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/kənˈtɹæk.ʃən/",
+    "uk": "/kɒnˈtɹæk.ʃən/"
+  },
+  {
+    "id": "batch-010--controversial",
+    "word": "controversial",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˌkɑn.tɹəˈvɝ.ʃəl/",
+    "uk": "/ˌkɒn.trəˈvɜː.ʃəl/"
+  },
+  {
+    "id": "conversation",
+    "word": "conversation",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˌkɑn.vəɹˈseɪ.ʃən/",
+    "uk": "/ˌkɒn.vəˈseɪ.ʃən/"
+  },
+  {
+    "id": "batch-010--corporate",
+    "word": "corporate",
+    "partOfSpeech": "adjective",
+    "topic": "Business & Economics",
+    "us": "/ˈkɔɹ.pəɹ.ət/",
+    "uk": "/ˈkɔː.pə.ɹət/"
+  },
+  {
+    "id": "clothing--cotton",
+    "word": "cotton",
+    "partOfSpeech": "noun",
+    "topic": "Clothing",
+    "us": "/ˈkɑt.n̩/",
+    "uk": "/ˈkɒt.n̩/"
+  },
+  {
+    "id": "cousin",
+    "word": "cousin",
+    "partOfSpeech": "noun",
+    "topic": "Family",
+    "us": "/ˈkʌz.ɪn/",
+    "uk": "/ˈkʌz.n̩/"
+  },
+  {
+    "id": "classroom--crayon",
+    "word": "crayon",
+    "partOfSpeech": "noun",
+    "topic": "Classroom",
+    "us": "/ˈkɹeɪ.ɒn/",
+    "uk": "/ˈkɹeɪ.ən/"
+  },
+  {
+    "id": "batch-010--curious",
+    "word": "curious",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈkjʊ.ɹi.əs/",
+    "uk": "/ˈkjʊə.ɹi.əs/"
+  },
+  {
+    "id": "travel--currency",
+    "word": "currency",
+    "partOfSpeech": "noun",
+    "topic": "Travel",
+    "us": "/ˈkʌɹ.ən.si/",
+    "uk": "/ˈkʌɹ.ən.si/"
+  },
+  {
+    "id": "batch-019--density",
+    "word": "density",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈdɛn.sə.ti/",
+    "uk": "/ˈdɛn.sɪ.ti/"
+  },
+  {
+    "id": "batch-019--disaster",
+    "word": "disaster",
+    "partOfSpeech": "noun",
+    "topic": "Community",
+    "us": "/dɪˈzæs.tɚ/",
+    "uk": "/dɪˈzɑːs.tə(ɹ)/"
+  },
+  {
+    "id": "batch-019--disposition",
+    "word": "disposition",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˌdɪs.pəˈzɪ.ʃɪn/",
+    "uk": "/ˌdɪs.pəˈzɪ.ʃən/"
+  },
+  {
+    "id": "home--doorbell",
+    "word": "doorbell",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/ˈdɔɹ.bɛl/",
+    "uk": "/ˈdɔː.bɛl/"
+  },
+  {
+    "id": "batch-019--economist",
+    "word": "economist",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/iːˈkɑn.ə.mɪst/",
+    "uk": "/iːˈkɒn.ə.mɪst/"
+  },
+  {
+    "id": "batch-020--economy",
+    "word": "economy",
+    "partOfSpeech": "noun",
+    "topic": "Business & Economics",
+    "us": "/iːˈkɑn.ə.mi/",
+    "uk": "/iːˈkɒn.ə.mi/"
+  },
+  {
+    "id": "health--elbow",
+    "word": "elbow",
+    "partOfSpeech": "noun",
+    "topic": "Health",
+    "us": "/ˈɛɫ.boʊ/",
+    "uk": "/ˈɛl.bəʊ/"
+  },
+  {
+    "id": "batch-020--electron",
+    "word": "electron",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ɪˈlɛk.tɹɑn/",
+    "uk": "/ɪˈlɛk.tɹɒn/"
+  },
+  {
+    "id": "batch-010--electronic",
+    "word": "electronic",
+    "partOfSpeech": "adjective",
+    "topic": "IT & Computers",
+    "us": "/ɪˌlɛkˈtɹɑn.ɪk/",
+    "uk": "/ˌɛl.ɛkˈtɹɒn.ɪk/"
+  },
+  {
+    "id": "batch-020--embryo",
+    "word": "embryo",
+    "partOfSpeech": "noun",
+    "topic": "Animals",
+    "us": "/ˈɛmbɹi.oʊ/",
+    "uk": "/ˈɛmbɹi.əʊ/"
+  },
+  {
+    "id": "batch-020--era",
+    "word": "era",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/ˈɛɹ.ə/",
+    "uk": "/ˈɪə̯ɹ.ə/"
+  },
+  {
+    "id": "exercise",
+    "word": "exercise",
+    "partOfSpeech": "noun",
+    "topic": "Health",
+    "us": "/ˈɛk.sɚ.saɪz/",
+    "uk": "/ˈɛk.sə.saɪz/"
+  },
+  {
+    "id": "jobs--experience",
+    "word": "experience",
+    "partOfSpeech": "noun",
+    "topic": "Jobs",
+    "us": "/ɪkˈspɪɹ.i.əns/",
+    "uk": "/ɪkˈspɪə.ɹɪəns/"
+  },
+  {
+    "id": "batch-010--experienced",
+    "word": "experienced",
+    "partOfSpeech": "adjective",
+    "topic": "Education & University Life",
+    "us": "/ɪkˈspɪɹ.i.ənst/",
+    "uk": "/ɪkˈspɪə.ɹɪənst/"
+  },
+  {
+    "id": "classroom--experiment",
+    "word": "experiment",
+    "partOfSpeech": "noun",
+    "topic": "Science & Research",
+    "us": "/ɪkˈspɛɹ.ə.mənt/",
+    "uk": "/ɪkˈspɛ.ɹɪ.mənt/"
+  },
+  {
+    "id": "batch-020--explosion",
+    "word": "explosion",
+    "partOfSpeech": "noun",
+    "topic": "Community",
+    "us": "/ɛkˈsploʊ.ʒən/",
+    "uk": "/ɪkˈspləʊ.ʒən/"
+  },
+  {
+    "id": "batch-010--familiar",
+    "word": "familiar",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/fəˈmɪl.jɚ/",
+    "uk": "/fəˈmɪl.i.ə/"
+  },
+  {
+    "id": "batch-020--favour",
+    "word": "favour",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/ˈfeɪ.vɚ/",
+    "uk": "/ˈfeɪ.və/"
+  },
+  {
+    "id": "batch-020--feather",
+    "word": "feather",
+    "partOfSpeech": "noun",
+    "topic": "Animals",
+    "us": "/ˈfɛð.ɚ/",
+    "uk": "/ˈfɛð.ə(ɹ)/"
+  },
+  {
+    "id": "jobs--firefighter",
+    "word": "firefighter",
+    "partOfSpeech": "noun",
+    "topic": "Jobs",
+    "us": "/ˈfaɪ.ɚˌfaɪ.tɚ/",
+    "uk": "/ˈfaɪə(ɹ)ˌfaɪ.tə(ɹ)/"
+  },
+  {
+    "id": "batch-021--foreigner",
+    "word": "foreigner",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˈfɔɹ.ɪ.nɚ/",
+    "uk": "/ˈfɒɹ.ɪ.nə(ɹ)/"
+  },
+  {
+    "id": "batch-021--format",
+    "word": "format",
+    "partOfSpeech": "noun",
+    "topic": "IT & Computers",
+    "us": "/ˈfɔːɹ.mæt/",
+    "uk": "/ˈfɔː(ɹ).mæt/"
+  },
+  {
+    "id": "batch-021--formation",
+    "word": "formation",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/fɔɹ.ˈmeɪ.ʃən/",
+    "uk": "/fə(ɹ).ˈmeɪ.ʃən/"
+  },
+  {
+    "id": "batch-021--formula",
+    "word": "formula",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈfɔɹ.mjə.lə/",
+    "uk": "/ˈfɔː.mjʊ.lə/"
+  },
+  {
+    "id": "community--fundraiser",
+    "word": "fundraiser",
+    "partOfSpeech": "noun",
+    "topic": "Community",
+    "us": "/ˈfʌnd.ɹeɪ.zɚ/",
+    "uk": "/ˈfʌnd.ɹeɪ.zə/"
+  },
+  {
+    "id": "batch-021--genius",
+    "word": "genius",
+    "partOfSpeech": "noun",
+    "topic": "School",
+    "us": "/ˈdʒin.jəs/",
+    "uk": "/ˈdʒiː.nɪəs/"
+  },
+  {
+    "id": "batch-011--geological",
+    "word": "geological",
+    "partOfSpeech": "adjective",
+    "topic": "School",
+    "us": "/ˌdʒi.əˈlɑdʒ.ɪk.əl/",
+    "uk": "/ˌdʒiː.əˈlɒdʒ.ɪk.əl/"
+  },
+  {
+    "id": "batch-021--glacier",
+    "word": "glacier",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈɡleɪ.ʃɚ/",
+    "uk": "/ˈɡlæs.jə/"
+  },
+  {
+    "id": "batch-011--glorious",
+    "word": "glorious",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈɡlɔɹ.i.əs/",
+    "uk": "/ˈɡlɔː.ɹi.əs/"
+  },
+  {
+    "id": "communication--grammar",
+    "word": "grammar",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈɡɹæ.mɚ/",
+    "uk": "/ˈɡɹæ.mə(ɹ)/"
+  },
+  {
+    "id": "batch-011--gregarious",
+    "word": "gregarious",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ɡɹɨˈɡɛɹ.i.əs/",
+    "uk": "/ɡɹɪˈɡɛə.ɹɪ.əs/"
+  },
+  {
+    "id": "batch-022--grimace",
+    "word": "grimace",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈɡɹɪm.əs/",
+    "uk": "/ˈɡɹɪm.əs/"
+  },
+  {
+    "id": "family--guardian",
+    "word": "guardian",
+    "partOfSpeech": "noun",
+    "topic": "Family",
+    "us": "/ˈɡɑɹ.di.ən/",
+    "uk": "/ˈɡɑː.dɪən/"
+  },
+  {
+    "id": "hammer",
+    "word": "hammer",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/ˈhæ.mɚ/",
+    "uk": "/ˈhæ.mə(ɹ)/"
+  },
+  {
+    "id": "batch-022--headquarters",
+    "word": "headquarters",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/ˈhɛd.ˌkwɔɹ.təz/",
+    "uk": "/ˌhɛd.ˈkwɔː.təz/"
+  },
+  {
+    "id": "batch-022--hero",
+    "word": "hero",
+    "partOfSpeech": "noun",
+    "topic": "Food",
+    "us": "/ˈhɪɹ.oʊ/",
+    "uk": "/ˈhɪə.ɹəʊ/"
+  },
+  {
+    "id": "batch-022--horoscope",
+    "word": "horoscope",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈhɔ.ɹəˌskoʊp/",
+    "uk": "/ˈhɒ.ɹə.skəʊp/"
+  },
+  {
+    "id": "hospital",
+    "word": "hospital",
+    "partOfSpeech": "noun",
+    "topic": "Places",
+    "us": "/ˈhɑs.pɪ.tl̩/",
+    "uk": "/ˈhɒs.pɪ.tl̩/"
+  },
+  {
+    "id": "batch-022--hospitality",
+    "word": "hospitality",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/hɑs.pɪˈtæl.ɪ.ti/",
+    "uk": "/hɒs.pɪˈtæl.ɪ.ti/"
+  },
+  {
+    "id": "batch-011--human",
+    "word": "human",
+    "partOfSpeech": "adjective",
+    "topic": "School",
+    "us": "/ˈ(h)ju.mən/",
+    "uk": "/ˈ(h)juː.mən/"
+  },
+  {
+    "id": "batch-022--ideology",
+    "word": "ideology",
+    "partOfSpeech": "noun",
+    "topic": "School",
+    "us": "/aɪ.di.ˈɑl.ə.d͡ʒi/",
+    "uk": "/ˌaɪ.diːˈɒl.ə.d͡ʒiː/"
+  },
+  {
+    "id": "batch-011--impossible",
+    "word": "impossible",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ɪmˈpɑ.səbl/",
+    "uk": "/ɪmˈpɒs.ɪ.bəl/"
+  },
+  {
+    "id": "batch-011--inappropriate",
+    "word": "inappropriate",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˌɪnəˈpɹoʊpɹi.ət/",
+    "uk": "/ˌɪnəˈpɹəʊpɹi.ət/"
+  },
+  {
+    "id": "batch-011--incongruous",
+    "word": "incongruous",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ɪnˈkɑn.ɡɹu.əs/",
+    "uk": "/ɪnˈkɒn.ɡɹʊu.ʌs/"
+  },
+  {
+    "id": "health--injury",
+    "word": "injury",
+    "partOfSpeech": "noun",
+    "topic": "Health",
+    "us": "/ˈɪn.dʒə.ɹi/",
+    "uk": "/ˈɪn.dʒə.ɹi/"
+  },
+  {
+    "id": "batch-023--insurance",
+    "word": "insurance",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ɪn.ˈʃʊɹ.əns/",
+    "uk": "/ɪn.ˈʃʊə.ɹəns/"
+  },
+  {
+    "id": "batch-011--internal",
+    "word": "internal",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ɪnˈtɝ.nl̩/",
+    "uk": "/ɪnˈtɜː.nəl/"
+  },
+  {
+    "id": "batch-011--international",
+    "word": "international",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˌɪn.tɚˈnæʃ.(ə.)n(ə)l/",
+    "uk": "/ˌɪn.təˈnæʃ.(ə.)n(ə)l/"
+  },
+  {
+    "id": "batch-023--irony",
+    "word": "irony",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈaɪ.ɹə.ni/",
+    "uk": "/ˈaɪə.ɹən.i/"
+  },
+  {
+    "id": "batch-023--labour",
+    "word": "labour",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/ˈleɪ.bɚ/",
+    "uk": "/ˈleɪ.bə/"
+  },
+  {
+    "id": "batch-023--landlord",
+    "word": "landlord",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˈlænd.lɔɹd/",
+    "uk": "/ˈlænd.lɔːd/"
+  },
+  {
+    "id": "batch-023--landowner",
+    "word": "landowner",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˈlændˌoʊ.nɚ/",
+    "uk": "/ˈlændˌəʊ.nə/"
+  },
+  {
+    "id": "laptop",
+    "word": "laptop",
+    "partOfSpeech": "noun",
+    "topic": "Technology",
+    "us": "/ˈlæp.tɑp/",
+    "uk": "/ˈlæp.tɒp/"
+  },
+  {
+    "id": "school--lecture",
+    "word": "lecture",
+    "partOfSpeech": "noun",
+    "topic": "Education & University Life",
+    "us": "/ˈlɛk.t͡ʃɚ/",
+    "uk": "/ˈlɛk.t͡ʃə/"
+  },
+  {
+    "id": "batch-011--legislative",
+    "word": "legislative",
+    "partOfSpeech": "adjective",
+    "topic": "School",
+    "us": "/ˈlɛ.dʒɪˌsleɪ.tɪv/",
+    "uk": "/ˈlɛ.dʒɪ.slə.tɪv/"
+  },
+  {
+    "id": "batch-011--linear",
+    "word": "linear",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈlɪn.i.ɚ/",
+    "uk": "/ˈlɪn.i.ə/"
+  },
+  {
+    "id": "batch-024--literacy",
+    "word": "literacy",
+    "partOfSpeech": "noun",
+    "topic": "School",
+    "us": "/ˈlɪt.əɹ.ə.si/",
+    "uk": "/ˈlɪt.ɹə.si/"
+  },
+  {
+    "id": "school--literature",
+    "word": "literature",
+    "partOfSpeech": "noun",
+    "topic": "Art, Literature & Culture",
+    "us": "/ˈlɪ.tɚ.ɪ.tʃɚ/",
+    "uk": "/ˈlɪ.tə.ɹə.tʃə(ɹ)/"
+  },
+  {
+    "id": "animals--lizard",
+    "word": "lizard",
+    "partOfSpeech": "noun",
+    "topic": "Animals",
+    "us": "/ˈlɪz.ɚd/",
+    "uk": "/ˈlɪz.əd/"
+  },
+  {
+    "id": "animals--lobster",
+    "word": "lobster",
+    "partOfSpeech": "noun",
+    "topic": "Animals",
+    "us": "/ˈlɑb.stɚ/",
+    "uk": "/ˈlɒb.stə/"
+  },
+  {
+    "id": "jobs--manager",
+    "word": "manager",
+    "partOfSpeech": "noun",
+    "topic": "Jobs",
+    "us": "/ˈmæn.ɪ.dʒɚ/",
+    "uk": "/ˈmæn.ɪ.dʒə/"
+  },
+  {
+    "id": "medicine",
+    "word": "medicine",
+    "partOfSpeech": "noun",
+    "topic": "Medicine & Healthcare",
+    "us": "/ˈmɛ.dɪ.sɪn/",
+    "uk": "/ˈmed(ɪ).sɪn/"
+  },
+  {
+    "id": "batch-012--medieval",
+    "word": "medieval",
+    "partOfSpeech": "adjective",
+    "topic": "School",
+    "us": "/mɪd.ˈi.vəl/",
+    "uk": "/ˌmɛd.i.ˈiː.vəl/"
+  },
+  {
+    "id": "people--mentor",
+    "word": "mentor",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˈmɛn.tɔɹ/",
+    "uk": "/ˈmɛn.tɔː/"
+  },
+  {
+    "id": "batch-001--metabolism",
+    "word": "metabolism",
+    "partOfSpeech": "noun",
+    "topic": "Health",
+    "us": "/məˈtæ.bəlˌɪz.əm/",
+    "uk": "/mɪˈtab.əl.ɪz.əm/"
+  },
+  {
+    "id": "technology--microphone",
+    "word": "microphone",
+    "partOfSpeech": "noun",
+    "topic": "Technology",
+    "us": "/ˈmaɪ.kɹəˌfoʊn/",
+    "uk": "/ˈmaɪ.kɹəˌfəʊn/"
+  },
+  {
+    "id": "batch-012--military",
+    "word": "military",
+    "partOfSpeech": "adjective",
+    "topic": "Education & University Life",
+    "us": "/ˈmɪl.ɪ.tɛɹ.i/",
+    "uk": "/ˈmɪl.ɪ.tɹi/"
+  },
+  {
+    "id": "batch-012--minimum",
+    "word": "minimum",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈmɪn.ə.məm/",
+    "uk": "/ˈmɪn.ɪ.məm/"
+  },
+  {
+    "id": "batch-025--minority",
+    "word": "minority",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/maɪˈnɔɹ.ɪ.ti/",
+    "uk": "/maɪˈnɒɹ.ɪ.ti/"
+  },
+  {
+    "id": "mirror",
+    "word": "mirror",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/ˈmiɹ.ɚ/",
+    "uk": "/ˈmɪ.ɹə/"
+  },
+  {
+    "id": "batch-025--mortgage",
+    "word": "mortgage",
+    "partOfSpeech": "noun",
+    "topic": "Business & Economics",
+    "us": "/ˈmɔɹ.ɡɪdʒ/",
+    "uk": "/ˈmɔː.ɡɪdʒ/"
+  },
+  {
+    "id": "batch-025--mosquito",
+    "word": "mosquito",
+    "partOfSpeech": "noun",
+    "topic": "Animals",
+    "us": "/məˈski.toʊ/",
+    "uk": "/mɒsˈkiː.təʊ/"
+  },
+  {
+    "id": "family--mother-in-law",
+    "word": "mother-in-law",
+    "partOfSpeech": "noun",
+    "topic": "Family",
+    "us": "/ˈmʌ.ðəɹ.ɪnˌlɑː/",
+    "uk": "/ˈmʌ.ðəɹ.ɪnˌlɔː/"
+  },
+  {
+    "id": "batch-025--nature",
+    "word": "nature",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈneɪ.tʃɚ/",
+    "uk": "/ˈneɪ.tʃə/"
+  },
+  {
+    "id": "nature--nectar",
+    "word": "nectar",
+    "partOfSpeech": "noun",
+    "topic": "Nature",
+    "us": "/ˈnɛk.təɹ/",
+    "uk": "/ˈnɛk.tə/"
+  },
+  {
+    "id": "batch-025--nephew",
+    "word": "nephew",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/ˈnɛf.ju/",
+    "uk": "/ˈnɛf.ju/"
+  },
+  {
+    "id": "batch-001--nutrition",
+    "word": "nutrition",
+    "partOfSpeech": "noun",
+    "topic": "Health",
+    "us": "/nuˈtɹɪ.ʃən/",
+    "uk": "/njuːˈtɹɪ.ʃən/"
+  },
+  {
+    "id": "batch-025--object",
+    "word": "object",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈɑb.d͡ʒɛkt/",
+    "uk": "/ˈɒb.d͡ʒɛkt/"
+  },
+  {
+    "id": "batch-012--objective",
+    "word": "objective",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/əbˈd͡ʒɛk.tɪv/",
+    "uk": "/ɒbˈd͡ʒɛk.tɪv/"
+  },
+  {
+    "id": "batch-012--obvious",
+    "word": "obvious",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈɑb.vi.əs/",
+    "uk": "/ˈɒb.vɪəs/"
+  },
+  {
+    "id": "nature--ocean",
+    "word": "ocean",
+    "partOfSpeech": "noun",
+    "topic": "Nature",
+    "us": "/ˈoʊ.ʃən/",
+    "uk": "/ˈəʊ.ʃən/"
+  },
+  {
+    "id": "animals--octopus",
+    "word": "octopus",
+    "partOfSpeech": "noun",
+    "topic": "Animals",
+    "us": "/ˈɑkt.ə.pʊs/",
+    "uk": "/ˈɒkt.ə.pʊs/"
+  },
+  {
+    "id": "technology--operating-system",
+    "word": "operating system",
+    "partOfSpeech": "noun",
+    "topic": "IT & Computers",
+    "us": "/ˈɑpəˌɹeɪtɪŋ ˌsɪstəm/",
+    "uk": "/ˈɒpəˌɹeɪtɪŋ ˌsɪstəm/"
+  },
+  {
+    "id": "batch-026--orbit",
+    "word": "orbit",
+    "partOfSpeech": "noun",
+    "topic": "Places",
+    "us": "/ˈɔɹ.bɪt/",
+    "uk": "/ˈɔː.bɪt/"
+  },
+  {
+    "id": "batch-026--organ",
+    "word": "organ",
+    "partOfSpeech": "noun",
+    "topic": "Art, Literature & Culture",
+    "us": "/ˈɔɹ.ɡən/",
+    "uk": "/ˈɔː.ɡən/"
+  },
+  {
+    "id": "batch-026--origin",
+    "word": "origin",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈɔɹ.ɪ.dʒɪn/",
+    "uk": "/ˈɒɹ.ɪ.dʒɪn/"
+  },
+  {
+    "id": "batch-026--packet",
+    "word": "packet",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/ˈpæk.ɪt/",
+    "uk": "/ˈpak.ɪt/"
+  },
+  {
+    "id": "classroom--pencil-case",
+    "word": "pencil case",
+    "partOfSpeech": "noun",
+    "topic": "Classroom",
+    "us": "/ˈpɛnsəl ˌkeɪs/",
+    "uk": "/ˈpɛnsəl ˌkeɪs/"
+  },
+  {
+    "id": "batch-026--period",
+    "word": "period",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈpɪr.ɪ.əd/",
+    "uk": "/ˈpɪə.rɪ.əd/"
+  },
+  {
+    "id": "batch-012--personal",
+    "word": "personal",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈpɜɹ.sən.əl/",
+    "uk": "/ˈpɜː.sən.əl/"
+  },
+  {
+    "id": "batch-026--photograph",
+    "word": "photograph",
+    "partOfSpeech": "noun",
+    "topic": "Media & Journalism",
+    "us": "/ˈfoʊ.tə.ˌɡɹæf/",
+    "uk": "/ˈfəʊ.tə.ˌɡɹɑːf/"
+  },
+  {
+    "id": "batch-027--politician",
+    "word": "politician",
+    "partOfSpeech": "noun",
+    "topic": "People",
+    "us": "/pɑl.ɪˈtɪʃ.ən/",
+    "uk": "/ˈpɒl.ɪ.tɪʃ.ən/"
+  },
+  {
+    "id": "batch-027--politics",
+    "word": "politics",
+    "partOfSpeech": "noun",
+    "topic": "Communication",
+    "us": "/ˈpɑl.ɪˌtɪks/",
+    "uk": "/ˈpɒl.ɪ.tɪks/"
+  },
+  {
+    "id": "clothing--poncho",
+    "word": "poncho",
+    "partOfSpeech": "noun",
+    "topic": "Clothing",
+    "us": "/ˈpɑn.tʃoʊ/",
+    "uk": "/ˈpɒn.tʃəʊ/"
+  },
+  {
+    "id": "batch-027--position",
+    "word": "position",
+    "partOfSpeech": "noun",
+    "topic": "Daily Activities",
+    "us": "/pəˈzɪ.ʃ(ə)n/",
+    "uk": "/pəˈzɪ.ʃ(ə)n/"
+  },
+  {
+    "id": "potato",
+    "word": "potato",
+    "partOfSpeech": "noun",
+    "topic": "Food",
+    "us": "/pəˈteɪ.toʊ/",
+    "uk": "/pəˈteɪ.təʊ/"
+  },
+  {
+    "id": "batch-012--premature",
+    "word": "premature",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˌpɹi.məˈtʊɹ/",
+    "uk": "/ˌpɹɛ.məˈtjʊə/"
+  },
+  {
+    "id": "technology--privacy",
+    "word": "privacy",
+    "partOfSpeech": "noun",
+    "topic": "IT & Computers",
+    "us": "/ˈpɹaɪ.və.si/",
+    "uk": "/ˈpɹɪv.ə.sɪ/"
+  },
+  {
+    "id": "batch-027--product",
+    "word": "product",
+    "partOfSpeech": "noun",
+    "topic": "Home",
+    "us": "/ˈpɹɑd.əkt/",
+    "uk": "/ˈpɹɒd.əkt/"
+  },
+  {
+    "id": "batch-013--proper",
+    "word": "proper",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈpɹɑ.pɚ/",
+    "uk": "/ˈpɹɒp.ə(ɹ)/"
+  },
+  {
+    "id": "batch-013--qualified",
+    "word": "qualified",
+    "partOfSpeech": "adjective",
+    "topic": "Sports",
+    "us": "/ˈkwɑl.ɪ.faɪd/",
+    "uk": "/ˈkwɒl.ɪ.faɪd/"
+  },
+  {
+    "id": "restaurant",
+    "word": "restaurant",
+    "partOfSpeech": "noun",
+    "topic": "Places",
+    "us": "/ˈɹɛs.t(ə)ˌɹɑnt/",
+    "uk": "/ˈɹɛs.t(ə).ɹɒ̃/"
+  },
+  {
+    "id": "technology--sensor",
+    "word": "sensor",
+    "partOfSpeech": "noun",
+    "topic": "Technology",
+    "us": "/ˈsɛn.sɚ/",
+    "uk": "/ˈsɛn.sə/"
+  },
+  {
+    "id": "batch-013--serious",
+    "word": "serious",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈsɪəɹ.i.əs/",
+    "uk": "/ˈsɪə.ɹi.əs/"
+  },
+  {
+    "id": "sister",
+    "word": "sister",
+    "partOfSpeech": "noun",
+    "topic": "Family",
+    "us": "/ˈsɪs.tɚ/",
+    "uk": "/ˈsɪs.tə/"
+  },
+  {
+    "id": "family--sister-in-law",
+    "word": "sister-in-law",
+    "partOfSpeech": "noun",
+    "topic": "Family",
+    "us": "/ˈsɪs.tɚ.ɪn.lɔ/",
+    "uk": "/ˈsɪs.tə.ɪn.lɔː/"
+  },
+  {
+    "id": "batch-013--spontaneous",
+    "word": "spontaneous",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/spɑnˈteɪ.ni.əs/",
+    "uk": "/spɒnˈteɪ.ni.əs/"
+  },
+  {
+    "id": "student",
+    "word": "student",
+    "partOfSpeech": "noun",
+    "topic": "School",
+    "us": "/ˈstu.dn̩t/",
+    "uk": "/ˈstjuː.dənt/"
+  },
+  {
+    "id": "batch-013--superior",
+    "word": "superior",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/sʊˈpɪɹ.i.ɚ/",
+    "uk": "/suːˈpɪə.ɹi.ə/"
+  },
+  {
+    "id": "sports--supporter",
+    "word": "supporter",
+    "partOfSpeech": "noun",
+    "topic": "Sports",
+    "us": "/səˈpɔɹ.tɚ/",
+    "uk": "/səˈpɔː.tə/"
+  },
+  {
+    "id": "animals--tortoise",
+    "word": "tortoise",
+    "partOfSpeech": "noun",
+    "topic": "Animals",
+    "us": "/ˈtɔːɹ.təs/",
+    "uk": "/ˈtɔː.təs/"
+  },
+  {
+    "id": "batch-014--toxic",
+    "word": "toxic",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈtɑk.sɪk/",
+    "uk": "/ˈtɒk.sɪk/"
+  },
+  {
+    "id": "batch-014--uncomfortable",
+    "word": "uncomfortable",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ʌnˈkʌm.fɚ.tə.bəl/",
+    "uk": "/ʌnˈkʌmf.tə.bəl/"
+  },
+  {
+    "id": "batch-014--verbal",
+    "word": "verbal",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈvɝ.bəl/",
+    "uk": "/ˈvɜː.bəl/"
+  },
+  {
+    "id": "batch-014--voluntary",
+    "word": "voluntary",
+    "partOfSpeech": "adjective",
+    "topic": "Communication",
+    "us": "/ˈvɑ.lənˌtɛ.ɹi/",
+    "uk": "/ˈvɒ.lən.tɹi/"
+  },
+  {
+    "id": "volunteer",
+    "word": "volunteer",
+    "partOfSpeech": "noun",
+    "topic": "Community",
+    "us": "/vɑl.ənˈtɪɹ/",
+    "uk": "/vɒl.ənˈtɪə/"
+  },
+  {
+    "id": "jobs--workshop",
+    "word": "workshop",
+    "partOfSpeech": "noun",
+    "topic": "Jobs",
+    "us": "/ˈwɝk.ʃɑp/",
+    "uk": "/ˈwɜːk.ʃɒp/"
+  },
+  {
+    "id": "jobs--writer",
+    "word": "writer",
+    "partOfSpeech": "noun",
+    "topic": "Art, Literature & Culture",
+    "us": "/ˈɹaɪ.təɹ/",
+    "uk": "/ˈɹaɪ.tə/"
+  },
+  {
+    "id": "health--x-ray",
+    "word": "X-ray",
+    "partOfSpeech": "noun",
+    "topic": "Health",
+    "us": "/ˈɛks ˌɹeɪ/",
+    "uk": "/ˈɛks ɹeɪ/"
+  }
+]

@@ -28,3 +28,15 @@ Changes made for this application:
 
 No Open English WordNet entry is added directly to the scored Level Test. New
 vocabulary remains subject to educator review through the existing review workflow.
+
+## Pronunciation Studio
+
+The Pronunciation Studio catalogue contains only existing vocabulary entries
+that have both US and GB IPA records in Open English WordNet 2025. The generated
+catalogue preserves those transcriptions exactly and requires explicit primary
+stress and source-provided syllable boundaries. Entries without that paired data
+remain clearly unavailable rather than receiving a guessed variant.
+
+Spoken playback uses the English voices exposed by the visitor's browser and
+operating system. It is not presented as a bundled or independently verified
+recording, and no microphone or speech-recognition service is used.

@@ -9,6 +9,7 @@ import {
 const publicRoutes = [
   "/",
   "/dictionary",
+  "/pronunciation-studio",
   "/confusing-words",
   "/topics",
   "/practice",
@@ -138,6 +139,82 @@ test("rich word cards and confusing-word lessons are usable", async ({
   await expect(
     page.locator('a[href^="/dictionary?q="]').first(),
   ).toHaveAttribute("href", /\/dictionary\?q=/)
+})
+
+test("pronunciation studio compares verified accents and supports listen-and-repeat", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    class MockSpeechSynthesisUtterance {
+      text: string
+      lang = ""
+      rate = 1
+      voice: SpeechSynthesisVoice | null = null
+      onstart: (() => void) | null = null
+      onend: (() => void) | null = null
+      onerror: ((event: { error: string }) => void) | null = null
+
+      constructor(text: string) {
+        this.text = text
+      }
+    }
+
+    const voices = [
+      { name: "Test US", lang: "en-US" },
+      { name: "Test UK", lang: "en-GB" },
+    ] as SpeechSynthesisVoice[]
+    Object.defineProperty(window, "SpeechSynthesisUtterance", {
+      configurable: true,
+      value: MockSpeechSynthesisUtterance,
+    })
+    Object.defineProperty(window, "speechSynthesis", {
+      configurable: true,
+      value: {
+        cancel() {},
+        getVoices: () => voices,
+        addEventListener() {},
+        removeEventListener() {},
+        speak(utterance: MockSpeechSynthesisUtterance) {
+          setTimeout(() => {
+            utterance.onstart?.()
+            utterance.onend?.()
+          }, 20)
+        },
+      },
+    })
+  })
+
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto("/pronunciation-studio?word=student")
+  await expect(
+    page.getByRole("heading", { name: "Pronunciation Studio" }),
+  ).toBeVisible()
+  await expect(page.getByText("/ˈstu.dn̩t/").first()).toBeVisible()
+  await page.getByRole("button", { name: "UK", exact: true }).click()
+  await expect(page.getByText("/ˈstjuː.dənt/").first()).toBeVisible()
+  await expect(page.getByText("Your device selected “Test UK”.")).toBeVisible()
+
+  const search = page.getByPlaceholder("Search by word or topic")
+  await search.fill("coffee")
+  await page.getByRole("button", { name: /coffee/i }).click()
+  await expect(page.getByRole("heading", { name: "coffee" })).toBeVisible()
+
+  await page.getByRole("button", { name: "Listen slowly" }).click()
+  await expect(
+    page.getByRole("button", { name: "I repeated it" }),
+  ).toBeEnabled()
+  await page.getByRole("button", { name: "I repeated it" }).click()
+  await expect(page.getByText("Word 2 of 3")).toBeVisible()
+
+  const overflow = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth >
+      document.documentElement.clientWidth + 1,
+  )
+  expect(overflow).toBe(false)
+
+  await page.goto("/pronunciation-studio?word=chair")
+  await expect(page.getByText(/Nothing has been guessed/)).toBeVisible()
 })
 
 test("every category practice, writing, flashcard and game mode opens", async ({

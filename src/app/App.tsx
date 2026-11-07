@@ -136,6 +136,10 @@ const AssessmentPage = lazy(() => import("./AssessmentPage"))
 
 const EnglishChatPage = lazy(() => import("./EnglishChatPage"))
 
+const PronunciationStudioPage = lazy(
+  () => import("./PronunciationStudioPage"),
+)
+
 const wordById = new Map(vocabulary.map((word) => [word.id, word]))
 
 const visualPracticeVocabulary = visualVocabulary(vocabulary)
@@ -1098,6 +1102,12 @@ const navigation: {
   { path: "/", label: "Home", icon: Home },
 
   { path: "/dictionary", label: "Dictionary", icon: BookOpen },
+
+  {
+    path: "/pronunciation-studio",
+    label: "Pronunciation Studio",
+    icon: Headphones,
+  },
 
   { path: "/confusing-words", label: "Confusing Words", icon: CircleHelp },
 
@@ -4544,6 +4554,14 @@ function WordDialog({ word, onClose }: WordDialogProps) {
               ? "Saved to favorites"
               : "Add to Favorites"}
           </button>
+          <Link
+            to={`/pronunciation-studio?word=${encodeURIComponent(word.id)}`}
+            onClick={onClose}
+            className={secondaryButton}
+          >
+            <Headphones size={15} />
+            Pronunciation Studio
+          </Link>
           <button
             onClick={async () => {
               try {
@@ -7458,6 +7476,17 @@ function PracticeRoute() {
   return <PracticePage key={params.toString()} />
 }
 
+function PronunciationStudioRoute() {
+  const { data, notify } = useApp()
+
+  return (
+    <PronunciationStudioPage
+      audioEnabled={data.preferences.audio}
+      notify={notify}
+    />
+  )
+}
+
 function CategoryLearningHub() {
   return (
     <>
@@ -7556,6 +7585,8 @@ const router = createBrowserRouter([
       { index: true, Component: HomePage },
 
       { path: "dictionary", Component: DictionaryPage },
+
+      { path: "pronunciation-studio", Component: PronunciationStudioRoute },
 
       { path: "confusing-words", Component: ConfusingWordsPage },
 

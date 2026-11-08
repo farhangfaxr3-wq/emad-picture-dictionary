@@ -15,20 +15,13 @@ import {
 } from "lucide-react"
 import { Link, useSearchParams } from "react-router"
 
+import type { Word } from "./content"
 import {
   ipaSounds,
   pronunciationChallenges,
   type IpaSound,
 } from "./pronunciationLearning"
-import {
-  pronunciationForAccent,
-  pronunciationSources,
-  pronunciationStudioById,
-  pronunciationStudioEntries,
-  splitIpaSyllables,
-  type PronunciationAccent,
-  type PronunciationStudioEntry,
-} from "./pronunciationStudio"
+import { splitIpaSyllables } from "./pronunciationStudio"
 import { vocabulary } from "./vocabulary"
 
 interface PronunciationStudioPageProps {
@@ -39,13 +32,12 @@ interface PronunciationStudioPageProps {
 type PlaybackState = "idle" | "loading" | "playing"
 type RecorderState = "idle" | "recording" | "ready"
 
-const accentDetails: Record<PronunciationAccent, {
-  label: string
-  language: string
-  longLabel: string
-}> = {
-  US: { label: "US", language: "en-US", longLabel: "American English" },
-  UK: { label: "UK", language: "en-GB", longLabel: "British English" },
+function displayIpa(ipa: string) {
+  const trimmed = ipa.trim()
+  if (!trimmed || trimmed === "Listen for pronunciation") {
+    return "Pronunciation pending review"
+  }
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}/`
 }
 
 function MouthDiagram({ sound }: { sound: IpaSound }) {
@@ -96,10 +88,13 @@ function MouthDiagram({ sound }: { sound: IpaSound }) {
 }
 
 function IpaBlocks({ ipa }: { ipa: string }) {
-  const blocks = splitIpaSyllables(ipa)
+  const blocks = splitIpaSyllables(displayIpa(ipa))
   return (
     <div>
-      <div className="flex flex-wrap gap-2" aria-label={`IPA: ${ipa}`}>
+      <div
+        className="flex flex-wrap gap-2"
+        aria-label={`Standard IPA: ${displayIpa(ipa)}`}
+      >
         {blocks.map((block, index) => {
           const primary = block.includes("ˈ")
           const secondary = block.includes("ˌ")
@@ -120,8 +115,8 @@ function IpaBlocks({ ipa }: { ipa: string }) {
         })}
       </div>
       <p className="mt-2 text-xs leading-5 text-muted-foreground">
-        Stress marks and syllable separators are shown exactly as supplied by
-        the verified source; none are inferred by this website.
+        The solid block marks primary stress. This is the same standard
+        pronunciation shown throughout the website.
       </p>
     </div>
   )
@@ -133,11 +128,9 @@ export default function PronunciationStudioPage({
 }: PronunciationStudioPageProps) {
   const [searchParams, setSearchParams] = useSearchParams()
   const requestedId = searchParams.get("word") || "airport"
-  const requestedWord = vocabulary.find((word) => word.id === requestedId)
-  const requestedEntry = pronunciationStudioById.get(requestedId)
-  const selected = requestedEntry || pronunciationStudioEntries[0]
+  const selected =
+    vocabulary.find((word) => word.id === requestedId) || vocabulary[0]
   const [query, setQuery] = useState("")
-  const [accent, setAccent] = useState<PronunciationAccent>("US")
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const [playback, setPlayback] = useState<PlaybackState>("idle")
   const [practiceStep, setPracticeStep] = useState(0)
@@ -153,7 +146,7 @@ export default function PronunciationStudioPage({
 
   const filteredEntries = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase("en")
-    return pronunciationStudioEntries
+    return vocabulary
       .filter(
         (entry) =>
           !normalized ||
@@ -165,20 +158,19 @@ export default function PronunciationStudioPage({
   const filteredChallenges = soraniOnly
     ? pronunciationChallenges.filter((challenge) => challenge.soraniRelevant)
     : pronunciationChallenges
-  const selectedIndex = pronunciationStudioEntries.findIndex(
-    (entry) => entry.id === selected.id,
+  const selectedIndex = Math.max(
+    0,
+    vocabulary.findIndex((entry) => entry.id === selected.id),
   )
   const practiceEntries = Array.from(
     { length: 3 },
-    (_, offset) =>
-      pronunciationStudioEntries[
-        (selectedIndex + offset) % pronunciationStudioEntries.length
-      ],
+    (_, offset) => vocabulary[(selectedIndex + offset) % vocabulary.length],
   )
   const practiceEntry = practiceEntries[practiceStep]
-  const verifiedPercent = Math.round(
-    (pronunciationStudioEntries.length / vocabulary.length) * 100,
-  )
+  const standardVoice =
+    voices.find((voice) =>
+      voice.lang.toLocaleLowerCase("en").startsWith("en"),
+    ) || null
 
   useEffect(() => {
     if (!("speechSynthesis" in window)) return
@@ -205,12 +197,7 @@ export default function PronunciationStudioPage({
     [recordingUrl],
   )
 
-  const playText = (
-    text: string,
-    playbackAccent: PronunciationAccent,
-    slow = false,
-    onComplete?: () => void,
-  ) => {
+  const playText = (text: string, slow = false, onComplete?: () => void) => {
     if (!audioEnabled) {
       notify("Audio is turned off. Enable it in Settings to listen.")
       return
@@ -219,23 +206,11 @@ export default function PronunciationStudioPage({
       notify("Synthetic speech is not supported by this browser.")
       return
     }
-    const details = accentDetails[playbackAccent]
-    const voice = voices.find(
-      (candidate) =>
-        candidate.lang.toLocaleLowerCase("en") ===
-        details.language.toLocaleLowerCase("en"),
-    )
-    if (!voice) {
-      notify(
-        `No exact ${details.language} synthetic voice is installed. Choose another device or browser; the site will not relabel a different accent.`,
-      )
-      return
-    }
 
     window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = details.language
-    utterance.voice = voice
+    utterance.lang = standardVoice?.lang || "en"
+    if (standardVoice) utterance.voice = standardVoice
     utterance.rate = slow ? 0.58 : 0.82
     activeUtterance.current = utterance
     setPlayback("loading")
@@ -252,13 +227,13 @@ export default function PronunciationStudioPage({
       if (activeUtterance.current !== utterance) return
       setPlayback("idle")
       if (event.error !== "canceled" && event.error !== "interrupted") {
-        notify("Synthetic audio could not play. Try another browser or voice.")
+        notify("Audio could not play. Try another browser or device.")
       }
     }
     window.speechSynthesis.speak(utterance)
   }
 
-  const selectEntry = (entry: PronunciationStudioEntry) => {
+  const selectEntry = (entry: Word) => {
     setSearchParams({ word: entry.id })
     setQuery("")
   }
@@ -305,34 +280,23 @@ export default function PronunciationStudioPage({
           <div>
             <p className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[.18em] text-primary">
               <Headphones size={16} aria-hidden="true" />
-              Listen · compare · try
+              Listen · notice · try
             </p>
             <h1 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
               Pronunciation Studio
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-              Compare source-verified UK and US IPA, explore sound positions,
-              and practise stress, linking and intonation without automated
-              scoring.
+              Learn one clear standard pronunciation for every dictionary entry,
+              then practise sounds, stress, linking and intonation.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-3 text-center">
-            <div className="rounded-2xl bg-secondary p-4">
-              <p className="text-3xl font-bold text-primary">
-                {pronunciationStudioEntries.length}
-              </p>
-              <p className="mt-1 text-[10px] text-muted-foreground">
-                paired records
-              </p>
-            </div>
-            <div className="rounded-2xl bg-secondary p-4">
-              <p className="text-3xl font-bold text-primary">
-                {verifiedPercent}%
-              </p>
-              <p className="mt-1 text-[10px] text-muted-foreground">
-                catalogue coverage
-              </p>
-            </div>
+          <div className="rounded-2xl bg-secondary p-5 text-center">
+            <p className="text-3xl font-bold text-primary">
+              {vocabulary.length}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              standard pronunciations
+            </p>
           </div>
         </div>
       </header>
@@ -344,7 +308,7 @@ export default function PronunciationStudioPage({
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-widest text-primary">
-              Verified sound library
+              Pronunciation library
             </p>
             <h2
               id="sound-library"
@@ -362,7 +326,7 @@ export default function PronunciationStudioPage({
           </Link>
         </div>
         <label className="relative mt-4 block">
-          <span className="sr-only">Search verified pronunciation words</span>
+          <span className="sr-only">Search pronunciation words</span>
           <Search
             size={18}
             className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -392,21 +356,10 @@ export default function PronunciationStudioPage({
         </div>
         {!filteredEntries.length ? (
           <p className="mt-3 text-sm text-muted-foreground" role="status">
-            No exact verified UK/US pair matches this search.
+            No dictionary entry matches this search.
           </p>
         ) : null}
       </section>
-
-      {!requestedEntry && requestedWord ? (
-        <aside
-          role="status"
-          className="mt-6 rounded-2xl border border-[#d9b45d] bg-[#fff8df] p-4 text-sm leading-6 text-[#604812] dark:border-[#806c3d] dark:bg-[#39321f] dark:text-[#f8dda0]"
-        >
-          <strong>{requestedWord.word}</strong> keeps its existing dictionary
-          pronunciation, but an exact paired US/UK source record is still
-          awaiting verification. Nothing has been guessed or relabelled.
-        </aside>
-      ) : null}
 
       <section
         className="mt-6 rounded-3xl border border-border bg-card p-5 sm:p-7"
@@ -426,107 +379,54 @@ export default function PronunciationStudioPage({
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-2 text-[10px] font-semibold text-primary">
             <ShieldCheck size={14} aria-hidden="true" />
-            Exact word + part of speech
+            One standard reading
           </span>
         </div>
 
-        <div className="mt-6 grid gap-4 lg:grid-cols-2">
-          {(["US", "UK"] as const).map((item) => {
-            const details = accentDetails[item]
-            const ipa = pronunciationForAccent(selected, item)
-            const voice = voices.find(
-              (candidate) =>
-                candidate.lang.toLocaleLowerCase("en") ===
-                details.language.toLocaleLowerCase("en"),
-            )
-            return (
-              <article
-                key={item}
-                className="rounded-2xl border border-border bg-secondary/35 p-4 sm:p-5"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold text-muted-foreground">
-                      {details.longLabel}
-                    </p>
-                    <h3 className="font-display text-xl font-bold">
-                      {item} IPA
-                    </h3>
-                  </div>
-                  <span className="rounded-full bg-background px-3 py-1 text-xs font-bold">
-                    {details.language}
-                  </span>
-                </div>
-                <p className="mt-3 break-words font-mono text-xl font-semibold sm:text-2xl">
-                  {ipa}
-                </p>
-                <div className="mt-4">
-                  <IpaBlocks ipa={ipa} />
-                </div>
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => playText(selected.word, item)}
-                    disabled={!audioEnabled || playback !== "idle" || !voice}
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-45"
-                  >
-                    {playback === "loading" ? (
-                      <LoaderCircle
-                        className="animate-spin"
-                        size={16}
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <Play size={16} aria-hidden="true" />
-                    )}
-                    Play {item}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => playText(selected.word, item, true)}
-                    disabled={!audioEnabled || playback !== "idle" || !voice}
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-border bg-background px-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-45"
-                  >
-                    <Gauge size={16} aria-hidden="true" />
-                    Slow {item}
-                  </button>
-                </div>
-                <p className="mt-3 text-[10px] leading-4 text-muted-foreground">
-                  {voice
-                    ? `Synthetic audio · device voice “${voice.name}”`
-                    : `No exact ${details.language} device voice is available; no substitute accent is used.`}
-                </p>
-              </article>
-            )
-          })}
-        </div>
-
-        {selected.us === selected.uk ? (
-          <p className="mt-4 rounded-xl bg-secondary px-4 py-3 text-sm">
-            This source records the same IPA for US and UK English. The two
-            synthetic voices remain separately labelled and playable.
+        <article className="mt-6 rounded-2xl border border-border bg-secondary/35 p-4 sm:p-5">
+          <p className="text-xs font-semibold text-muted-foreground">
+            Standard dictionary pronunciation
           </p>
-        ) : null}
-        <p className="mt-4 flex items-start gap-2 text-xs leading-5 text-muted-foreground">
-          <ShieldCheck
-            className="mt-0.5 shrink-0"
-            size={15}
-            aria-hidden="true"
-          />
-          <span>
-            IPA source:{" "}
-            <a
-              href={pronunciationSources[selected.sourceId].url}
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold text-primary underline"
+          <p className="mt-2 break-words font-mono text-xl font-semibold sm:text-2xl">
+            {displayIpa(selected.pronunciation)}
+          </p>
+          <div className="mt-4">
+            <IpaBlocks ipa={selected.pronunciation} />
+          </div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => playText(selected.word)}
+              disabled={!audioEnabled || playback !== "idle"}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-45"
             >
-              {pronunciationSources[selected.sourceId].name}
-            </a>{" "}
-            ({pronunciationSources[selected.sourceId].license}). Playback is
-            clearly labelled browser-generated speech, not a studio recording.
-          </span>
-        </p>
+              {playback === "loading" ? (
+                <LoaderCircle
+                  className="animate-spin"
+                  size={16}
+                  aria-hidden="true"
+                />
+              ) : (
+                <Play size={16} aria-hidden="true" />
+              )}
+              Play pronunciation
+            </button>
+            <button
+              type="button"
+              onClick={() => playText(selected.word, true)}
+              disabled={!audioEnabled || playback !== "idle"}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-border bg-background px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-45"
+            >
+              <Gauge size={16} aria-hidden="true" />
+              Play slowly
+            </button>
+          </div>
+          <p className="mt-3 text-[10px] leading-4 text-muted-foreground">
+            Synthetic playback
+            {standardVoice ? ` · device voice “${standardVoice.name}”` : ""}. No
+            separate accent choices are shown.
+          </p>
+        </article>
       </section>
 
       <section
@@ -567,12 +467,12 @@ export default function PronunciationStudioPage({
             <MouthDiagram sound={selectedSound} />
             <button
               type="button"
-              onClick={() => playText(selectedSound.example, accent, true)}
+              onClick={() => playText(selectedSound.example, true)}
               disabled={!audioEnabled || playback !== "idle"}
               className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-45"
             >
               <Volume2 size={16} aria-hidden="true" />
-              Hear “{selectedSound.example}” in {accent} English
+              Hear “{selectedSound.example}”
             </button>
           </div>
         </div>
@@ -625,7 +525,7 @@ export default function PronunciationStudioPage({
                   <p className="mt-1 text-sm">{challenge.listenText}</p>
                   <button
                     type="button"
-                    onClick={() => playText(challenge.listenText, accent, true)}
+                    onClick={() => playText(challenge.listenText, true)}
                     disabled={!audioEnabled || playback !== "idle"}
                     className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-lg border border-border bg-card px-3 text-xs font-semibold disabled:opacity-45"
                   >
@@ -698,12 +598,12 @@ export default function PronunciationStudioPage({
                 {practiceEntry.word}
               </p>
               <p className="mt-2 font-mono text-sm text-muted-foreground">
-                {pronunciationForAccent(practiceEntry, accent)}
+                {displayIpa(practiceEntry.pronunciation)}
               </p>
               <button
                 type="button"
                 onClick={() =>
-                  playText(practiceEntry.word, accent, true, () =>
+                  playText(practiceEntry.word, true, () =>
                     setHeardPractice(true),
                   )
                 }
@@ -781,8 +681,8 @@ export default function PronunciationStudioPage({
                 aria-label="Your local pronunciation recording"
               />
               <p className="mt-2 text-[10px] text-muted-foreground">
-                Compare your rhythm and sounds with the labelled synthetic
-                example above. No accuracy claim is made.
+                Compare your rhythm and sounds with the standard example above.
+                No accuracy claim is made.
               </p>
             </div>
           ) : null}
@@ -790,12 +690,10 @@ export default function PronunciationStudioPage({
       </div>
 
       <section className="mt-6 rounded-2xl border border-border bg-card p-4 text-xs leading-5 text-muted-foreground">
-        <strong className="text-foreground">Coverage note:</strong>{" "}
-        {pronunciationStudioEntries.length} of {vocabulary.length} dictionary
-        records currently have an exact paired US/UK IPA source match. The
-        remaining {vocabulary.length - pronunciationStudioEntries.length} keep
-        their existing dictionary experience while awaiting verification.
-        Synthetic audio loads only when you press Play.
+        <strong className="text-foreground">Pronunciation note:</strong> All{" "}
+        {vocabulary.length} dictionary entries keep their existing words,
+        meanings and learning data. The Studio presents one standard
+        pronunciation and one synthetic playback option for consistency.
       </section>
 
       {!audioEnabled ? (

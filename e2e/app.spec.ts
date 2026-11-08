@@ -161,7 +161,7 @@ test("rich word cards and confusing-word lessons are usable", async ({
   ).toHaveAttribute("href", /\/dictionary\?q=/)
 })
 
-test("pronunciation studio compares verified accents and supports listen-and-repeat", async ({
+test("pronunciation studio uses one standard reading and supports listen-and-repeat", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -180,8 +180,7 @@ test("pronunciation studio compares verified accents and supports listen-and-rep
     }
 
     const voices = [
-      { name: "Test US", lang: "en-US" },
-      { name: "Test UK", lang: "en-GB" },
+      { name: "Test Standard English", lang: "en" },
     ] as SpeechSynthesisVoice[]
     Object.defineProperty(window, "SpeechSynthesisUtterance", {
       configurable: true,
@@ -209,12 +208,12 @@ test("pronunciation studio compares verified accents and supports listen-and-rep
   await expect(
     page.getByRole("heading", { name: "Pronunciation Studio" }),
   ).toBeVisible()
-  await expect(page.getByText("/ˈstu.dn̩t/").first()).toBeVisible()
   await expect(page.getByText("/ˈstjuː.dənt/").first()).toBeVisible()
   await expect(
-    page.getByText(/Synthetic audio · device voice “Test UK”/),
+    page.getByText(/device voice “Test Standard English”/),
   ).toBeVisible()
-  await page.getByRole("button", { name: "Play UK" }).click()
+  await page.getByRole("button", { name: "Play pronunciation" }).click()
+  await expect(page.getByText(/US English|UK English/)).toHaveCount(0)
 
   const search = page.getByPlaceholder("Search by word or topic")
   await search.fill("coffee")
@@ -235,7 +234,7 @@ test("pronunciation studio compares verified accents and supports listen-and-rep
   )
   expect(overflow).toBe(false)
 
-  await expect(page.getByText(/paired records/)).toBeVisible()
+  await expect(page.getByText("4000", { exact: true })).toBeVisible()
   await expect(
     page.getByRole("heading", { name: "See how the sound is formed" }),
   ).toBeVisible()
@@ -244,7 +243,8 @@ test("pronunciation studio compares verified accents and supports listen-and-rep
   ).toBeVisible()
 
   await page.goto("/pronunciation-studio?word=apple")
-  await expect(page.getByText(/Nothing has been guessed/)).toBeVisible()
+  await expect(page.getByRole("heading", { name: "apple" })).toBeVisible()
+  await expect(page.getByText(/One standard reading/)).toBeVisible()
 })
 
 test("retired learning-path links redirect to topics without changing progress", async ({

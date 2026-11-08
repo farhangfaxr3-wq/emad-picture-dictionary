@@ -16,7 +16,6 @@ import {
   type ConfusionDifficulty,
   type ConfusionType,
 } from "./confusingWords"
-import { pronunciationStudioEntries } from "./pronunciationStudio"
 
 type ChallengeMode = "choose" | "fix"
 
@@ -38,10 +37,6 @@ export default function ConfusingWordsPage() {
   const [mode, setMode] = useState<ChallengeMode>("choose")
   const [answers, setAnswers] = useState<Record<string, string>>({})
 
-  const pronunciationIds = useMemo(
-    () => new Set(pronunciationStudioEntries.map((entry) => entry.id)),
-    [],
-  )
   const filteredLessons = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase("en")
     return confusingWordLessons.filter((lesson) => {
@@ -223,8 +218,6 @@ export default function ConfusingWordsPage() {
                 }`}
               >
                 {lesson.words.map((item) => {
-                  const hasVerifiedAudio =
-                    !!item.wordId && pronunciationIds.has(item.wordId)
                   return (
                     <section
                       key={item.word}
@@ -260,19 +253,15 @@ export default function ConfusingWordsPage() {
                             Dictionary
                           </Link>
                         ) : null}
-                        {hasVerifiedAudio ? (
+                        {item.wordId ? (
                           <Link
                             to={`/pronunciation-studio?word=${encodeURIComponent(item.wordId!)}`}
                             className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-border bg-card px-3 text-xs font-semibold hover:bg-secondary"
                           >
                             <Headphones size={14} aria-hidden="true" />
-                            Verified UK/US audio
+                            Pronunciation
                           </Link>
-                        ) : (
-                          <span className="inline-flex min-h-11 items-center text-[10px] text-muted-foreground">
-                            Paired UK/US verification pending
-                          </span>
-                        )}
+                        ) : null}
                       </div>
                     </section>
                   )

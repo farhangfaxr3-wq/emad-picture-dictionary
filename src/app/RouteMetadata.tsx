@@ -22,7 +22,7 @@ const routeMetadata: Record<string, PageMetadata> = {
   "/pronunciation-studio": {
     title: "English Pronunciation Studio | Emad Picture Dictionary",
     description:
-      "Compare verified US and UK IPA, find stressed syllables and practise English words with accessible slow playback.",
+      "Learn one clear standard pronunciation, find stressed syllables and practise English words with accessible slow playback.",
   },
   "/confusing-words": {
     title: "Words People Confuse | Emad Picture Dictionary",

@@ -105,7 +105,6 @@ import { topicNames } from "./topicCatalog"
 import RouteMetadata from "./RouteMetadata"
 import WordLearningDetails from "./WordLearningDetails"
 import ConfusingWordsPage from "./ConfusingWordsPage"
-import { pronunciationStudioById } from "./pronunciationStudio"
 import { SoraniGloss, SoraniInstruction } from "./SoraniSupport"
 import {
   STORE_KEY,
@@ -1050,70 +1049,6 @@ function AudioButton({
         <Volume2 size={large ? 22 : 16} />
       )}
     </button>
-  )
-}
-
-function PairedAccentControls({ word }: { word: Word }) {
-  const { data, notify } = useApp()
-  const record = pronunciationStudioById.get(word.id)
-
-  if (!record) return null
-
-  const playAccent = (accent: "US" | "UK") => {
-    if (!data.preferences.audio) {
-      notify("Audio is turned off. Enable it in Settings to listen.")
-      return
-    }
-    if (!("speechSynthesis" in window)) {
-      notify("Synthetic speech is not supported by this browser.")
-      return
-    }
-    const language = accent === "US" ? "en-US" : "en-GB"
-    const voice = window.speechSynthesis
-      .getVoices()
-      .find(
-        (candidate) =>
-          candidate.lang.toLocaleLowerCase("en") ===
-          language.toLocaleLowerCase("en"),
-      )
-    if (!voice) {
-      notify(
-        `No exact ${language} synthetic voice is installed. The site will not relabel another accent.`,
-      )
-      return
-    }
-    const utterance = new SpeechSynthesisUtterance(word.word)
-    utterance.lang = language
-    utterance.voice = voice
-    utterance.rate = data.preferences.speed === "Slow" ? 0.65 : 0.85
-    window.speechSynthesis.cancel()
-    window.speechSynthesis.speak(utterance)
-  }
-
-  return (
-    <div className="mt-3 rounded-xl border border-border bg-background p-3">
-      <p className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
-        Verified paired pronunciation · synthetic playback
-      </p>
-      <div className="mt-2 grid gap-2 sm:grid-cols-2">
-        {(["US", "UK"] as const).map((accent) => (
-          <button
-            key={accent}
-            type="button"
-            onClick={() => playAccent(accent)}
-            className="inline-flex min-h-11 items-center justify-between gap-3 rounded-xl border border-border bg-card px-3 text-left hover:bg-secondary"
-          >
-            <span>
-              <strong className="block text-xs">{accent} English</strong>
-              <span className="font-mono text-[10px] text-muted-foreground">
-                {accent === "US" ? record.us : record.uk}
-              </span>
-            </span>
-            <Volume2 size={16} className="shrink-0 text-primary" />
-          </button>
-        ))}
-      </div>
-    </div>
   )
 }
 
@@ -4576,7 +4511,6 @@ function WordDialog({ word, onClose }: WordDialogProps) {
                     : "Preparing pronunciation…"
               : "Ready to listen. Tap the speaker."}
         </p>
-        <PairedAccentControls word={word} />
         <div className="mt-4 rounded-xl bg-background p-4">
           <p className="mb-1 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
             IN A SENTENCE
@@ -7485,12 +7419,12 @@ function AboutPage() {
             </summary>
             <p className="mt-3 text-xs leading-6 text-muted-foreground">
               Pronunciation transcriptions are checked against open linguistic
-              datasets. American English coverage is based on CMUdict-derived
-              IPA data and supplemented by Open English WordNet. A small,
-              documented exception list covers learner terms and initialisms
-              absent from those source files. CEFR labels remain provisional
-              until educator review; the site does not present automatically
-              estimated levels as verified.
+              datasets, including CMUdict-derived IPA and Open English WordNet.
+              The interface presents one standard reading per dictionary entry.
+              A small, documented exception list covers learner terms and
+              initialisms absent from those source files. CEFR labels remain
+              provisional until educator review; the site does not present
+              automatically estimated levels as verified.
             </p>
             <ul className="mt-3 space-y-2 text-xs">
               <li>

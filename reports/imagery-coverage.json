@@ -1,13 +1,12 @@
 {
-  "generatedAt": "2026-11-03T03:31:46.136Z",
+  "generatedAt": "2026-11-09T03:03:14.207Z",
   "totalVocabulary": 4000,
   "wordSpecificVerified": 1058,
   "awaitingWordSpecificReview": 2942,
-  "curatedRelatedContext": 48,
-  "sameGroupContext": 484,
-  "topicContext": 2410,
-  "entriesWithoutAnyVisual": 0,
-  "totalVisualCoverage": 4000,
+  "correctedMisleadingFallbacks": 2942,
+  "neutralUnavailableState": 2942,
+  "entriesWithoutAnyVisual": 2942,
+  "totalVisualCoverage": 1058,
   "practiceEligibleWords": 1058,
   "practiceEligibleUniqueImages": 974,
   "unlinkedLocalAssets": 56,
@@ -70,6 +69,6 @@
     "/images/vocabulary/unsplash-v-young.jpg"
   ],
   "unlinkedAssetPolicy": "Unlinked files are not shown or marked verified until their source credit and word relevance are confirmed.",
-  "practicePolicy": "Only checked word-specific images are eligible for image-answer questions. Related and contextual images are display-only.",
-  "remainingReason": "Entries without a checked word-specific photograph use a clearly labeled curated, learning-group, or topic context until a relevant licensed exact image is manually reviewed."
+  "practicePolicy": "Only checked word-specific images are displayed or eligible for image-answer questions. Missing and unverified images use a neutral unavailable state.",
+  "remainingReason": "Entries without a checked word-specific photograph remain usable with definitions, examples, and neutral unavailable states until a relevant licensed exact image is manually reviewed."
 }

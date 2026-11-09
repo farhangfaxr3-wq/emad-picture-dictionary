@@ -1324,28 +1324,32 @@ export function completeCategoryCatalog(
     const photograph = getVocabularyPhoto(word)
     return {
       ...word,
-      image: photograph.kind === "context" ? undefined : photograph.src,
-      imageStatus: photograph.kind === "context" ? "pending" : "verified",
+      image: photograph?.src,
+      imageStatus: photograph ? "verified" : "pending",
       cefr: word.cefr || estimateCEFR(word),
-      visualKind: photograph.kind === "context" ? "symbol" : "photo",
+      visualKind: photograph ? "photo" : "symbol",
       audio: { text: word.word, language: "en-US" },
       related: [
-      ...new Set([
-        ...word.related.filter((id) =>
-          words.some((other) => other.id === id && other.topic === word.topic),
-        ),
-        ...words
-          .filter(
-            (other) =>
-              other.topic === word.topic &&
-              other.group === word.group &&
-              other.id !== word.id,
-          )
-          .map((other) => other.id),
-        ...words
-          .filter((other) => other.topic === word.topic && other.id !== word.id)
-          .map((other) => other.id),
-      ]),
+        ...new Set([
+          ...word.related.filter((id) =>
+            words.some(
+              (other) => other.id === id && other.topic === word.topic,
+            ),
+          ),
+          ...words
+            .filter(
+              (other) =>
+                other.topic === word.topic &&
+                other.group === word.group &&
+                other.id !== word.id,
+            )
+            .map((other) => other.id),
+          ...words
+            .filter(
+              (other) => other.topic === word.topic && other.id !== word.id,
+            )
+            .map((other) => other.id),
+        ]),
       ].slice(0, 5),
     }
   })

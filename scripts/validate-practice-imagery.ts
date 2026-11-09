@@ -25,6 +25,7 @@ const withoutVerifiedImage = vocabulary.filter(
 )
 const practicePool = visualVocabulary(vocabulary)
 const practiceSources = new Set<string>()
+const verifiedWordsBySource = new Map<string, Set<string>>()
 const creditedSources = new Set([
   ...Object.values(photoLibrary).map((image) => image.src),
   ...vocabularyVisuals.map((image) => image.src),
@@ -37,11 +38,22 @@ const unlinkedAssets = fs
   .filter((source) => !creditedSources.has(source))
 const visualCoverage = {
   exact: 0,
-  related: 0,
-  contextual: 0,
-  wordContext: 0,
-  groupContext: 0,
-  topicContext: 0,
+  unavailable: 0,
+}
+
+const allowedSharedMeanings = [
+  new Set(["phone", "smartphone"]),
+  new Set(["water", "glass"]),
+  new Set(["reception", "receptionist"]),
+  new Set(["bus stop", "bus shelter"]),
+  new Set(["railway station", "train station"]),
+  new Set(["bus station", "bus terminal"]),
+]
+
+function isAllowedSharedMeaning(words: Set<string>) {
+  return allowedSharedMeanings.some((allowed) =>
+    [...words].every((word) => allowed.has(word)),
+  )
 }
 
 for (const word of vocabulary) {
@@ -49,13 +61,24 @@ for (const word of vocabulary) {
   const image = match.image
   visualCoverage[match.quality] += 1
 
-  if (match.contextScope === "word") visualCoverage.wordContext += 1
-  if (match.contextScope === "group") visualCoverage.groupContext += 1
-  if (match.contextScope === "topic") visualCoverage.topicContext += 1
-
   if (match.practiceEligible !== (match.quality === "exact")) {
     errors.push(`${word.id}: visual quality and practice eligibility disagree`)
   }
+
+  if (!image) {
+    if (match.quality !== "unavailable") {
+      errors.push(`${word.id}: missing image is not marked unavailable`)
+    }
+    continue
+  }
+
+  if (match.quality !== "exact") {
+    errors.push(`${word.id}: non-exact image must not be displayed`)
+  }
+
+  const sourceWords = verifiedWordsBySource.get(image.src) || new Set<string>()
+  sourceWords.add(word.word.trim().toLowerCase())
+  verifiedWordsBySource.set(image.src, sourceWords)
 
   if (!image.src.startsWith("/images/")) {
     errors.push(`${word.id}: visual path must stay inside /images/`)
@@ -67,6 +90,23 @@ for (const word of vocabulary) {
     errors.push(`${word.id}: unsafe visual path ${image.src}`)
   } else if (!fs.existsSync(file) || fs.statSync(file).size === 0) {
     errors.push(`${word.id}: visual file is missing or empty ${image.src}`)
+  }
+}
+
+for (const [source, words] of verifiedWordsBySource) {
+  if (words.size > 1 && !isAllowedSharedMeaning(words)) {
+    errors.push(
+      `${source}: reused by unrelated verified words ${[...words].join(", ")}`,
+    )
+  }
+}
+
+for (const word of vocabulary.filter((entry) =>
+  ["bike", "bin", "bolt"].includes(entry.word.toLowerCase()),
+)) {
+  const match = getVocabularyImageMatch(word)
+  if (match.image || match.quality !== "unavailable") {
+    errors.push(`${word.id}: shared knife-image regression returned`)
   }
 }
 
@@ -130,11 +170,10 @@ const coverageReport = {
   totalVocabulary: vocabulary.length,
   wordSpecificVerified: eligible.length,
   awaitingWordSpecificReview: withoutVerifiedImage.length,
-  curatedRelatedContext: visualCoverage.related,
-  sameGroupContext: visualCoverage.groupContext,
-  topicContext: visualCoverage.topicContext,
-  entriesWithoutAnyVisual: 0,
-  totalVisualCoverage: vocabulary.length,
+  correctedMisleadingFallbacks: withoutVerifiedImage.length,
+  neutralUnavailableState: withoutVerifiedImage.length,
+  entriesWithoutAnyVisual: withoutVerifiedImage.length,
+  totalVisualCoverage: eligible.length,
   practiceEligibleWords: eligible.length,
   practiceEligibleUniqueImages: practicePool.length,
   unlinkedLocalAssets: unlinkedAssets.length,
@@ -142,9 +181,9 @@ const coverageReport = {
   unlinkedAssetPolicy:
     "Unlinked files are not shown or marked verified until their source credit and word relevance are confirmed.",
   practicePolicy:
-    "Only checked word-specific images are eligible for image-answer questions. Related and contextual images are display-only.",
+    "Only checked word-specific images are displayed or eligible for image-answer questions. Missing and unverified images use a neutral unavailable state.",
   remainingReason:
-    "Entries without a checked word-specific photograph use a clearly labeled curated, learning-group, or topic context until a relevant licensed exact image is manually reviewed.",
+    "Entries without a checked word-specific photograph remain usable with definitions, examples, and neutral unavailable states until a relevant licensed exact image is manually reviewed.",
 }
 
 fs.mkdirSync(path.join(root, "reports"), { recursive: true })
@@ -163,16 +202,16 @@ const byLevel = Object.fromEntries(
       {
         total: levelWords.length,
         eligible: levelEligible.length,
-        contextOnly: levelWords.length - levelEligible.length,
+        unavailable: levelWords.length - levelEligible.length,
       },
     ]
   }),
 )
 
 console.log(
-  `Practice imagery QA passed: ${vocabulary.length} vocabulary entries checked, ${eligible.length} words have a verified word-specific image, ${withoutVerifiedImage.length} use labeled context outside image-answer questions, and ${practicePool.length} unique images are eligible for image-based questions.`,
+  `Practice imagery QA passed: ${vocabulary.length} vocabulary entries checked, ${eligible.length} words have a verified word-specific image, ${withoutVerifiedImage.length} use the neutral unavailable state, and ${practicePool.length} unique images are eligible for image-based questions.`,
 )
 console.log(
-  `Visual coverage: ${visualCoverage.exact} exact, ${visualCoverage.related} curated related, ${visualCoverage.groupContext} same-group context, ${visualCoverage.topicContext} topic context; 4000 of 4000 entries have a loadable labeled visual.`,
+  `Visual coverage: ${visualCoverage.exact} exact and ${visualCoverage.unavailable} neutral unavailable; no group, topic, or unrelated fallback image is displayed.`,
 )
 console.log(`CEFR imagery coverage: ${JSON.stringify(byLevel)}`)

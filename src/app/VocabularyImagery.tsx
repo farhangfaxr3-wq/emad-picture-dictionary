@@ -4,13 +4,9 @@ import { BookOpenText, ImageOff } from "lucide-react"
 
 import type { Word } from "./content"
 
-import { categoryImages } from "./CategoryImagery"
-
 import { getWordVisual } from "./visualAssets"
 
 import library from "./vocabularyPhotos.json"
-
-import contextRepresentatives from "./vocabularyContextRepresentatives.json"
 
 export interface VocabularyImage {
   src: string
@@ -33,8 +29,6 @@ export interface VocabularyImage {
 }
 
 const photographs = library as Record<string, VocabularyImage>
-
-const representatives: Record<string, string> = contextRepresentatives
 
 function libraryPhotograph(word: Pick<Word, "word" | "topic" | "sourceTopic">) {
   return (
@@ -86,42 +80,12 @@ export function hasVerifiedVocabularyImage(
   return Boolean(getVerifiedVocabularyImage(word))
 }
 
-export type VocabularyImageQuality = "exact" | "related" | "contextual"
+export type VocabularyImageQuality = "exact" | "unavailable"
 
 export interface VocabularyImageMatch {
-  image: VocabularyImage
+  image?: VocabularyImage
   quality: VocabularyImageQuality
   practiceEligible: boolean
-  contextScope?: "word" | "group" | "topic"
-  representativeWord?: string
-}
-
-export function contextPhotograph(word: Word): VocabularyImage {
-  const category =
-    categoryImages.find((image) => image.category === word.topic) ||
-    categoryImages[0]
-
-  return {
-    src: `/images/categories/${category.photoId}.jpg`,
-
-    source: category.sourceUrl || `https://unsplash.com/@${category.username}`,
-
-    author: category.photographer,
-
-    license:
-      category.sourceName === "Pexels" ? "Pexels License" : "Unsplash License",
-
-    licenseUrl:
-      category.sourceName === "Pexels"
-        ? "https://www.pexels.com/license/"
-        : "https://unsplash.com/license",
-
-    description: category.alt,
-
-    kind: "context",
-
-    contextLabel: `${word.topic} topic context`,
-  }
 }
 
 export function getVocabularyImageMatch(word: Word): VocabularyImageMatch {
@@ -130,54 +94,10 @@ export function getVocabularyImageMatch(word: Word): VocabularyImageMatch {
     return { image: exact, quality: "exact", practiceEligible: true }
   }
 
-  const curatedContext = libraryPhotograph(word)
-  if (curatedContext?.kind === "context") {
-    return {
-      image: {
-        ...curatedContext,
-        contextLabel: `Related real-life context for ${word.word}`,
-      },
-      quality: "related",
-      practiceEligible: false,
-      contextScope: "word",
-    }
-  }
-
-  const representativeWord = representatives[`${word.topic}|${word.group}`]
-  if (
-    representativeWord &&
-    representativeWord.toLowerCase() !== word.word.toLowerCase()
-  ) {
-    const representative = getVerifiedVocabularyImage({
-      word: representativeWord,
-      topic: word.topic,
-      sourceTopic: word.sourceTopic,
-    })
-
-    if (representative) {
-      return {
-        image: {
-          ...representative,
-          kind: "context",
-          contextLabel: `${word.group} context: ${representativeWord}`,
-        },
-        quality: "contextual",
-        practiceEligible: false,
-        contextScope: "group",
-        representativeWord,
-      }
-    }
-  }
-
-  return {
-    image: contextPhotograph(word),
-    quality: "contextual",
-    practiceEligible: false,
-    contextScope: "topic",
-  }
+  return { quality: "unavailable", practiceEligible: false }
 }
 
-export function getVocabularyPhoto(word: Word): VocabularyImage {
+export function getVocabularyPhoto(word: Word): VocabularyImage | undefined {
   return getVocabularyImageMatch(word).image
 }
 
@@ -243,20 +163,8 @@ export function VocabularyPhoto({
   return (
     <img
       src={image.src}
-      alt={
-        match.quality === "exact"
-          ? `Photograph illustrating ${word.word}`
-          : match.contextScope === "word"
-            ? `Related real-life context for ${word.word}`
-            : match.contextScope === "group"
-              ? `Context for ${word.group}`
-              : `Context for the ${word.topic} topic`
-      }
-      title={`${image.author} · ${image.license}. ${
-        match.quality === "exact"
-          ? "Checked word-specific photograph"
-          : "Context photograph; not used as an image-answer clue"
-      }. Open word details for source and license.`}
+      alt={`Photograph illustrating ${word.word}`}
+      title={`${image.author} · ${image.license}. Checked word-specific photograph. Open word details for source and license.`}
       width={600}
       height={450}
       loading="lazy"
@@ -274,17 +182,20 @@ export function VocabularyPhotoCredit({ word }: { word: Word }) {
 
   const image = match.image
 
+  if (!image) {
+    return (
+      <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
+        <p>
+          Image unavailable · No verified word-specific photograph is shown for{" "}
+          {word.word}.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
-      <p>
-        {match.quality === "exact"
-          ? `Checked word-specific photograph · ${word.word}`
-          : match.contextScope === "word"
-            ? `Related real-life photograph · ${word.word}. This contextual image is not used as an image-answer clue.`
-            : match.contextScope === "group"
-              ? `Learning-group context · ${word.group}. Representative image: ${match.representativeWord}. This image is not used as an answer clue.`
-              : `Topic context · ${word.topic}. This image supports the topic but does not claim to depict ${word.word} exactly.`}
-      </p>
+      <p>Checked word-specific photograph · {word.word}</p>
       <p className="mt-1 break-words">
         Photo: {image.author} ·{" "}
         <a
@@ -318,12 +229,12 @@ export function VocabularyPhotographyCredits() {
 
   const [page, setPage] = useState(0)
 
-  const entries = Object.entries(photographs).filter(([word, image]) =>
-    `${word} ${image.author}`
-
-      .toLowerCase()
-
-      .includes(query.trim().toLowerCase()),
+  const entries = Object.entries(photographs).filter(
+    ([word, image]) =>
+      image.kind !== "context" &&
+      `${word} ${image.author}`
+        .toLowerCase()
+        .includes(query.trim().toLowerCase()),
   )
 
   return (
@@ -334,11 +245,10 @@ export function VocabularyPhotographyCredits() {
       <p className="mt-3 text-xs leading-6 text-muted-foreground">
         Vocabulary photographs come from Wikimedia Commons and Unsplash, with
         individual licenses and creator attribution. Scene object photographs
-        are crops from their credited environment. When an accurate image is
-        unavailable, a clearly labeled related, learning-group, or topic context
-        may be shown. Context images are never used as answer clues in
-        image-dependent practice. Each displayed image includes its source and
-        license.
+        are crops from their credited environment. When an accurate verified
+        image is unavailable, the vocabulary entry uses a neutral unavailable
+        state instead of an unrelated context picture. Each displayed image
+        includes its source and license.
       </p>
       <label
         className="mt-4 block text-xs font-medium"

@@ -84,7 +84,6 @@ import {
   VocabularyPhotoCredit,
   VocabularyPhotographyCredits,
   getVerifiedVocabularyImage,
-  getVocabularyPhoto,
   hasVerifiedVocabularyImage,
   visualVocabulary,
 } from "./VocabularyImagery"
@@ -2101,9 +2100,9 @@ function WordCard({ word, compact = false }: WordCardProps) {
             <span className="ml-2 inline-flex align-middle">
               <CEFRBadge word={word} />
             </span>
-            {getVocabularyPhoto(word).kind === "context" && (
+            {!hasVerifiedVocabularyImage(word) && (
               <p className="mt-2 text-[10px] text-muted-foreground">
-                Context image · Not used as an image-answer clue.
+                Image unavailable · Learn with the definition and example.
               </p>
             )}
             <p className="mt-2 text-xs leading-5 text-muted-foreground">
@@ -4145,7 +4144,7 @@ function DictionaryPage() {
       <PageHeading
         eyebrow="Your visual vocabulary"
         title="Real words. Pictures you can trust."
-        description={`${verifiedCount} entries have a checked word-specific photograph. ${vocabulary.length - verifiedCount} entries use clearly labeled related, learning-group, or topic context while an exact image is reviewed; context images are excluded from image-answer questions.`}
+        description={`${verifiedCount} entries have a checked word-specific photograph. ${vocabulary.length - verifiedCount} entries use a neutral image-unavailable state while an exact image is reviewed; only verified images appear in image-answer questions.`}
       />
       <div className={`${card} mb-6 p-5`}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -4155,7 +4154,7 @@ function DictionaryPage() {
 
               { id: "all", label: "All vocabulary" },
 
-              { id: "pending", label: "Context images" },
+              { id: "pending", label: "Images unavailable" },
             ].map((item) => (
               <button
                 key={item.id}

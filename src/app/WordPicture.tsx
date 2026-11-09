@@ -60,25 +60,12 @@ export default function WordPicture({
 
   return (
     <img
-      data-image-status={match.quality === "exact" ? "verified" : "contextual"}
+      data-image-status="verified"
       data-image-quality={match.quality}
       data-vocabulary-word={word}
       src={visual.src}
-      alt={
-        altText ||
-        (match.quality === "exact"
-          ? `Photograph illustrating ${word}`
-          : match.contextScope === "word"
-            ? `Related real-life context for ${word}`
-            : match.contextScope === "group"
-              ? `Context for ${group || "this learning group"}`
-              : `Context for the ${topic || "vocabulary"} topic`)
-      }
-      title={`${
-        match.quality === "exact"
-          ? `Checked photo for ${word}`
-          : "Context photo; not used as an image-answer clue"
-      } · ${visual.author} · ${visual.license}`}
+      alt={altText || `Photograph illustrating ${word}`}
+      title={`Checked photo for ${word} · ${visual.author} · ${visual.license}`}
       width={900}
       height={600}
       loading="lazy"

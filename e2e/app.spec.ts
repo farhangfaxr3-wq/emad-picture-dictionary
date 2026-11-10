@@ -103,12 +103,14 @@ test("home search and dictionary search show deduplicated learner results", asyn
 test("dictionary uses a neutral state when a verified image is unavailable", async ({
   page,
 }) => {
-  await page.goto("/dictionary?q=tuna&images=all")
+  await page.goto("/dictionary?q=spatula&images=all")
   await expect(
     page.locator('[data-image-status="unavailable"]').first(),
   ).toBeVisible()
   await expect(page.getByText("Image unavailable").first()).toBeVisible()
-  await expect(page.locator('img[data-vocabulary-word="tuna"]')).toHaveCount(0)
+  await expect(page.locator('img[data-vocabulary-word="spatula"]')).toHaveCount(
+    0,
+  )
 
   for (const word of ["bike", "bin", "bolt"]) {
     await page.goto(`/dictionary?q=${word}&images=all`)
@@ -117,6 +119,51 @@ test("dictionary uses a neutral state when a verified image is unavailable", asy
     ).toBeVisible()
     await expect(page.locator('img[src*="knife.jpg"]')).toHaveCount(0)
   }
+})
+
+test("reviewed image uploads render, fail safely and keep quiz alternatives neutral", async ({
+  page,
+}) => {
+  test.setTimeout(90_000)
+  const reviewed = [
+    ["balcony", "wikimedia-balcony.jpg"],
+    ["binder", "wikimedia-binder.jpg"],
+    ["poncho", "wikimedia-poncho.jpg"],
+    ["collar", "wikimedia-collar.jpg"],
+    ["nose", "wikimedia-nose.jpg"],
+    ["ointment", "wikimedia-ointment.png"],
+    ["tuna", "wikimedia-tuna.png"],
+    ["wardrobe", "wikimedia-wardrobe.jpg"],
+  ]
+
+  for (const [word, filename] of reviewed) {
+    await page.goto(`/dictionary?q=${word}&images=all`)
+    await expect(
+      page.locator(`img[data-vocabulary-word="${word}"][src*="${filename}"]`),
+    ).toBeVisible()
+  }
+
+  await page.route("**/wikimedia-tuna.png", (route) => route.abort())
+  await page.goto("/dictionary?q=tuna&images=all")
+  await expect(
+    page.locator('[data-image-status="unavailable"]').first(),
+  ).toBeVisible()
+  await page.unroute("**/wikimedia-tuna.png")
+
+  await page.goto(
+    "/topics/Food?section=practice&activity=picture&cefr=all&length=5",
+  )
+  const quizImage = page.locator('img[data-image-status="verified"]').first()
+  await expect(quizImage).toBeVisible()
+  await expect(quizImage).toHaveAttribute("alt", "Vocabulary question image")
+
+  await page.goto(
+    "/topics/Food?section=practice&activity=picture&cefr=C2&length=5",
+  )
+  await expect(
+    page.getByText("Which word matches this definition?"),
+  ).toBeVisible()
+  await expect(page.locator('img[data-image-status="verified"]')).toHaveCount(0)
 })
 
 test("rich word cards and confusing-word lessons are usable", async ({

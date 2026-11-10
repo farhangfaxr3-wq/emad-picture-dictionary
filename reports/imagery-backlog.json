@@ -1,8 +1,286 @@
 {
-  "generatedAt": "2026-11-10T02:22:42.428Z",
+  "generatedAt": "2026-11-10T08:24:53.367Z",
   "policy": "A gap is resolved only after an accurate asset renders and its creator, source, license, attribution, alt text and intended sense pass review.",
   "batchSize": 100,
-  "totalAwaiting": 2942,
+  "totalAwaiting": 2934,
+  "learnerFilteredAwaiting": 2920,
+  "reconciliation": {
+    "previousFullCatalogCount": 2942,
+    "previousLearnerFilteredCount": 2928,
+    "previousDifferenceExplainedByTopicAliases": 14,
+    "reviewedAssetsAddedThisBatch": 8,
+    "currentFullCatalogCount": 2934,
+    "currentLearnerFilteredCount": 2920,
+    "currentDifferenceExplainedByTopicAliases": 14,
+    "pendingAliasGroups": [
+      {
+        "surface": "answer",
+        "ids": [
+          "answer",
+          "classroom--answer"
+        ],
+        "senses": [
+          {
+            "id": "answer",
+            "topic": "Communication",
+            "definition": "Something said or written in reply to a question."
+          },
+          {
+            "id": "classroom--answer",
+            "topic": "Classroom",
+            "definition": "A response to a question."
+          }
+        ]
+      },
+      {
+        "surface": "polite",
+        "ids": [
+          "people--polite",
+          "communication--polite"
+        ],
+        "senses": [
+          {
+            "id": "people--polite",
+            "topic": "People",
+            "definition": "Showing good manners."
+          },
+          {
+            "id": "communication--polite",
+            "topic": "Communication",
+            "definition": "Showing respect."
+          }
+        ]
+      },
+      {
+        "surface": "partner",
+        "ids": [
+          "people--partner",
+          "family--partner"
+        ],
+        "senses": [
+          {
+            "id": "people--partner",
+            "topic": "People",
+            "definition": "Someone who shares an activity."
+          },
+          {
+            "id": "family--partner",
+            "topic": "Family",
+            "definition": "A person sharing a close relationship."
+          }
+        ]
+      },
+      {
+        "surface": "resident",
+        "ids": [
+          "people--resident",
+          "community--resident"
+        ],
+        "senses": [
+          {
+            "id": "people--resident",
+            "topic": "People",
+            "definition": "A person who lives in a place."
+          },
+          {
+            "id": "community--resident",
+            "topic": "Community",
+            "definition": "A person living in a particular place."
+          }
+        ]
+      },
+      {
+        "surface": "paragraph",
+        "ids": [
+          "classroom--paragraph",
+          "communication--paragraph"
+        ],
+        "senses": [
+          {
+            "id": "classroom--paragraph",
+            "topic": "Classroom",
+            "definition": "A group of related sentences."
+          },
+          {
+            "id": "communication--paragraph",
+            "topic": "Communication",
+            "definition": "A group of related sentences."
+          }
+        ]
+      },
+      {
+        "surface": "sentence",
+        "ids": [
+          "classroom--sentence",
+          "communication--sentence"
+        ],
+        "senses": [
+          {
+            "id": "classroom--sentence",
+            "topic": "Classroom",
+            "definition": "A group of words expressing a thought."
+          },
+          {
+            "id": "communication--sentence",
+            "topic": "Communication",
+            "definition": "Words forming a complete thought."
+          }
+        ]
+      },
+      {
+        "surface": "vocabulary",
+        "ids": [
+          "classroom--vocabulary",
+          "communication--vocabulary"
+        ],
+        "senses": [
+          {
+            "id": "classroom--vocabulary",
+            "topic": "Classroom",
+            "definition": "Words used in a language."
+          },
+          {
+            "id": "communication--vocabulary",
+            "topic": "Communication",
+            "definition": "The words of a language."
+          }
+        ]
+      },
+      {
+        "surface": "pronunciation",
+        "ids": [
+          "classroom--pronunciation",
+          "communication--pronunciation"
+        ],
+        "senses": [
+          {
+            "id": "classroom--pronunciation",
+            "topic": "Classroom",
+            "definition": "The way a word is spoken."
+          },
+          {
+            "id": "communication--pronunciation",
+            "topic": "Communication",
+            "definition": "The way words are spoken."
+          }
+        ]
+      },
+      {
+        "surface": "stretching",
+        "ids": [
+          "health--stretching",
+          "sports--stretching"
+        ],
+        "senses": [
+          {
+            "id": "health--stretching",
+            "topic": "Health",
+            "definition": "Extending the muscles."
+          },
+          {
+            "id": "sports--stretching",
+            "topic": "Sports",
+            "definition": "Extending muscles."
+          }
+        ]
+      },
+      {
+        "surface": "application",
+        "ids": [
+          "jobs--application",
+          "technology--application"
+        ],
+        "senses": [
+          {
+            "id": "jobs--application",
+            "topic": "Jobs",
+            "definition": "A formal request for a position."
+          },
+          {
+            "id": "technology--application",
+            "topic": "IT & Computers",
+            "definition": "A program for a particular task."
+          }
+        ]
+      },
+      {
+        "surface": "reservation",
+        "ids": [
+          "transportation--reservation",
+          "travel--reservation"
+        ],
+        "senses": [
+          {
+            "id": "transportation--reservation",
+            "topic": "Transportation",
+            "definition": "An arrangement to keep a place available."
+          },
+          {
+            "id": "travel--reservation",
+            "topic": "Travel",
+            "definition": "An arrangement to keep a service available."
+          }
+        ]
+      },
+      {
+        "surface": "wall",
+        "ids": [
+          "home--wall",
+          "classroom--scene-home--wall"
+        ],
+        "senses": [
+          {
+            "id": "home--wall",
+            "topic": "Home",
+            "definition": "A vertical surface forming the side of a room."
+          },
+          {
+            "id": "classroom--scene-home--wall",
+            "topic": "Classroom",
+            "definition": "A vertical surface forming the side of a room."
+          }
+        ]
+      },
+      {
+        "surface": "ceiling",
+        "ids": [
+          "home--ceiling",
+          "jobs--scene-home--ceiling"
+        ],
+        "senses": [
+          {
+            "id": "home--ceiling",
+            "topic": "Home",
+            "definition": "The upper inside surface of a room."
+          },
+          {
+            "id": "jobs--scene-home--ceiling",
+            "topic": "Jobs",
+            "definition": "The upper inside surface of a room."
+          }
+        ]
+      },
+      {
+        "surface": "floor",
+        "ids": [
+          "travel--scene-home--floor",
+          "food--scene-home--floor"
+        ],
+        "senses": [
+          {
+            "id": "travel--scene-home--floor",
+            "topic": "Travel",
+            "definition": "The surface you walk on indoors."
+          },
+          {
+            "id": "food--scene-home--floor",
+            "topic": "Food",
+            "definition": "The surface you walk on indoors."
+          }
+        ]
+      }
+    ]
+  },
   "batches": [
     {
       "batch": 1,
@@ -152,7 +430,7 @@
     {
       "batch": 30,
       "status": "ready-for-manual-source-review",
-      "count": 42
+      "count": 34
     }
   ],
   "entries": [
@@ -265,18 +543,6 @@
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
-      "id": "food--tuna",
-      "word": "tuna",
-      "sense": "A large ocean fish eaten as food.",
-      "partOfSpeech": "noun",
-      "topic": "Food",
-      "group": "Meat & seafood",
-      "cefr": "A1",
-      "status": "awaiting-verified-visual",
-      "reviewBatch": 1,
-      "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
-    },
-    {
       "id": "food--butter",
       "word": "butter",
       "sense": "A soft fat made from cream.",
@@ -319,30 +585,6 @@
       "partOfSpeech": "noun",
       "topic": "Home",
       "group": "Rooms",
-      "cefr": "A2",
-      "status": "awaiting-verified-visual",
-      "reviewBatch": 1,
-      "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
-    },
-    {
-      "id": "home--wardrobe",
-      "word": "wardrobe",
-      "sense": "A cupboard for clothes.",
-      "partOfSpeech": "noun",
-      "topic": "Home",
-      "group": "Furniture",
-      "cefr": "A2",
-      "status": "awaiting-verified-visual",
-      "reviewBatch": 1,
-      "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
-    },
-    {
-      "id": "home--balcony",
-      "word": "balcony",
-      "sense": "A raised outdoor platform.",
-      "partOfSpeech": "noun",
-      "topic": "Home",
-      "group": "Doors & outside spaces",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
       "reviewBatch": 1,
@@ -901,18 +1143,6 @@
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
-      "id": "classroom--binder",
-      "word": "binder",
-      "sense": "A cover with rings for holding paper.",
-      "partOfSpeech": "noun",
-      "topic": "Classroom",
-      "group": "Paper & books",
-      "cefr": "A1",
-      "status": "awaiting-verified-visual",
-      "reviewBatch": 1,
-      "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
-    },
-    {
       "id": "classroom--index-card",
       "word": "index card",
       "sense": "A small card for notes.",
@@ -1093,18 +1323,6 @@
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
-      "id": "clothing--poncho",
-      "word": "poncho",
-      "sense": "A loose covering with a head opening.",
-      "partOfSpeech": "noun",
-      "topic": "Clothing",
-      "group": "Outerwear",
-      "cefr": "A1",
-      "status": "awaiting-verified-visual",
-      "reviewBatch": 1,
-      "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
-    },
-    {
       "id": "clothing--uniform",
       "word": "uniform",
       "sense": "Clothing worn by members of a group.",
@@ -1120,18 +1338,6 @@
       "id": "clothing--sleeve",
       "word": "sleeve",
       "sense": "The part covering an arm.",
-      "partOfSpeech": "noun",
-      "topic": "Clothing",
-      "group": "Parts of clothes",
-      "cefr": "A1",
-      "status": "awaiting-verified-visual",
-      "reviewBatch": 1,
-      "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
-    },
-    {
-      "id": "clothing--collar",
-      "word": "collar",
-      "sense": "The part around the neck.",
       "partOfSpeech": "noun",
       "topic": "Clothing",
       "group": "Parts of clothes",
@@ -1225,18 +1431,6 @@
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
-      "id": "health--nose",
-      "word": "nose",
-      "sense": "The part used for smelling.",
-      "partOfSpeech": "noun",
-      "topic": "Health",
-      "group": "More body parts",
-      "cefr": "A1",
-      "status": "awaiting-verified-visual",
-      "reviewBatch": 1,
-      "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
-    },
-    {
       "id": "health--sore-throat",
       "word": "sore throat",
       "sense": "Pain or irritation in the throat.",
@@ -1279,18 +1473,6 @@
       "partOfSpeech": "noun",
       "topic": "Health",
       "group": "Symptoms",
-      "cefr": "A2",
-      "status": "awaiting-verified-visual",
-      "reviewBatch": 1,
-      "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
-    },
-    {
-      "id": "health--ointment",
-      "word": "ointment",
-      "sense": "A thick substance put on skin.",
-      "partOfSpeech": "noun",
-      "topic": "Medicine & Healthcare",
-      "group": "Medicine & care",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
       "reviewBatch": 1,
@@ -1365,7 +1547,7 @@
       "group": "Healthy habits",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 2,
+      "reviewBatch": 1,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -1377,7 +1559,7 @@
       "group": "Healthy habits",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 2,
+      "reviewBatch": 1,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -1389,7 +1571,7 @@
       "group": "Safety & recovery",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 2,
+      "reviewBatch": 1,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -1401,7 +1583,7 @@
       "group": "Safety & recovery",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 2,
+      "reviewBatch": 1,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -1413,7 +1595,7 @@
       "group": "Safety & recovery",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 2,
+      "reviewBatch": 1,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -1425,7 +1607,7 @@
       "group": "Safety & recovery",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 2,
+      "reviewBatch": 1,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -1437,7 +1619,7 @@
       "group": "Safety & recovery",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 2,
+      "reviewBatch": 1,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -1449,7 +1631,7 @@
       "group": "Safety & recovery",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 2,
+      "reviewBatch": 1,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -2565,7 +2747,7 @@
       "group": "Message parts",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 3,
+      "reviewBatch": 2,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -2577,7 +2759,7 @@
       "group": "Language",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 3,
+      "reviewBatch": 2,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -2589,7 +2771,7 @@
       "group": "Language",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 3,
+      "reviewBatch": 2,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -2601,7 +2783,7 @@
       "group": "Language",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 3,
+      "reviewBatch": 2,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -2613,7 +2795,7 @@
       "group": "Language",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 3,
+      "reviewBatch": 2,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -2625,7 +2807,7 @@
       "group": "Language",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 3,
+      "reviewBatch": 2,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -2637,7 +2819,7 @@
       "group": "Language",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 3,
+      "reviewBatch": 2,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -2649,7 +2831,7 @@
       "group": "Language",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 3,
+      "reviewBatch": 2,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -3765,7 +3947,7 @@
       "group": "Software",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 4,
+      "reviewBatch": 3,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -3777,7 +3959,7 @@
       "group": "Software",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 4,
+      "reviewBatch": 3,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -3789,7 +3971,7 @@
       "group": "Software",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 4,
+      "reviewBatch": 3,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -3801,7 +3983,7 @@
       "group": "Digital files",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 4,
+      "reviewBatch": 3,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -3813,7 +3995,7 @@
       "group": "Inclusive technology",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 4,
+      "reviewBatch": 3,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -3825,7 +4007,7 @@
       "group": "Digital safety",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 4,
+      "reviewBatch": 3,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -3837,7 +4019,7 @@
       "group": "Software",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 4,
+      "reviewBatch": 3,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -3849,7 +4031,7 @@
       "group": "Healthy living",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 4,
+      "reviewBatch": 3,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -4965,7 +5147,7 @@
       "group": "Urban areas",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 5,
+      "reviewBatch": 4,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -4977,7 +5159,7 @@
       "group": "Urban areas",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 5,
+      "reviewBatch": 4,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -4989,7 +5171,7 @@
       "group": "Public space",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 5,
+      "reviewBatch": 4,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -5001,7 +5183,7 @@
       "group": "Culture and history",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 5,
+      "reviewBatch": 4,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -5013,7 +5195,7 @@
       "group": "Visitor services",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 5,
+      "reviewBatch": 4,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -5025,7 +5207,7 @@
       "group": "Work and study",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 5,
+      "reviewBatch": 4,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -5037,7 +5219,7 @@
       "group": "Work and study",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 5,
+      "reviewBatch": 4,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -5049,7 +5231,7 @@
       "group": "Health services",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 5,
+      "reviewBatch": 4,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -6165,7 +6347,7 @@
       "group": "Family relationships",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 6,
+      "reviewBatch": 5,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -6177,7 +6359,7 @@
       "group": "Care and support",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 6,
+      "reviewBatch": 5,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -6189,7 +6371,7 @@
       "group": "Family life",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 6,
+      "reviewBatch": 5,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -6201,7 +6383,7 @@
       "group": "Family learning",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 6,
+      "reviewBatch": 5,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -6213,7 +6395,7 @@
       "group": "Family occasions",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 6,
+      "reviewBatch": 5,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -6225,7 +6407,7 @@
       "group": "Care and support",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 6,
+      "reviewBatch": 5,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -6237,7 +6419,7 @@
       "group": "Family safety",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 6,
+      "reviewBatch": 5,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -6249,7 +6431,7 @@
       "group": "Family health",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 6,
+      "reviewBatch": 5,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -7365,7 +7547,7 @@
       "group": "Landforms",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 7,
+      "reviewBatch": 6,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -7377,7 +7559,7 @@
       "group": "Coasts",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 7,
+      "reviewBatch": 6,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -7389,7 +7571,7 @@
       "group": "Habitat restoration",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 7,
+      "reviewBatch": 6,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -7401,7 +7583,7 @@
       "group": "Ecosystems",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 7,
+      "reviewBatch": 6,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -7413,7 +7595,7 @@
       "group": "Environmental planning",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 7,
+      "reviewBatch": 6,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -7425,7 +7607,7 @@
       "group": "Sustainable systems",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 7,
+      "reviewBatch": 6,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -7437,7 +7619,7 @@
       "group": "Natural resources",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 7,
+      "reviewBatch": 6,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -7449,7 +7631,7 @@
       "group": "Environmental action",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 7,
+      "reviewBatch": 6,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -8565,7 +8747,7 @@
       "group": "Project work",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 8,
+      "reviewBatch": 7,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -8577,7 +8759,7 @@
       "group": "School subjects",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 8,
+      "reviewBatch": 7,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -8589,7 +8771,7 @@
       "group": "Classroom objects",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 8,
+      "reviewBatch": 7,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -8601,7 +8783,7 @@
       "group": "Assessment",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 8,
+      "reviewBatch": 7,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -8613,7 +8795,7 @@
       "group": "School administration",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 8,
+      "reviewBatch": 7,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -8625,7 +8807,7 @@
       "group": "Library",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 8,
+      "reviewBatch": 7,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -8637,7 +8819,7 @@
       "group": "Study spaces",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 8,
+      "reviewBatch": 7,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -8649,7 +8831,7 @@
       "group": "Study skills",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 8,
+      "reviewBatch": 7,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -9765,7 +9947,7 @@
       "group": "Artificial intelligence",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 9,
+      "reviewBatch": 8,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -9777,7 +9959,7 @@
       "group": "Networks",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 9,
+      "reviewBatch": 8,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -9789,7 +9971,7 @@
       "group": "System security",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 9,
+      "reviewBatch": 8,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -9801,7 +9983,7 @@
       "group": "Interface design",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 9,
+      "reviewBatch": 8,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -9813,7 +9995,7 @@
       "group": "System design",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 9,
+      "reviewBatch": 8,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -9825,7 +10007,7 @@
       "group": "Software development",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 9,
+      "reviewBatch": 8,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -9837,7 +10019,7 @@
       "group": "Software development",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 9,
+      "reviewBatch": 8,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -9849,7 +10031,7 @@
       "group": "Data exchange",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 9,
+      "reviewBatch": 8,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -10965,7 +11147,7 @@
       "group": "Team care",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 10,
+      "reviewBatch": 9,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -10977,7 +11159,7 @@
       "group": "Patient assessment",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 10,
+      "reviewBatch": 9,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -10989,7 +11171,7 @@
       "group": "Patient assessment",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 10,
+      "reviewBatch": 9,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -11001,7 +11183,7 @@
       "group": "Treatment safety",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 10,
+      "reviewBatch": 9,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -11013,7 +11195,7 @@
       "group": "Medical research",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 10,
+      "reviewBatch": 9,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -11025,7 +11207,7 @@
       "group": "Public health",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 10,
+      "reviewBatch": 9,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -11037,7 +11219,7 @@
       "group": "Medical research",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 10,
+      "reviewBatch": 9,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -11049,7 +11231,7 @@
       "group": "Supportive care",
       "cefr": "C2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 10,
+      "reviewBatch": 9,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -12165,7 +12347,7 @@
       "group": "Care roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 11,
+      "reviewBatch": 10,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -12177,7 +12359,7 @@
       "group": "Community roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 11,
+      "reviewBatch": 10,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -12189,7 +12371,7 @@
       "group": "Professional roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 11,
+      "reviewBatch": 10,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -12201,7 +12383,7 @@
       "group": "Leadership",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 11,
+      "reviewBatch": 10,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -12213,7 +12395,7 @@
       "group": "Professional roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 11,
+      "reviewBatch": 10,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -12225,7 +12407,7 @@
       "group": "Academic roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 11,
+      "reviewBatch": 10,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -12237,7 +12419,7 @@
       "group": "Community roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 11,
+      "reviewBatch": 10,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -12249,7 +12431,7 @@
       "group": "Family events",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 11,
+      "reviewBatch": 10,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -13365,7 +13547,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 12,
+      "reviewBatch": 11,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -13377,7 +13559,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 12,
+      "reviewBatch": 11,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -13389,7 +13571,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 12,
+      "reviewBatch": 11,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -13401,7 +13583,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 12,
+      "reviewBatch": 11,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -13413,7 +13595,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 12,
+      "reviewBatch": 11,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -13425,7 +13607,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 12,
+      "reviewBatch": 11,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -13437,7 +13619,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 12,
+      "reviewBatch": 11,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -13449,7 +13631,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 12,
+      "reviewBatch": 11,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -14565,7 +14747,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 13,
+      "reviewBatch": 12,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -14577,7 +14759,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 13,
+      "reviewBatch": 12,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -14589,7 +14771,7 @@
       "group": "Academic description",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 13,
+      "reviewBatch": 12,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -14601,7 +14783,7 @@
       "group": "Describing things",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 13,
+      "reviewBatch": 12,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -14613,7 +14795,7 @@
       "group": "Describing things",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 13,
+      "reviewBatch": 12,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -14625,7 +14807,7 @@
       "group": "Describing things",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 13,
+      "reviewBatch": 12,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -14637,7 +14819,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 13,
+      "reviewBatch": 12,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -14649,7 +14831,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 13,
+      "reviewBatch": 12,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -15765,7 +15947,7 @@
       "group": "Academic description",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 14,
+      "reviewBatch": 13,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -15777,7 +15959,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 14,
+      "reviewBatch": 13,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -15789,7 +15971,7 @@
       "group": "University & academic English",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 14,
+      "reviewBatch": 13,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -15801,7 +15983,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 14,
+      "reviewBatch": 13,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -15813,7 +15995,7 @@
       "group": "Medicine & healthcare",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 14,
+      "reviewBatch": 13,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -15825,7 +16007,7 @@
       "group": "Academic description",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 14,
+      "reviewBatch": 13,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -15837,7 +16019,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 14,
+      "reviewBatch": 13,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -15849,7 +16031,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 14,
+      "reviewBatch": 13,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -16965,7 +17147,7 @@
       "group": "Describing things",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 15,
+      "reviewBatch": 14,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -16977,7 +17159,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 15,
+      "reviewBatch": 14,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -16989,7 +17171,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 15,
+      "reviewBatch": 14,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -17001,7 +17183,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 15,
+      "reviewBatch": 14,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -17013,7 +17195,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 15,
+      "reviewBatch": 14,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -17025,7 +17207,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 15,
+      "reviewBatch": 14,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -17037,7 +17219,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 15,
+      "reviewBatch": 14,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -17049,7 +17231,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 15,
+      "reviewBatch": 14,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -18165,7 +18347,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 16,
+      "reviewBatch": 15,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -18177,7 +18359,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 16,
+      "reviewBatch": 15,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -18189,7 +18371,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 16,
+      "reviewBatch": 15,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -18201,7 +18383,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 16,
+      "reviewBatch": 15,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -18213,7 +18395,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 16,
+      "reviewBatch": 15,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -18225,7 +18407,7 @@
       "group": "Describing things",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 16,
+      "reviewBatch": 15,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -18237,7 +18419,7 @@
       "group": "Describing things",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 16,
+      "reviewBatch": 15,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -18249,7 +18431,7 @@
       "group": "Describing things",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 16,
+      "reviewBatch": 15,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -19365,7 +19547,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 17,
+      "reviewBatch": 16,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -19377,7 +19559,7 @@
       "group": "Describing things",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 17,
+      "reviewBatch": 16,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -19389,7 +19571,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 17,
+      "reviewBatch": 16,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -19401,7 +19583,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 17,
+      "reviewBatch": 16,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -19413,7 +19595,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 17,
+      "reviewBatch": 16,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -19425,7 +19607,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 17,
+      "reviewBatch": 16,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -19437,7 +19619,7 @@
       "group": "Describing things",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 17,
+      "reviewBatch": 16,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -19449,7 +19631,7 @@
       "group": "Describing things",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 17,
+      "reviewBatch": 16,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -20565,7 +20747,7 @@
       "group": "Feelings & emotions",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 18,
+      "reviewBatch": 17,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -20577,7 +20759,7 @@
       "group": "People & roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 18,
+      "reviewBatch": 17,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -20589,7 +20771,7 @@
       "group": "Actions & activities",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 18,
+      "reviewBatch": 17,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -20601,7 +20783,7 @@
       "group": "Objects & equipment",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 18,
+      "reviewBatch": 17,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -20613,7 +20795,7 @@
       "group": "Architecture & construction",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 18,
+      "reviewBatch": 17,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -20625,7 +20807,7 @@
       "group": "Architecture & construction",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 18,
+      "reviewBatch": 17,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -20637,7 +20819,7 @@
       "group": "General academic vocabulary",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 18,
+      "reviewBatch": 17,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -20649,7 +20831,7 @@
       "group": "Places & locations",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 18,
+      "reviewBatch": 17,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -21765,7 +21947,7 @@
       "group": "Objects & equipment",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 19,
+      "reviewBatch": 18,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -21777,7 +21959,7 @@
       "group": "Objects & equipment",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 19,
+      "reviewBatch": 18,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -21789,7 +21971,7 @@
       "group": "Body & anatomy",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 19,
+      "reviewBatch": 18,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -21801,7 +21983,7 @@
       "group": "Objects & equipment",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 19,
+      "reviewBatch": 18,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -21813,7 +21995,7 @@
       "group": "People & roles",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 19,
+      "reviewBatch": 18,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -21825,7 +22007,7 @@
       "group": "IT & computers",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 19,
+      "reviewBatch": 18,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -21837,7 +22019,7 @@
       "group": "Body & anatomy",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 19,
+      "reviewBatch": 18,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -21849,7 +22031,7 @@
       "group": "Knowledge & ideas",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 19,
+      "reviewBatch": 18,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -22965,7 +23147,7 @@
       "group": "Body & anatomy",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 20,
+      "reviewBatch": 19,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -22977,7 +23159,7 @@
       "group": "IT & computers",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 20,
+      "reviewBatch": 19,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -22989,7 +23171,7 @@
       "group": "Knowledge & ideas",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 20,
+      "reviewBatch": 19,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -23001,7 +23183,7 @@
       "group": "Language & communication",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 20,
+      "reviewBatch": 19,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -23013,7 +23195,7 @@
       "group": "Groups & organizations",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 20,
+      "reviewBatch": 19,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -23025,7 +23207,7 @@
       "group": "Objects & equipment",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 20,
+      "reviewBatch": 19,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -23037,7 +23219,7 @@
       "group": "Objects & equipment",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 20,
+      "reviewBatch": 19,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -23049,7 +23231,7 @@
       "group": "General academic vocabulary",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 20,
+      "reviewBatch": 19,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -24165,7 +24347,7 @@
       "group": "General academic vocabulary",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 21,
+      "reviewBatch": 20,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -24177,7 +24359,7 @@
       "group": "Knowledge & ideas",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 21,
+      "reviewBatch": 20,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -24189,7 +24371,7 @@
       "group": "People & roles",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 21,
+      "reviewBatch": 20,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -24201,7 +24383,7 @@
       "group": "General academic vocabulary",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 21,
+      "reviewBatch": 20,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -24213,7 +24395,7 @@
       "group": "Objects & equipment",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 21,
+      "reviewBatch": 20,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -24225,7 +24407,7 @@
       "group": "Language & communication",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 21,
+      "reviewBatch": 20,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -24237,7 +24419,7 @@
       "group": "Objects & equipment",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 21,
+      "reviewBatch": 20,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -24249,7 +24431,7 @@
       "group": "Places & locations",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 21,
+      "reviewBatch": 20,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -25365,7 +25547,7 @@
       "group": "Actions & activities",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 22,
+      "reviewBatch": 21,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -25377,7 +25559,7 @@
       "group": "Language & communication",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 22,
+      "reviewBatch": 21,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -25389,7 +25571,7 @@
       "group": "Actions & activities",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 22,
+      "reviewBatch": 21,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -25401,7 +25583,7 @@
       "group": "General academic vocabulary",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 22,
+      "reviewBatch": 21,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -25413,7 +25595,7 @@
       "group": "Knowledge & ideas",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 22,
+      "reviewBatch": 21,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -25425,7 +25607,7 @@
       "group": "General academic vocabulary",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 22,
+      "reviewBatch": 21,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -25437,7 +25619,7 @@
       "group": "Food & cooking",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 22,
+      "reviewBatch": 21,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -25449,7 +25631,7 @@
       "group": "People & roles",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 22,
+      "reviewBatch": 21,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -26565,7 +26747,7 @@
       "group": "Time & schedules",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 23,
+      "reviewBatch": 22,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -26577,7 +26759,7 @@
       "group": "General academic vocabulary",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 23,
+      "reviewBatch": 22,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -26589,7 +26771,7 @@
       "group": "Actions & activities",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 23,
+      "reviewBatch": 22,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -26601,7 +26783,7 @@
       "group": "Language & communication",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 23,
+      "reviewBatch": 22,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -26613,7 +26795,7 @@
       "group": "Objects & equipment",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 23,
+      "reviewBatch": 22,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -26625,7 +26807,7 @@
       "group": "Money & possessions",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 23,
+      "reviewBatch": 22,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -26637,7 +26819,7 @@
       "group": "Knowledge & ideas",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 23,
+      "reviewBatch": 22,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -26649,7 +26831,7 @@
       "group": "University & academic English",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 23,
+      "reviewBatch": 22,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -27765,7 +27947,7 @@
       "group": "Body & anatomy",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 24,
+      "reviewBatch": 23,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -27777,7 +27959,7 @@
       "group": "People & roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 24,
+      "reviewBatch": 23,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -27789,7 +27971,7 @@
       "group": "Knowledge & ideas",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 24,
+      "reviewBatch": 23,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -27801,7 +27983,7 @@
       "group": "Knowledge & ideas",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 24,
+      "reviewBatch": 23,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -27813,7 +27995,7 @@
       "group": "IT & computers",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 24,
+      "reviewBatch": 23,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -27825,7 +28007,7 @@
       "group": "Objects & equipment",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 24,
+      "reviewBatch": 23,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -27837,7 +28019,7 @@
       "group": "Language & communication",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 24,
+      "reviewBatch": 23,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -27849,7 +28031,7 @@
       "group": "Natural phenomena",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 24,
+      "reviewBatch": 23,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -28965,7 +29147,7 @@
       "group": "Medicine & healthcare",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 25,
+      "reviewBatch": 24,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -28977,7 +29159,7 @@
       "group": "Objects & equipment",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 25,
+      "reviewBatch": 24,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -28989,7 +29171,7 @@
       "group": "Architecture & construction",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 25,
+      "reviewBatch": 24,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -29001,7 +29183,7 @@
       "group": "Places & locations",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 25,
+      "reviewBatch": 24,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -29013,7 +29195,7 @@
       "group": "General academic vocabulary",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 25,
+      "reviewBatch": 24,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -29025,7 +29207,7 @@
       "group": "People & roles",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 25,
+      "reviewBatch": 24,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -29037,7 +29219,7 @@
       "group": "Knowledge & ideas",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 25,
+      "reviewBatch": 24,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -29049,7 +29231,7 @@
       "group": "Actions & activities",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 25,
+      "reviewBatch": 24,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -30165,7 +30347,7 @@
       "group": "IT & computers",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 26,
+      "reviewBatch": 25,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -30177,7 +30359,7 @@
       "group": "Objects & equipment",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 26,
+      "reviewBatch": 25,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -30189,7 +30371,7 @@
       "group": "Language & communication",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 26,
+      "reviewBatch": 25,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -30201,7 +30383,7 @@
       "group": "Events",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 26,
+      "reviewBatch": 25,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -30213,7 +30395,7 @@
       "group": "Knowledge & ideas",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 26,
+      "reviewBatch": 25,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -30225,7 +30407,7 @@
       "group": "People & roles",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 26,
+      "reviewBatch": 25,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -30237,7 +30419,7 @@
       "group": "Money & possessions",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 26,
+      "reviewBatch": 25,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -30249,7 +30431,7 @@
       "group": "Architecture & construction",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 26,
+      "reviewBatch": 25,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -31365,7 +31547,7 @@
       "group": "IT & computers",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 27,
+      "reviewBatch": 26,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -31377,7 +31559,7 @@
       "group": "Money & possessions",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 27,
+      "reviewBatch": 26,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -31389,7 +31571,7 @@
       "group": "Places & locations",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 27,
+      "reviewBatch": 26,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -31401,7 +31583,7 @@
       "group": "Objects & equipment",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 27,
+      "reviewBatch": 26,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -31413,7 +31595,7 @@
       "group": "Knowledge & ideas",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 27,
+      "reviewBatch": 26,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -31425,7 +31607,7 @@
       "group": "People & roles",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 27,
+      "reviewBatch": 26,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -31437,7 +31619,7 @@
       "group": "General academic vocabulary",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 27,
+      "reviewBatch": 26,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -31449,7 +31631,7 @@
       "group": "Groups & organizations",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 27,
+      "reviewBatch": 26,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -32565,7 +32747,7 @@
       "group": "Objects & equipment",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 28,
+      "reviewBatch": 27,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -32577,7 +32759,7 @@
       "group": "Plants & ecosystems",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 28,
+      "reviewBatch": 27,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -32589,7 +32771,7 @@
       "group": "General academic vocabulary",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 28,
+      "reviewBatch": 27,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -32601,7 +32783,7 @@
       "group": "Actions & activities",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 28,
+      "reviewBatch": 27,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -32613,7 +32795,7 @@
       "group": "Actions & activities",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 28,
+      "reviewBatch": 27,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -32625,7 +32807,7 @@
       "group": "General academic vocabulary",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 28,
+      "reviewBatch": 27,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -32637,7 +32819,7 @@
       "group": "Objects & equipment",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 28,
+      "reviewBatch": 27,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -32649,7 +32831,7 @@
       "group": "Language & communication",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 28,
+      "reviewBatch": 27,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -33765,7 +33947,7 @@
       "group": "Language & communication",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 29,
+      "reviewBatch": 28,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -33777,7 +33959,7 @@
       "group": "Events",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 29,
+      "reviewBatch": 28,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -33789,7 +33971,7 @@
       "group": "Language & communication",
       "cefr": "A2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 29,
+      "reviewBatch": 28,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -33801,7 +33983,7 @@
       "group": "Groups & organizations",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 29,
+      "reviewBatch": 28,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -33813,7 +33995,7 @@
       "group": "General academic vocabulary",
       "cefr": "A1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 29,
+      "reviewBatch": 28,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -33825,7 +34007,7 @@
       "group": "People & roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 29,
+      "reviewBatch": 28,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -33837,7 +34019,7 @@
       "group": "General academic vocabulary",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 29,
+      "reviewBatch": 28,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -33849,7 +34031,7 @@
       "group": "Language & communication",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 29,
+      "reviewBatch": 28,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -34965,7 +35147,7 @@
       "group": "People & roles",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 30,
+      "reviewBatch": 29,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -34977,7 +35159,7 @@
       "group": "Knowledge & ideas",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 30,
+      "reviewBatch": 29,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -34989,7 +35171,7 @@
       "group": "Knowledge & ideas",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 30,
+      "reviewBatch": 29,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -35001,7 +35183,7 @@
       "group": "Money & possessions",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 30,
+      "reviewBatch": 29,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -35013,7 +35195,7 @@
       "group": "Knowledge & ideas",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 30,
+      "reviewBatch": 29,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -35025,7 +35207,7 @@
       "group": "General academic vocabulary",
       "cefr": "B2",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 30,
+      "reviewBatch": 29,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -35037,7 +35219,7 @@
       "group": "General academic vocabulary",
       "cefr": "B1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 30,
+      "reviewBatch": 29,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {
@@ -35049,7 +35231,7 @@
       "group": "General academic vocabulary",
       "cefr": "C1",
       "status": "awaiting-verified-visual",
-      "reviewBatch": 30,
+      "reviewBatch": 29,
       "reason": "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review."
     },
     {

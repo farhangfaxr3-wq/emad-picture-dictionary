@@ -23,6 +23,16 @@ const eligible = vocabulary.filter(hasVerifiedVocabularyImage)
 const withoutVerifiedImage = vocabulary.filter(
   (word) => !hasVerifiedVocabularyImage(word),
 )
+const reviewedBatchIds = [
+  "home--balcony",
+  "classroom--binder",
+  "clothing--poncho",
+  "clothing--collar",
+  "health--nose",
+  "health--ointment",
+  "food--tuna",
+  "home--wardrobe",
+]
 const verifiedIllustrations = eligible.filter(
   (word) => word.visualKind === "illustration",
 )
@@ -109,6 +119,28 @@ for (const word of vocabulary) {
   }
 }
 
+const reviewedBatch = reviewedBatchIds.map((id) => {
+  const word = vocabulary.find((entry) => entry.id === id)
+  const image = word ? getVerifiedVocabularyImage(word) : undefined
+  if (!word || !image) errors.push(`${id}: reviewed batch image is not linked`)
+  return word && image
+    ? {
+        id: word.id,
+        word: word.word,
+        sense: word.definition,
+        topic: word.topic,
+        src: image.src,
+        source: image.source,
+        author: image.author,
+        license: image.license,
+        licenseUrl: image.licenseUrl,
+        alt: image.alt || image.description,
+        mediaType: image.mediaType || "photo",
+        practiceEligible: true,
+      }
+    : null
+})
+
 for (const [source, words] of verifiedWordsBySource) {
   if (words.size > 1 && !isAllowedSharedMeaning(words)) {
     errors.push(
@@ -188,6 +220,18 @@ const coverageReport = {
   verifiedPhotos: verifiedPhotos.length,
   verifiedIllustrations: verifiedIllustrations.length,
   awaitingWordSpecificReview: withoutVerifiedImage.length,
+  learnerFilteredAwaiting: new Set(
+    withoutVerifiedImage.map((word) =>
+      word.word.trim().toLocaleLowerCase("en"),
+    ),
+  ).size,
+  topicAliasRowsBeyondFilteredCount:
+    withoutVerifiedImage.length -
+    new Set(
+      withoutVerifiedImage.map((word) =>
+        word.word.trim().toLocaleLowerCase("en"),
+      ),
+    ).size,
   correctedMisleadingFallbacks: withoutVerifiedImage.length,
   neutralUnavailableState: withoutVerifiedImage.length,
   entriesWithoutAnyVisual: withoutVerifiedImage.length,
@@ -203,6 +247,25 @@ const coverageReport = {
   remainingReason:
     "Entries without a checked word-specific photograph remain usable with definitions, examples, and neutral unavailable states until a relevant licensed exact image is manually reviewed.",
 }
+
+const awaitingBySurface = new Map<string, typeof withoutVerifiedImage>()
+for (const word of withoutVerifiedImage) {
+  const surface = word.word.trim().toLocaleLowerCase("en")
+  const aliases = awaitingBySurface.get(surface) || []
+  aliases.push(word)
+  awaitingBySurface.set(surface, aliases)
+}
+const pendingAliasGroups = [...awaitingBySurface.entries()]
+  .filter(([, words]) => words.length > 1)
+  .map(([surface, words]) => ({
+    surface,
+    ids: words.map((word) => word.id),
+    senses: words.map((word) => ({
+      id: word.id,
+      topic: word.topic,
+      definition: word.definition,
+    })),
+  }))
 
 const backlogEntries = withoutVerifiedImage.map((word, index) => ({
   id: word.id,
@@ -223,6 +286,18 @@ const backlogReport = {
     "A gap is resolved only after an accurate asset renders and its creator, source, license, attribution, alt text and intended sense pass review.",
   batchSize: 100,
   totalAwaiting: backlogEntries.length,
+  learnerFilteredAwaiting: awaitingBySurface.size,
+  reconciliation: {
+    previousFullCatalogCount: 2942,
+    previousLearnerFilteredCount: 2928,
+    previousDifferenceExplainedByTopicAliases: 14,
+    reviewedAssetsAddedThisBatch: reviewedBatch.filter(Boolean).length,
+    currentFullCatalogCount: backlogEntries.length,
+    currentLearnerFilteredCount: awaitingBySurface.size,
+    currentDifferenceExplainedByTopicAliases:
+      backlogEntries.length - awaitingBySurface.size,
+    pendingAliasGroups,
+  },
   batches: Array.from(
     { length: Math.ceil(backlogEntries.length / 100) },
     (_, index) => ({
@@ -238,6 +313,25 @@ fs.mkdirSync(path.join(root, "reports"), { recursive: true })
 fs.writeFileSync(
   path.join(root, "reports", "imagery-coverage.json"),
   `${JSON.stringify(coverageReport, null, 2)}\n`,
+)
+fs.writeFileSync(
+  path.join(root, "reports", "imagery-batch-01.json"),
+  `${JSON.stringify(
+    {
+      generatedAt: coverageReport.generatedAt,
+      status: "reviewed-and-linked",
+      before: { fullCatalogAwaiting: 2942, learnerFilteredAwaiting: 2928 },
+      after: {
+        fullCatalogAwaiting: backlogEntries.length,
+        learnerFilteredAwaiting: awaitingBySurface.size,
+      },
+      added: reviewedBatch.filter(Boolean),
+      rejectedCandidatePolicy:
+        "Ambiguous, generic, weakly visible, unlicensed or sense-mismatched candidates remain unlinked and do not count as completed.",
+    },
+    null,
+    2,
+  )}\n`,
 )
 fs.writeFileSync(
   path.join(root, "reports", "imagery-backlog.json"),
@@ -265,6 +359,9 @@ console.log(
 )
 console.log(
   `Verified asset types: ${verifiedPhotos.length} photographs, ${verifiedIllustrations.length} illustrations, ${backlogEntries.length} awaiting a reviewed visual across ${backlogReport.batches.length} resumable batches.`,
+)
+console.log(
+  `Pending-count reconciliation: ${backlogEntries.length} full entry IDs versus ${awaitingBySurface.size} deduplicated learner results; the ${backlogEntries.length - awaitingBySurface.size} row difference is fully explained by ${pendingAliasGroups.length} topic-alias surfaces.`,
 )
 console.log(
   `Visual coverage: ${visualCoverage.exact} exact and ${visualCoverage.unavailable} neutral unavailable; no group, topic, or unrelated fallback image is displayed.`,

@@ -64,8 +64,8 @@ export default function WordPicture({
       data-image-quality={match.quality}
       data-vocabulary-word={word}
       src={visual.src}
-      alt={altText || `Photograph illustrating ${word}`}
-      title={`Checked photo for ${word} · ${visual.author} · ${visual.license}`}
+      alt={altText || visual.alt || `Learning visual for ${word}`}
+      title={`Checked ${visual.mediaType || "photo"} for ${word} · ${visual.author} · ${visual.license}`}
       width={900}
       height={600}
       loading="lazy"

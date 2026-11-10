@@ -1,0 +1,127 @@
+{
+  "generatedAt": "2026-11-10T08:24:53.367Z",
+  "status": "reviewed-and-linked",
+  "before": {
+    "fullCatalogAwaiting": 2942,
+    "learnerFilteredAwaiting": 2928
+  },
+  "after": {
+    "fullCatalogAwaiting": 2934,
+    "learnerFilteredAwaiting": 2920
+  },
+  "added": [
+    {
+      "id": "home--balcony",
+      "word": "balcony",
+      "sense": "A raised outdoor platform.",
+      "topic": "Home",
+      "src": "/images/vocabulary/wikimedia-balcony.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Balcony_in_Pompeii.jpg",
+      "author": "Commonists",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "alt": "A projecting balcony attached to a stone building",
+      "mediaType": "photo",
+      "practiceEligible": true
+    },
+    {
+      "id": "classroom--binder",
+      "word": "binder",
+      "sense": "A cover with rings for holding paper.",
+      "topic": "Classroom",
+      "src": "/images/vocabulary/wikimedia-binder.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:1976_Campaign_binder.JPG",
+      "author": "Unknown author, Gerald R. Ford Presidential Library and Museum",
+      "license": "Public domain",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+      "alt": "An open blue ring binder holding sheets of paper",
+      "mediaType": "photo",
+      "practiceEligible": true
+    },
+    {
+      "id": "clothing--poncho",
+      "word": "poncho",
+      "sense": "A loose covering with a head opening.",
+      "topic": "Clothing",
+      "src": "/images/vocabulary/wikimedia-poncho.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Poncho.jpg",
+      "author": "David Ring",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "alt": "A loose blanket-like garment with a central neck opening",
+      "mediaType": "illustration",
+      "practiceEligible": true
+    },
+    {
+      "id": "clothing--collar",
+      "word": "collar",
+      "sense": "The part around the neck.",
+      "topic": "Clothing",
+      "src": "/images/vocabulary/wikimedia-collar.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Collar_(clothing).jpg",
+      "author": "David Ring",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "alt": "The folded neckline of a buttoned shirt",
+      "mediaType": "illustration",
+      "practiceEligible": true
+    },
+    {
+      "id": "health--nose",
+      "word": "nose",
+      "sense": "The part used for smelling.",
+      "topic": "Health",
+      "src": "/images/vocabulary/wikimedia-nose.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Nose_of_a_male_Human.jpg",
+      "author": "Zeta Puppis (Naos)",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "alt": "A close-up side view of a human nose",
+      "mediaType": "photo",
+      "practiceEligible": true
+    },
+    {
+      "id": "health--ointment",
+      "word": "ointment",
+      "sense": "A thick substance put on skin.",
+      "topic": "Medicine & Healthcare",
+      "src": "/images/vocabulary/wikimedia-ointment.png",
+      "source": "https://commons.wikimedia.org/wiki/File:Tubeand_Box_(NIH_BioArt_526).png",
+      "author": "Ryan Kissinger, NIAID",
+      "license": "Public domain",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+      "alt": "A squeezable tube of ointment resting on its box",
+      "mediaType": "illustration",
+      "practiceEligible": true
+    },
+    {
+      "id": "food--tuna",
+      "word": "tuna",
+      "sense": "A large ocean fish eaten as food.",
+      "topic": "Food",
+      "src": "/images/vocabulary/wikimedia-tuna.png",
+      "source": "https://commons.wikimedia.org/wiki/File:Tuna_assortment.png",
+      "author": "NOAA",
+      "license": "Public domain",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+      "alt": "Five streamlined ocean fish shown from the side",
+      "mediaType": "illustration",
+      "practiceEligible": true
+    },
+    {
+      "id": "home--wardrobe",
+      "word": "wardrobe",
+      "sense": "A cupboard for clothes.",
+      "topic": "Home",
+      "src": "/images/vocabulary/wikimedia-wardrobe.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Schrank2.jpg",
+      "author": "Peng",
+      "license": "CC BY 2.5",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.5/",
+      "alt": "A tall wooden wardrobe with two closed doors",
+      "mediaType": "photo",
+      "practiceEligible": true
+    }
+  ],
+  "rejectedCandidatePolicy": "Ambiguous, generic, weakly visible, unlicensed or sense-mismatched candidates remain unlinked and do not count as completed."
+}

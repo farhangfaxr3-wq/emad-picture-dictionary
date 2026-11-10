@@ -1327,7 +1327,11 @@ export function completeCategoryCatalog(
       image: photograph?.src,
       imageStatus: photograph ? "verified" : "pending",
       cefr: word.cefr || estimateCEFR(word),
-      visualKind: photograph ? "photo" : "symbol",
+      visualKind: photograph
+        ? photograph.mediaType === "illustration"
+          ? "illustration"
+          : "photo"
+        : "symbol",
       audio: { text: word.word, language: "en-US" },
       related: [
         ...new Set([

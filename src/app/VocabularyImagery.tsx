@@ -21,6 +21,10 @@ export interface VocabularyImage {
 
   description: string
 
+  alt?: string
+
+  mediaType?: "photo" | "illustration"
+
   filename?: string
 
   kind: "object" | "scene-object" | "context"
@@ -163,8 +167,8 @@ export function VocabularyPhoto({
   return (
     <img
       src={image.src}
-      alt={`Photograph illustrating ${word.word}`}
-      title={`${image.author} · ${image.license}. Checked word-specific photograph. Open word details for source and license.`}
+      alt={image.alt || `Learning visual for ${word.word}`}
+      title={`${image.author} · ${image.license}. Checked word-specific ${image.mediaType || "photo"}. Open word details for source and license.`}
       width={600}
       height={450}
       loading="lazy"
@@ -195,9 +199,12 @@ export function VocabularyPhotoCredit({ word }: { word: Word }) {
 
   return (
     <div className="border-b border-border bg-card px-7 py-3 text-xs leading-5 text-muted-foreground">
-      <p>Checked word-specific photograph · {word.word}</p>
+      <p>
+        Checked word-specific {image.mediaType || "photo"} · {word.word}
+      </p>
       <p className="mt-1 break-words">
-        Photo: {image.author} ·{" "}
+        {image.mediaType === "illustration" ? "Illustration" : "Photo"}:{" "}
+        {image.author} ·{" "}
         <a
           href={image.licenseUrl}
           target="_blank"

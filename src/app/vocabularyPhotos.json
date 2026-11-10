@@ -12189,5 +12189,93 @@
     "licenseUrl": "https://unsplash.com/license",
     "description": "A daylight-filled interior designed with abundant living plants",
     "kind": "object"
+  },
+  "Home|balcony": {
+    "src": "/images/vocabulary/wikimedia-balcony.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Balcony_in_Pompeii.jpg",
+    "author": "Commonists",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "description": "Balcony in Pompeii",
+    "alt": "A projecting balcony attached to a stone building",
+    "mediaType": "photo",
+    "kind": "object"
+  },
+  "Classroom|binder": {
+    "src": "/images/vocabulary/wikimedia-binder.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:1976_Campaign_binder.JPG",
+    "author": "Unknown author, Gerald R. Ford Presidential Library and Museum",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+    "description": "A blue ring binder holding typewritten pages",
+    "alt": "An open blue ring binder holding sheets of paper",
+    "mediaType": "photo",
+    "kind": "object"
+  },
+  "Clothing|poncho": {
+    "src": "/images/vocabulary/wikimedia-poncho.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Poncho.jpg",
+    "author": "David Ring",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "description": "Drawing of a blanket-like garment with a central opening for the head",
+    "alt": "A loose blanket-like garment with a central neck opening",
+    "mediaType": "illustration",
+    "kind": "object"
+  },
+  "Clothing|collar": {
+    "src": "/images/vocabulary/wikimedia-collar.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Collar_(clothing).jpg",
+    "author": "David Ring",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "description": "Drawing of the shaped part of a shirt worn around the neckline",
+    "alt": "The folded neckline of a buttoned shirt",
+    "mediaType": "illustration",
+    "kind": "object"
+  },
+  "Health|nose": {
+    "src": "/images/vocabulary/wikimedia-nose.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Nose_of_a_male_Human.jpg",
+    "author": "Zeta Puppis (Naos)",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "description": "Close-up photograph of an adult human nose",
+    "alt": "A close-up side view of a human nose",
+    "mediaType": "photo",
+    "kind": "object"
+  },
+  "Health|ointment": {
+    "src": "/images/vocabulary/wikimedia-ointment.png",
+    "source": "https://commons.wikimedia.org/wiki/File:Tubeand_Box_(NIH_BioArt_526).png",
+    "author": "Ryan Kissinger, NIAID",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+    "description": "NIH BioArt illustration of an ointment tube and its box",
+    "alt": "A squeezable tube of ointment resting on its box",
+    "mediaType": "illustration",
+    "kind": "object"
+  },
+  "Food|tuna": {
+    "src": "/images/vocabulary/wikimedia-tuna.png",
+    "source": "https://commons.wikimedia.org/wiki/File:Tuna_assortment.png",
+    "author": "NOAA",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+    "description": "Scientific illustration of five tuna species",
+    "alt": "Five streamlined ocean fish shown from the side",
+    "mediaType": "illustration",
+    "kind": "object"
+  },
+  "Home|wardrobe": {
+    "src": "/images/vocabulary/wikimedia-wardrobe.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Schrank2.jpg",
+    "author": "Peng",
+    "license": "CC BY 2.5",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.5/",
+    "description": "A freestanding wooden wardrobe from around 1900",
+    "alt": "A tall wooden wardrobe with two closed doors",
+    "mediaType": "photo",
+    "kind": "object"
   }
 }

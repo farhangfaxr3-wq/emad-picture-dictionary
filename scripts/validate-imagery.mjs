@@ -30,8 +30,11 @@ const errors = []
 
 function extractTopicList(name) {
   const start = topicCatalogSource.indexOf(`export const ${name}`)
+
   const assignment = topicCatalogSource.indexOf("=", start)
+
   const open = topicCatalogSource.indexOf("[", assignment)
+
   const end = topicCatalogSource.indexOf("]", open)
 
   if (start < 0 || assignment < 0 || open < 0 || end < 0) return []
@@ -142,6 +145,17 @@ for (const [key, image] of Object.entries(library)) {
 
   if (!allowedKinds.has(image.kind))
     errors.push(`${key}: invalid kind ${image.kind}`)
+
+  if (
+    image.mediaType !== undefined &&
+    !["photo", "illustration"].includes(image.mediaType)
+  ) {
+    errors.push(`${key}: invalid mediaType ${image.mediaType}`)
+  }
+
+  if (image.alt !== undefined && image.alt.trim().length < 8) {
+    errors.push(`${key}: learner alt text is too short`)
+  }
 
   if (!isHttpUrl(image.source)) errors.push(`${key}: invalid source URL`)
 

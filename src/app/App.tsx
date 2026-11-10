@@ -4012,6 +4012,13 @@ function DictionaryPage() {
     (word) => word.imageStatus === "verified",
   ).length
 
+  const verifiedIllustrationCount = vocabulary.filter(
+    (word) =>
+      word.imageStatus === "verified" && word.visualKind === "illustration",
+  ).length
+
+  const verifiedPhotoCount = verifiedCount - verifiedIllustrationCount
+
   const view = params.get("view") || "grid"
 
   const sort = params.get("sort") || "Relevance"
@@ -4144,7 +4151,7 @@ function DictionaryPage() {
       <PageHeading
         eyebrow="Your visual vocabulary"
         title="Real words. Pictures you can trust."
-        description={`${verifiedCount} entries have a checked word-specific photograph. ${vocabulary.length - verifiedCount} entries use a neutral image-unavailable state while an exact image is reviewed; only verified images appear in image-answer questions.`}
+        description={`${verifiedPhotoCount} entries have a verified word-specific photograph and ${verifiedIllustrationCount} have a verified illustration. ${vocabulary.length - verifiedCount} entries are awaiting a suitable reviewed visual and use a neutral image-unavailable state; only verified exact visuals appear in image-answer questions.`}
       />
       <div className={`${card} mb-6 p-5`}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">

@@ -1,6 +1,8 @@
 export type ConfusionType = "Meaning" | "Similar spelling" | "Sound-alike" | "Grammar and usage" | "Academic English"
 
-export type ConfusionDifficulty = "A2" | "B1" | "B2" | "C1"
+import { expandedConfusingWordLessons } from "./confusingWordsExpansion"
+
+export type ConfusionDifficulty = "A1" | "A2" | "B1" | "B2" | "C1" | "C2"
 
 export interface ConfusingWordSide {
   wordId?: string
@@ -10,7 +12,7 @@ export interface ConfusingWordSide {
   collocations: string[]
 }
 
-interface ChoiceChallenge {
+export interface ChoiceChallenge {
   prompt: string
   options: string[]
   answer: string
@@ -33,7 +35,7 @@ export interface ConfusingWordLesson {
   fix: ChoiceChallenge
 }
 
-export const confusingWordLessons: ConfusingWordLesson[] = [
+const coreConfusingWordLessons: ConfusingWordLesson[] = [
   {
     id: "affect-effect",
     title: "Affect or effect?",
@@ -533,4 +535,9 @@ export const confusingWordLessons: ConfusingWordLesson[] = [
       explanation: "Lose is the verb for no longer having something.",
     },
   },
+]
+
+export const confusingWordLessons: ConfusingWordLesson[] = [
+  ...coreConfusingWordLessons,
+  ...expandedConfusingWordLessons,
 ]

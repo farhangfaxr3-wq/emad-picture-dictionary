@@ -23,6 +23,12 @@ const eligible = vocabulary.filter(hasVerifiedVocabularyImage)
 const withoutVerifiedImage = vocabulary.filter(
   (word) => !hasVerifiedVocabularyImage(word),
 )
+const verifiedIllustrations = eligible.filter(
+  (word) => word.visualKind === "illustration",
+)
+const verifiedPhotos = eligible.filter(
+  (word) => word.visualKind !== "illustration",
+)
 const practicePool = visualVocabulary(vocabulary)
 const practiceSources = new Set<string>()
 const verifiedWordsBySource = new Map<string, Set<string>>()
@@ -70,6 +76,16 @@ for (const word of vocabulary) {
       errors.push(`${word.id}: missing image is not marked unavailable`)
     }
     continue
+  }
+
+  for (const [field, value] of Object.entries({
+    source: image.source,
+    author: image.author,
+    license: image.license,
+    licenseUrl: image.licenseUrl,
+    description: image.description,
+  })) {
+    if (!value?.trim()) errors.push(`${word.id}: image is missing ${field}`)
   }
 
   if (match.quality !== "exact") {
@@ -169,6 +185,8 @@ const coverageReport = {
   generatedAt: new Date().toISOString(),
   totalVocabulary: vocabulary.length,
   wordSpecificVerified: eligible.length,
+  verifiedPhotos: verifiedPhotos.length,
+  verifiedIllustrations: verifiedIllustrations.length,
   awaitingWordSpecificReview: withoutVerifiedImage.length,
   correctedMisleadingFallbacks: withoutVerifiedImage.length,
   neutralUnavailableState: withoutVerifiedImage.length,
@@ -186,10 +204,44 @@ const coverageReport = {
     "Entries without a checked word-specific photograph remain usable with definitions, examples, and neutral unavailable states until a relevant licensed exact image is manually reviewed.",
 }
 
+const backlogEntries = withoutVerifiedImage.map((word, index) => ({
+  id: word.id,
+  word: word.word,
+  sense: word.definition,
+  partOfSpeech: word.partOfSpeech,
+  topic: word.topic,
+  group: word.group,
+  cefr: word.cefr?.level || null,
+  status: "awaiting-verified-visual",
+  reviewBatch: Math.floor(index / 100) + 1,
+  reason:
+    "No approved licensed word-specific asset is linked. Source rights, exact sense, crop, learner-friendly alt text and quiz safety require review.",
+}))
+const backlogReport = {
+  generatedAt: coverageReport.generatedAt,
+  policy:
+    "A gap is resolved only after an accurate asset renders and its creator, source, license, attribution, alt text and intended sense pass review.",
+  batchSize: 100,
+  totalAwaiting: backlogEntries.length,
+  batches: Array.from(
+    { length: Math.ceil(backlogEntries.length / 100) },
+    (_, index) => ({
+      batch: index + 1,
+      status: "ready-for-manual-source-review",
+      count: backlogEntries.slice(index * 100, index * 100 + 100).length,
+    }),
+  ),
+  entries: backlogEntries,
+}
+
 fs.mkdirSync(path.join(root, "reports"), { recursive: true })
 fs.writeFileSync(
   path.join(root, "reports", "imagery-coverage.json"),
   `${JSON.stringify(coverageReport, null, 2)}\n`,
+)
+fs.writeFileSync(
+  path.join(root, "reports", "imagery-backlog.json"),
+  `${JSON.stringify(backlogReport, null, 2)}\n`,
 )
 
 const byLevel = Object.fromEntries(
@@ -210,6 +262,9 @@ const byLevel = Object.fromEntries(
 
 console.log(
   `Practice imagery QA passed: ${vocabulary.length} vocabulary entries checked, ${eligible.length} words have a verified word-specific image, ${withoutVerifiedImage.length} use the neutral unavailable state, and ${practicePool.length} unique images are eligible for image-based questions.`,
+)
+console.log(
+  `Verified asset types: ${verifiedPhotos.length} photographs, ${verifiedIllustrations.length} illustrations, ${backlogEntries.length} awaiting a reviewed visual across ${backlogReport.batches.length} resumable batches.`,
 )
 console.log(
   `Visual coverage: ${visualCoverage.exact} exact and ${visualCoverage.unavailable} neutral unavailable; no group, topic, or unrelated fallback image is displayed.`,

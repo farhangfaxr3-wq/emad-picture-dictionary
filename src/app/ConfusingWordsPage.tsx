@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
   ArrowRight,
   BookOpen,
@@ -27,7 +27,26 @@ const types = [
   "Grammar and usage",
   "Academic English",
 ] as const
-const difficulties = ["All levels", "A2", "B1", "B2", "C1"] as const
+const difficulties = ["All levels", "A1", "A2", "B1", "B2", "C1", "C2"] as const
+const LESSON_PAGE_SIZE = 12
+const PROGRESS_KEY = "emad-confusing-words-progress-v1"
+
+function readSavedAnswers() {
+  if (typeof window === "undefined") return {}
+  try {
+    const saved: unknown = JSON.parse(
+      window.localStorage.getItem(PROGRESS_KEY) || "{}",
+    )
+    if (!saved || typeof saved !== "object" || Array.isArray(saved)) return {}
+    return Object.fromEntries(
+      Object.entries(saved).filter(
+        (entry): entry is [string, string] => typeof entry[1] === "string",
+      ),
+    )
+  } catch {
+    return {}
+  }
+}
 
 export default function ConfusingWordsPage() {
   const [query, setQuery] = useState("")
@@ -35,7 +54,9 @@ export default function ConfusingWordsPage() {
   const [difficulty, setDifficulty] =
     useState<typeof difficulties[number]>("All levels")
   const [mode, setMode] = useState<ChallengeMode>("choose")
-  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [answers, setAnswers] =
+    useState<Record<string, string>>(readSavedAnswers)
+  const [visibleCount, setVisibleCount] = useState(LESSON_PAGE_SIZE)
 
   const filteredLessons = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase("en")
@@ -52,6 +73,16 @@ export default function ConfusingWordsPage() {
       return matchesQuery && matchesType && matchesDifficulty
     })
   }, [difficulty, query, type])
+
+  useEffect(() => {
+    setVisibleCount(LESSON_PAGE_SIZE)
+  }, [difficulty, query, type])
+
+  useEffect(() => {
+    window.localStorage.setItem(PROGRESS_KEY, JSON.stringify(answers))
+  }, [answers])
+
+  const visibleLessons = filteredLessons.slice(0, visibleCount)
 
   const answerKey = (lessonId: string) => `${lessonId}:${mode}`
   const correctCount = confusingWordLessons.reduce((count, lesson) => {
@@ -176,11 +207,11 @@ export default function ConfusingWordsPage() {
       </section>
 
       <p className="mt-5 text-sm text-muted-foreground" role="status">
-        Showing {filteredLessons.length} of {confusingWordLessons.length}{" "}
-        lessons
+        Showing {visibleLessons.length} of {filteredLessons.length} matching
+        lessons · {confusingWordLessons.length} reviewed lessons in total
       </p>
       <div className="mt-3 space-y-6">
-        {filteredLessons.map((lesson) => {
+        {visibleLessons.map((lesson) => {
           const challenge = mode === "choose" ? lesson.choose : lesson.fix
           const key = answerKey(lesson.id)
           const selected = answers[key]
@@ -262,6 +293,22 @@ export default function ConfusingWordsPage() {
                             Pronunciation
                           </Link>
                         ) : null}
+                        <a
+                          href={`https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(item.word.toLocaleLowerCase("en").replace(/\s+/g, "-"))}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-border bg-card px-3 text-xs font-semibold hover:bg-secondary"
+                        >
+                          Cambridge sense
+                        </a>
+                        <a
+                          href={`https://www.ldoceonline.com/dictionary/${encodeURIComponent(item.word.toLocaleLowerCase("en").replace(/\s+/g, "-"))}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-border bg-card px-3 text-xs font-semibold hover:bg-secondary"
+                        >
+                          Longman usage
+                        </a>
                       </div>
                     </section>
                   )
@@ -367,6 +414,27 @@ export default function ConfusingWordsPage() {
           )
         })}
       </div>
+
+      {visibleLessons.length < filteredLessons.length ? (
+        <div className="mt-6 flex justify-center">
+          <button
+            type="button"
+            onClick={() =>
+              setVisibleCount((current) =>
+                Math.min(current + LESSON_PAGE_SIZE, filteredLessons.length),
+              )
+            }
+            className="min-h-11 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground"
+          >
+            Load{" "}
+            {Math.min(
+              LESSON_PAGE_SIZE,
+              filteredLessons.length - visibleLessons.length,
+            )}{" "}
+            more lessons
+          </button>
+        </div>
+      ) : null}
 
       {!filteredLessons.length ? (
         <section className="mt-6 rounded-3xl border border-border bg-card p-8 text-center">

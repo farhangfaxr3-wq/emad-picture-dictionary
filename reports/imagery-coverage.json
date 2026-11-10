@@ -1,7 +1,9 @@
 {
-  "generatedAt": "2026-11-09T03:03:14.207Z",
+  "generatedAt": "2026-11-10T02:22:42.428Z",
   "totalVocabulary": 4000,
   "wordSpecificVerified": 1058,
+  "verifiedPhotos": 1058,
+  "verifiedIllustrations": 0,
   "awaitingWordSpecificReview": 2942,
   "correctedMisleadingFallbacks": 2942,
   "neutralUnavailableState": 2942,

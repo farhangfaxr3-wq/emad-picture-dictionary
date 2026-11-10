@@ -133,6 +133,8 @@ test("rich word cards and confusing-word lessons are usable", async ({
   await expect(
     page.getByRole("heading", { name: "Words people confuse" }),
   ).toBeVisible()
+  await expect(page.getByText(/150 reviewed lessons in total/i)).toBeVisible()
+  await expect(page.locator("article")).toHaveCount(12)
   await expect(
     page.getByRole("heading", { name: "House or home?" }),
   ).toBeVisible()
@@ -161,6 +163,16 @@ test("rich word cards and confusing-word lessons are usable", async ({
   await expect(
     page.locator('a[href^="/dictionary?q="]').first(),
   ).toHaveAttribute("href", /\/dictionary\?q=/)
+  await page.getByPlaceholder("Search affect, borrow, cite…").fill("economic")
+  await expect(
+    page.getByRole("heading", { name: "Economic or economical?" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", { name: "Cambridge sense" }).first(),
+  ).toHaveAttribute("href", /dictionary\.cambridge\.org/)
+  await page.getByPlaceholder("Search affect, borrow, cite…").fill("")
+  await page.getByRole("button", { name: /Load 12 more lessons/i }).click()
+  await expect(page.locator("article")).toHaveCount(24)
 })
 
 test("pronunciation studio uses one standard reading and supports listen-and-repeat", async ({

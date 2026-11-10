@@ -41,11 +41,32 @@ const requiredLessons = new Set([
   "borrow-lend",
   "cite-site-sight",
   "say-tell-speak-talk",
+  "bring-take",
+  "make-do",
+  "look-see-watch",
+  "economic-economical",
+  "imply-infer",
 ])
+const coveredLevels = new Set<string>()
+const coveredTypes = new Set<string>()
+const surfaceSignatures = new Set<string>()
 for (const lesson of confusingWordLessons) {
   if (lessonIds.has(lesson.id))
     failures.push(`Duplicate lesson id: ${lesson.id}`)
   lessonIds.add(lesson.id)
+  coveredLevels.add(lesson.difficulty)
+  coveredTypes.add(lesson.type)
+
+  const surfaceSignature = lesson.words
+    .map((item) => item.word.trim().toLocaleLowerCase("en"))
+    .sort()
+    .join("|")
+  if (surfaceSignatures.has(surfaceSignature)) {
+    failures.push(
+      `Duplicate lesson surface set: ${lesson.id}/${surfaceSignature}`,
+    )
+  }
+  surfaceSignatures.add(surfaceSignature)
 
   for (const challenge of [lesson.choose, lesson.fix]) {
     if (!challenge.options.includes(challenge.answer)) {
@@ -92,12 +113,25 @@ for (const lesson of confusingWordLessons) {
   }
 }
 
-if (confusingWordLessons.length < 10) {
-  failures.push("Confusing Words needs at least ten substantial lessons.")
+if (confusingWordLessons.length < 150) {
+  failures.push("Confusing Words needs at least 150 substantial lessons.")
 }
 for (const lessonId of requiredLessons) {
   if (!lessonIds.has(lessonId))
     failures.push(`Missing required lesson: ${lessonId}`)
+}
+for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) {
+  if (!coveredLevels.has(level))
+    failures.push(`Missing CEFR lesson coverage: ${level}`)
+}
+for (const type of [
+  "Meaning",
+  "Similar spelling",
+  "Sound-alike",
+  "Grammar and usage",
+  "Academic English",
+]) {
+  if (!coveredTypes.has(type)) failures.push(`Missing confusion type: ${type}`)
 }
 
 if (failures.length) {

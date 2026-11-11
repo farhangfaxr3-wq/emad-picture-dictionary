@@ -59,9 +59,9 @@ const routeMetadata: Record<string, PageMetadata> = {
       "Send private feedback or suggest an English word for editorial review.",
   },
   "/about": {
-    title: "About Emad A. Mohammed | Emad Picture Dictionary",
+    title: "About Us | Emad Picture Dictionary",
     description:
-      "Learn about the creator of Emad Picture Dictionary and the Soran University event project.",
+      "Meet Emad A. Mohammed and Farhang F. Jamal, the team behind Emad Picture Dictionary and its Soran University event project.",
   },
   "/settings": {
     title: "Learning Settings | Emad Picture Dictionary",

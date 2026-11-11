@@ -16,6 +16,7 @@
     "test:enrichment": "tsx scripts/validate-learning-enrichment.ts",
     "pronunciations:generate": "node scripts/generate-pronunciation-overrides.mjs && node scripts/generate-pronunciation-studio.mjs",
     "test:imagery": "node scripts/validate-imagery.mjs && tsx scripts/validate-practice-imagery.ts",
+    "test:practice": "tsx scripts/validate-practice-audit.ts",
     "images:context-map": "tsx scripts/generate-vocabulary-context-map.ts",
     "test:assessment-audio": "node scripts/validate-assessment-audio.mjs",
     "test:pronunciation-studio": "node scripts/validate-pronunciation-studio.mjs",

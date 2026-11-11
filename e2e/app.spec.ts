@@ -70,6 +70,96 @@ async function assertHealthyPage(page: Page, path: string) {
   }
 }
 
+async function chooseSingleWordPicture(page: Page) {
+  const picture = page.locator('img[data-vocabulary-word="apple"]')
+  await expect(picture.first()).toBeVisible()
+  await picture.first().locator("xpath=ancestor::button[1]").click()
+}
+
+async function completeCategoryActivity(
+  page: Page,
+  section: "practice" | "write" | "games",
+  activity: string,
+) {
+  await page.goto(
+    `/topics/Food?section=${section}&activity=${activity}&cefr=all&length=5&word=apple`,
+  )
+  await expect(page.getByText("Loading your learning space…")).toHaveCount(0, {
+    timeout: 15_000,
+  })
+
+  if (["matching", "picture-match"].includes(activity)) {
+    await page.getByRole("button", { name: "Match word: apple" }).click()
+    await chooseSingleWordPicture(page)
+  } else if (activity === "memory") {
+    const cards = page.locator('button[class*="min-h-36"]')
+    await expect(cards).toHaveCount(2)
+    await cards.nth(0).click()
+    await cards.nth(1).click()
+  } else if (activity === "review") {
+    await page.getByRole("button", { name: "Reveal word" }).click()
+    await page.getByRole("button", { name: "I remembered it" }).click()
+    await page.getByRole("button", { name: "See Results" }).click()
+  } else if (
+    section === "write" ||
+    ["spelling", "dictation", "missing", "complete-word"].includes(activity)
+  ) {
+    await page.getByLabel("Your English word").fill("apple")
+    await page.getByRole("button", { name: "Check Answer" }).click()
+    await page.getByRole("button", { name: "See Results" }).click()
+  } else if (activity === "builder") {
+    const tiles = page.getByRole("button", { name: /^Letter / })
+    const tileCount = await tiles.count()
+    for (let index = 0; index < tileCount; index += 1) {
+      await tiles.nth(index).click()
+    }
+    await page.getByRole("button", { name: "Check word" }).click()
+    await page.getByRole("button", { name: "See Results" }).click()
+  } else if (["word", "identify", "listen-choose"].includes(activity)) {
+    await chooseSingleWordPicture(page)
+    await page.getByRole("button", { name: "See Results" }).click()
+  } else {
+    await page.getByRole("button", { name: "Choose word: apple" }).click()
+    await page.getByRole("button", { name: "See Results" }).click()
+  }
+
+  await expect(
+    page.getByText(/Activity complete|Beautifully done!/).first(),
+  ).toBeVisible()
+}
+
+async function completeGlobalActivity(page: Page, title: string) {
+  await page.goto(
+    "/practice?q=apple%20Food%20A%20round%20fruit%20with%20red%20or%20green%20skin",
+  )
+  await expect(page).toHaveURL(/\/practice\?q=apple%20Food%20A%20round%20fruit/)
+  await expect(
+    page.getByText("1 word in your practice collection."),
+  ).toBeVisible()
+  await page.getByRole("button", { name: new RegExp(title, "i") }).click()
+
+  if (title === "Matching") {
+    await page.getByRole("button", { name: "apple", exact: true }).click()
+    await chooseSingleWordPicture(page)
+  } else if (title === "Quick Review") {
+    await page.getByRole("button", { name: "Reveal the word" }).click()
+    await page.getByRole("button", { name: "I remembered it" }).click()
+    await page.getByRole("button", { name: "See my results" }).click()
+  } else if (title === "Spelling") {
+    await page.getByLabel("Spell the word").fill("apple")
+    await page.getByRole("button", { name: "Check", exact: true }).click()
+    await page.getByRole("button", { name: "See my results" }).click()
+  } else if (title === "Word → Picture") {
+    await chooseSingleWordPicture(page)
+    await page.getByRole("button", { name: "See my results" }).click()
+  } else {
+    await page.getByRole("button", { name: "Choose apple" }).click()
+    await page.getByRole("button", { name: "See my results" }).click()
+  }
+
+  await expect(page.getByText("PRACTICE COMPLETE")).toBeVisible()
+}
+
 for (const viewport of [
   { name: "desktop", width: 1440, height: 900 },
   { name: "tablet", width: 768, height: 1024 },
@@ -81,6 +171,55 @@ for (const viewport of [
     for (const route of publicRoutes) await assertHealthyPage(page, route)
   })
 }
+
+test("About Us presents both team members responsively with working contact links", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto("/about")
+
+  await expect(
+    page.getByRole("heading", { name: "About Us & the Dictionary" }),
+  ).toBeVisible()
+  await expect(page.getByRole("link", { name: "About Us" })).toBeVisible()
+  await expect(
+    page.locator('img[src="/images/brand/emad-a-mohammed-2026.jpg"]'),
+  ).toBeVisible()
+  await expect(
+    page.locator('img[src="/images/brand/farhang-web-developer.svg"]'),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", { name: "Email Emad A. Mohammed" }),
+  ).toHaveAttribute("href", "mailto:em20323115@soran.edu.iq")
+  await expect(
+    page.getByRole("link", { name: "Email Farhang F. Jamal" }),
+  ).toHaveAttribute("href", "mailto:fj40223119@soran.edu.iq")
+
+  const desktopEmad = await page.getByTestId("team-card-emad").boundingBox()
+  const desktopFarhang = await page
+    .getByTestId("team-card-farhang")
+    .boundingBox()
+  expect(desktopEmad).not.toBeNull()
+  expect(desktopFarhang).not.toBeNull()
+  expect(Math.abs(desktopEmad!.y - desktopFarhang!.y)).toBeLessThan(2)
+  expect(Math.abs(desktopEmad!.width - desktopFarhang!.width)).toBeLessThan(2)
+
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.reload()
+  const mobileEmad = await page.getByTestId("team-card-emad").boundingBox()
+  const mobileFarhang = await page
+    .getByTestId("team-card-farhang")
+    .boundingBox()
+  const emadFrame = await page.getByTestId("team-photo-emad").boundingBox()
+  const farhangFrame = await page
+    .getByTestId("team-photo-farhang")
+    .boundingBox()
+  expect(mobileEmad).not.toBeNull()
+  expect(mobileFarhang).not.toBeNull()
+  expect(mobileEmad!.y).toBeLessThan(mobileFarhang!.y)
+  expect(Math.abs(emadFrame!.width - farhangFrame!.width)).toBeLessThan(2)
+  expect(Math.abs(emadFrame!.height - farhangFrame!.height)).toBeLessThan(2)
+})
 
 test("home search and dictionary search show deduplicated learner results", async ({
   page,
@@ -446,6 +585,132 @@ test("every category practice, writing, flashcard and game mode opens", async ({
   }
   await page.goto("/topics/Food?section=flashcards&cefr=all")
   await expect(page.getByText("Food Flashcards")).toBeVisible()
+})
+
+const fullPracticeCategoryModes = {
+  practice: [
+    "picture",
+    "word",
+    "multiple",
+    "listening",
+    "matching",
+    "identify",
+    "choose",
+    "sentence",
+    "spelling",
+    "topic-review",
+    "review",
+  ],
+  write: ["spelling", "missing", "complete-word", "dictation"],
+  games: [
+    "picture-match",
+    "word-match",
+    "memory",
+    "speed",
+    "listen-choose",
+    "builder",
+    "picture-challenge",
+  ],
+} as const
+
+const fullPracticeGlobalModes = [
+  "Multiple Choice",
+  "Topic Review",
+  "Picture → Word",
+  "Word → Picture",
+  "Listening Practice",
+  "Matching",
+  "Spelling",
+  "Quick Review",
+]
+
+const fullPracticeViewports = [
+  { name: "desktop", width: 1440, height: 900 },
+  { name: "mobile", width: 390, height: 844 },
+] as const
+
+async function resetPracticeTest(
+  page: Page,
+  viewport: typeof fullPracticeViewports[number],
+) {
+  page.setDefaultTimeout(10_000)
+  await page.setViewportSize(viewport)
+  await page.goto("/")
+  await page.evaluate(() => localStorage.removeItem("emad-dictionary"))
+}
+
+async function savedPracticeSessions(page: Page) {
+  await page.reload()
+  return page.evaluate(() => {
+    const saved = JSON.parse(localStorage.getItem("emad-dictionary") || "{}")
+    return saved.sessions?.length || 0
+  })
+}
+
+for (const viewport of fullPracticeViewports) {
+  test(`category Practice sessions complete on ${viewport.name}`, async ({
+    page,
+  }) => {
+    test.setTimeout(300_000)
+    await resetPracticeTest(page, viewport)
+
+    for (const activity of fullPracticeCategoryModes.practice) {
+      await completeCategoryActivity(page, "practice", activity)
+    }
+
+    expect(await savedPracticeSessions(page)).toBeGreaterThanOrEqual(11)
+  })
+
+  test(`writing and game sessions complete on ${viewport.name}`, async ({
+    page,
+  }) => {
+    test.setTimeout(300_000)
+    await resetPracticeTest(page, viewport)
+
+    for (const activity of fullPracticeCategoryModes.write) {
+      await completeCategoryActivity(page, "write", activity)
+    }
+    for (const activity of fullPracticeCategoryModes.games) {
+      await completeCategoryActivity(page, "games", activity)
+    }
+
+    expect(await savedPracticeSessions(page)).toBeGreaterThanOrEqual(11)
+  })
+
+  test(`flashcard and global Practice sessions complete on ${viewport.name}`, async ({
+    page,
+  }) => {
+    test.setTimeout(300_000)
+    await resetPracticeTest(page, viewport)
+
+    await page.goto("/topics/Food?section=flashcards&cefr=all&word=apple")
+    await page.getByRole("button", { name: "Flip flashcard" }).click()
+    await page.getByRole("button", { name: "Known" }).click()
+    await expect(page.getByText("Deck session complete")).toBeVisible()
+
+    for (const title of fullPracticeGlobalModes) {
+      await completeGlobalActivity(page, title)
+    }
+
+    expect(await savedPracticeSessions(page)).toBeGreaterThanOrEqual(9)
+  })
+}
+
+test("Practice preserves the learner when a checked image fails at runtime", async ({
+  page,
+}) => {
+  await page.route("**/images/vocabulary/apple*", (route) => route.abort())
+  await page.goto(
+    "/topics/Food?section=practice&activity=picture&cefr=all&length=5&word=apple",
+  )
+
+  await expect(
+    page.getByText(/meaning question|definition instead/i).first(),
+  ).toBeVisible()
+  await page.getByRole("button", { name: "Choose word: apple" }).click()
+  await expect(page.getByText("Correct! Nicely done.")).toBeVisible()
+  await page.getByRole("button", { name: "See Results" }).click()
+  await expect(page.getByText("Beautifully done!")).toBeVisible()
 })
 
 test("scenes, favorites, progress, feedback, settings and assessment remain usable", async ({

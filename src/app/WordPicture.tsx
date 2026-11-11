@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import type { Word } from "./content"
 
@@ -16,6 +16,8 @@ interface Props {
   className?: string
 
   altText?: string
+
+  onUnavailable?: () => void
 }
 
 export default function WordPicture({
@@ -25,6 +27,7 @@ export default function WordPicture({
   sourceTopic,
   className = "",
   altText,
+  onUnavailable,
 }: Props) {
   const match = getVocabularyImageMatch({
     word,
@@ -36,6 +39,8 @@ export default function WordPicture({
   const visual = match.image
 
   const [failed, setFailed] = useState(false)
+
+  useEffect(() => setFailed(false), [visual?.src])
 
   if (!visual || failed)
     return (
@@ -70,7 +75,11 @@ export default function WordPicture({
       height={600}
       loading="lazy"
       decoding="async"
-      onError={() => setFailed(true)}
+      onError={() => {
+        if (failed) return
+        setFailed(true)
+        onUnavailable?.()
+      }}
       className={`max-w-full rounded-xl object-contain ${className}`}
     />
   )

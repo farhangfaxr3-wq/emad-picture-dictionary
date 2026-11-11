@@ -71,7 +71,12 @@ interface CourseProps {
 
   favorite: (id: string) => void
 
-  art: (word: Word, className?: string, altText?: string) => ReactNode
+  art: (
+    word: Word,
+    className?: string,
+    altText?: string,
+    onUnavailable?: () => void,
+  ) => ReactNode
 
   audio: (text: string) => ReactNode
 
@@ -637,6 +642,7 @@ export default function CategoryCourse(course: CourseProps) {
                   title={active.title}
                   onComplete={onComplete}
                   onProgress={() => navigate("progress")}
+                  onExit={() => navigate(section)}
                 />
               ) : (
                 <QuizSession
@@ -660,6 +666,7 @@ export default function CategoryCourse(course: CourseProps) {
                   section={section as LearningSection}
                   onComplete={onComplete}
                   onProgress={() => navigate("progress")}
+                  onExit={() => navigate(section)}
                 />
               )}
             </div>
@@ -1050,6 +1057,8 @@ interface QuizProps extends SessionProps {
   section: LearningSection
 
   questionCount: number
+
+  onExit: () => void
 }
 
 interface ResultProps extends SessionProps {
@@ -1162,6 +1171,8 @@ function QuizSession(props: QuizProps) {
     questionCount,
 
     onComplete,
+
+    onExit,
   } = props
 
   const imageDependentActivity = [
@@ -1185,19 +1196,7 @@ function QuizSession(props: QuizProps) {
       ? verifiedVisualWords
       : words
 
-  const [round, setRound] = useState(0)
-
-  const [questions, setQuestions] = useState(() =>
-    shuffled(questionPool).slice(
-      0,
-
-      activityMode === "speed" ? questionPool.length : questionCount,
-    ),
-  )
-
-  const [index, setIndex] = useState(0)
-
-  const requestedMode =
+  const requestedModeAt = (position: number) =>
     activityMode === "topic-review"
       ? [
           "picture",
@@ -1211,11 +1210,57 @@ function QuizSession(props: QuizProps) {
           "multiple",
 
           "sentence",
-        ][index % 6]
+        ][position % 6]
       : activityMode
 
+  const createQuestions = () => {
+    const count = Math.min(
+      activityMode === "speed" ? questionPool.length : questionCount,
+      questionPool.length,
+    )
+
+    if (activityMode !== "topic-review")
+      return shuffled(questionPool).slice(0, count)
+
+    const mixedSource = shuffled(words)
+
+    const mixedVisuals = shuffled(verifiedVisualWords)
+
+    const used = new Set<string>()
+
+    return Array.from({ length: count }, (_, position) => {
+      const needsPicture = ["picture", "word"].includes(
+        requestedModeAt(position),
+      )
+
+      const preferred = needsPicture ? mixedVisuals : mixedSource
+
+      const choice =
+        preferred.find((item) => !used.has(item.id)) ||
+        mixedSource.find((item) => !used.has(item.id)) ||
+        mixedSource[position % mixedSource.length]
+
+      used.add(choice.id)
+
+      return choice
+    })
+  }
+
+  const [round, setRound] = useState(0)
+
+  const [questions, setQuestions] = useState(createQuestions)
+
+  const [index, setIndex] = useState(0)
+
+  const requestedMode = requestedModeAt(index)
+
+  const [failedVisualIds, setFailedVisualIds] = useState<string[]>([])
+
+  const [runtimeFallbackNotice, setRuntimeFallbackNotice] = useState("")
+
   const unavailablePicture =
-    !hasVerifiedVocabularyImage(questions[index]) &&
+    (!hasVerifiedVocabularyImage(questions[index]) ||
+      failedVisualIds.includes(questions[index]?.id)) &&
     [
       "picture",
 
@@ -1262,10 +1307,10 @@ function QuizSession(props: QuizProps) {
 
   useEffect(() => {
     const relation =
-      course.words.find(
+      words.find(
         (item) => item.id !== word.id && word.related.includes(item.id),
       ) ||
-      course.words.find((item) => item.id !== word.id) ||
+      words.find((item) => item.id !== word.id) ||
       word
 
     setRelated(relation)
@@ -1274,22 +1319,36 @@ function QuizSession(props: QuizProps) {
 
     const correctImage = getVerifiedVocabularyImage(correct)
 
+    const localCandidates = isPictureChoice ? visualVocabulary(words) : words
+
+    const categoryCandidates = isPictureChoice
+      ? visualVocabulary(course.words)
+      : course.words
+
+    const candidates = [...localCandidates, ...categoryCandidates].filter(
+      (item, position, all) =>
+        all.findIndex((candidate) => candidate.id === item.id) === position,
+    )
+
     const distinct = shuffled(
-      (isPictureChoice ? visualVocabulary(course.words) : course.words).filter(
+      candidates.filter(
         (item) =>
           item.id !== correct.id &&
           item.word !== correct.word &&
+          (!isPictureChoice || !failedVisualIds.includes(item.id)) &&
           (!isPictureChoice ||
             getVerifiedVocabularyImage(item)?.src !== correctImage?.src),
       ),
     ).slice(0, 3)
 
     const fallback = shuffled(
-      course.words.filter(
+      categoryCandidates.filter(
         (item) =>
           item.id !== correct.id &&
           item.word !== correct.word &&
-          (!isPictureChoice || hasVerifiedVocabularyImage(item)) &&
+          (!isPictureChoice ||
+            (hasVerifiedVocabularyImage(item) &&
+              !failedVisualIds.includes(item.id))) &&
           !distinct.some((choice) => choice.id === item.id),
       ),
     )
@@ -1315,7 +1374,57 @@ function QuizSession(props: QuizProps) {
     )
 
     course.visitWord(word)
-  }, [index, round])
+  }, [index, round, mode, word.id, failedVisualIds])
+
+  function handleVisualFailure(id: string) {
+    const excluded = [...new Set([...failedVisualIds, id])]
+
+    setFailedVisualIds(excluded)
+
+    if (feedback) {
+      setRuntimeFallbackNotice(
+        "A picture stopped loading after your answer. Your submitted answer and score were preserved.",
+      )
+      return
+    }
+
+    if (word.id !== id) {
+      setRuntimeFallbackNotice(
+        "A picture option could not load and was replaced with another checked option. No answer or score was lost.",
+      )
+      return
+    }
+
+    const used = new Set(questions.map((question) => question.id))
+
+    const replacement =
+      verifiedVisualWords.find(
+        (candidate) =>
+          candidate.cefr?.level === word.cefr?.level &&
+          !used.has(candidate.id) &&
+          !excluded.includes(candidate.id),
+      ) ||
+      verifiedVisualWords.find(
+        (candidate) =>
+          !used.has(candidate.id) && !excluded.includes(candidate.id),
+      )
+
+    if (replacement) {
+      setQuestions((previous) =>
+        previous.map((question, position) =>
+          position === index ? replacement : question,
+        ),
+      )
+      setRuntimeFallbackNotice(
+        `A picture could not load, so this round was replaced with another checked picture from ${course.category}. No answer or score was lost.`,
+      )
+      return
+    }
+
+    setRuntimeFallbackNotice(
+      "A picture could not load and no unused checked replacement was available. This round now uses a meaning question, so you can continue without a penalty.",
+    )
+  }
 
   function finish(next: ReviewOutcome[]) {
     if (completion.current) return
@@ -1396,13 +1505,7 @@ function QuizSession(props: QuizProps) {
 
     answers.current = []
 
-    setQuestions(
-      shuffled(questionPool).slice(
-        0,
-
-        activityMode === "speed" ? questionPool.length : questionCount,
-      ),
-    )
+    setQuestions(createQuestions())
 
     setIndex(0)
 
@@ -1419,6 +1522,10 @@ function QuizSession(props: QuizProps) {
     setDone(false)
 
     setRemaining(60)
+
+    setFailedVisualIds([])
+
+    setRuntimeFallbackNotice("")
 
     setRound((previous) => previous + 1)
   }
@@ -1482,6 +1589,17 @@ function QuizSession(props: QuizProps) {
         }
         label="Activity progress"
       />
+      {runtimeFallbackNotice && (
+        <div
+          role="status"
+          className="mt-4 rounded-xl border border-primary/20 bg-secondary p-3 text-center text-xs leading-5 text-muted-foreground"
+        >
+          <p>{runtimeFallbackNotice}</p>
+          <button onClick={onExit} className={`${secondary} mt-3`}>
+            Choose another activity
+          </button>
+        </div>
+      )}
       <h2 className="mb-5 mt-6 text-center font-display text-xl font-bold">
         {instruction}
       </h2>
@@ -1524,7 +1642,9 @@ function QuizSession(props: QuizProps) {
           <div className="mb-5 rounded-2xl bg-secondary/50 p-4">
             <div className="flex justify-center">
               {hasVerifiedVocabularyImage(word) ? (
-                course.art(word, "h-44 w-52", "Vocabulary question image")
+                course.art(word, "h-44 w-52", "Vocabulary question image", () =>
+                  handleVisualFailure(word.id),
+                )
               ) : (
                 <span className="flex h-20 w-20 items-center justify-center rounded-full bg-card text-primary">
                   <BookOpen aria-hidden="true" size={30} />
@@ -1716,7 +1836,12 @@ function QuizSession(props: QuizProps) {
               {isPictureChoice ? (
                 <>
                   <div className="flex justify-center">
-                    {course.art(choice, "h-24 w-28", "Picture answer option")}
+                    {course.art(
+                      choice,
+                      "h-24 w-28",
+                      "Picture answer option",
+                      () => handleVisualFailure(choice.id),
+                    )}
                   </div>
                   <p className="mt-2 text-xs font-normal leading-5 text-muted-foreground">
                     {choice.definition}
@@ -1767,10 +1892,12 @@ function QuizSession(props: QuizProps) {
 
 interface PairProps extends SessionProps {
   memory: boolean
+
+  onExit: () => void
 }
 
 function PairGame(props: PairProps) {
-  const { course, words, memory, onComplete } = props
+  const { course, words, memory, onComplete, onExit } = props
 
   const [pairs, setPairs] = useState(() =>
     shuffled(visualVocabulary(words)).slice(0, 4),
@@ -1795,6 +1922,10 @@ function PairGame(props: PairProps) {
   const [matched, setMatched] = useState<string[]>([])
 
   const [failed, setFailed] = useState<string[]>([])
+
+  const [unavailableVisuals, setUnavailableVisuals] = useState<string[]>([])
+
+  const [runtimeNotice, setRuntimeNotice] = useState("")
 
   const [feedback, setFeedback] = useState("")
 
@@ -1853,6 +1984,46 @@ function PairGame(props: PairProps) {
     }
   }
 
+  function handlePictureUnavailable(id: string) {
+    if (unavailableVisuals.includes(id)) return
+
+    const nextUnavailable = [...unavailableVisuals, id]
+
+    setUnavailableVisuals(nextUnavailable)
+
+    const used = new Set(pairs.map((word) => word.id))
+
+    const replacement = visualVocabulary(words).find(
+      (candidate) =>
+        !used.has(candidate.id) && !nextUnavailable.includes(candidate.id),
+    )
+
+    if (!replacement) {
+      setRuntimeNotice(
+        "A picture could not load and no unused checked replacement was available. Use its exact definition to finish the pair; this loading problem will not reduce your score.",
+      )
+      return
+    }
+
+    setPairs((previous) =>
+      previous.map((word) => (word.id === id ? replacement : word)),
+    )
+    setRight((previous) =>
+      previous.map((word) => (word.id === id ? replacement : word)),
+    )
+    setDeck((previous) =>
+      previous.map((card) =>
+        card.id === id ? { ...card, id: replacement.id } : card,
+      ),
+    )
+    setMatched((previous) => previous.filter((matchedId) => matchedId !== id))
+    setLeft((previous) => (previous === id ? null : previous))
+    setFlipped([])
+    setRuntimeNotice(
+      `A picture could not load, so it was replaced with another checked ${course.category} picture. No answer or score was lost.`,
+    )
+  }
+
   function flip(index: number) {
     if (
       flipped.includes(index) ||
@@ -1902,6 +2073,10 @@ function PairGame(props: PairProps) {
 
     setFailed([])
 
+    setUnavailableVisuals([])
+
+    setRuntimeNotice("")
+
     setFeedback("")
 
     setAttempts(0)
@@ -1927,6 +2102,17 @@ function PairGame(props: PairProps) {
         value={(matched.length / pairs.length) * 100}
         label="Pairs matched"
       />
+      {runtimeNotice && (
+        <div
+          role="status"
+          className="mt-4 rounded-xl border border-primary/20 bg-secondary p-3 text-center text-xs leading-5 text-muted-foreground"
+        >
+          <p>{runtimeNotice}</p>
+          <button onClick={onExit} className={`${secondary} mt-3`}>
+            Choose another activity
+          </button>
+        </div>
+      )}
       <h2 className="mt-6 text-center font-display text-xl font-bold">
         {memory
           ? "Find a word and its picture."
@@ -1967,7 +2153,12 @@ function PairGame(props: PairProps) {
                   ) : (
                     <>
                       <div className="flex justify-center">
-                        {course.art(word, "h-20 w-24", "Memory picture card")}
+                        {course.art(
+                          word,
+                          "h-20 w-24",
+                          "Memory picture card",
+                          () => handlePictureUnavailable(word.id),
+                        )}
                       </div>
                       <span className="mt-2 block text-xs leading-4 text-muted-foreground">
                         {word.definition}
@@ -2017,7 +2208,12 @@ function PairGame(props: PairProps) {
                 }`}
               >
                 <div className="flex justify-center">
-                  {course.art(word, "h-20 w-24", "Picture matching option")}
+                  {course.art(
+                    word,
+                    "h-20 w-24",
+                    "Picture matching option",
+                    () => handlePictureUnavailable(word.id),
+                  )}
                 </div>
                 <span className="mt-1 block text-xs leading-4 text-muted-foreground">
                   {word.definition}

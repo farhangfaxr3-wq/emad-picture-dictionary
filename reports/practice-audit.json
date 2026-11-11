@@ -1,0 +1,273 @@
+{
+  "status": "PASS",
+  "scope": {
+    "topics": 31,
+    "levels": 7,
+    "sessionLengths": [
+      5,
+      10,
+      15
+    ],
+    "activityRows": 31,
+    "combinationChecks": 20181
+  },
+  "safeguards": {
+    "imageFallbackChecks": 9114,
+    "smallPoolChecks": 9044,
+    "emptyFilteredCollections": 12,
+    "verifiedPracticeImages": 1012,
+    "runtimeBehavior": "Broken current images are replaced where possible; otherwise the question becomes text-based without losing an answer or score. Broken pair images retain exact definitions and offer another activity.",
+    "persistence": "Existing progress, favorites, review history and localStorage migrations are unchanged."
+  },
+  "activities": [
+    {
+      "area": "Global Practice",
+      "activity": "multiple",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Global Practice",
+      "activity": "topic-review",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Global Practice",
+      "activity": "picture",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Global Practice",
+      "activity": "word",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Global Practice",
+      "activity": "listening",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Global Practice",
+      "activity": "matching",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Global Practice",
+      "activity": "spelling",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Global Practice",
+      "activity": "review",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "picture",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "word",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "multiple",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "listening",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "matching",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "identify",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "choose",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "sentence",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "spelling",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "topic-review",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Practice",
+      "activity": "review",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Write",
+      "activity": "spelling",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Write",
+      "activity": "missing",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Write",
+      "activity": "complete-word",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Write",
+      "activity": "dictation",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Flashcards",
+      "activity": "flashcards",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Games",
+      "activity": "picture-match",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Games",
+      "activity": "word-match",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Games",
+      "activity": "memory",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Games",
+      "activity": "speed",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Games",
+      "activity": "listen-choose",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Games",
+      "activity": "builder",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "text/audio mode; no image dependency",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    },
+    {
+      "area": "Topic Games",
+      "activity": "picture-challenge",
+      "filters": "31 topics × All/A1–C2 × 5/10/15",
+      "imagePolicy": "verified unique images; automatic text fallback",
+      "smallPoolPolicy": "session clamps to unique available words",
+      "result": "PASS"
+    }
+  ],
+  "remainingIssues": []
+}

@@ -202,12 +202,16 @@ function Illustration({
   className = "",
 
   altText,
+
+  onUnavailable,
 }: {
   word: string
 
   className?: string
 
   altText?: string
+
+  onUnavailable?: () => void
 }) {
   const item =
     wordById.get(word) || vocabulary.find((item) => item.word === word)
@@ -221,6 +225,7 @@ function Illustration({
       sourceTopic={item?.sourceTopic}
       className={className}
       altText={altText}
+      onUnavailable={onUnavailable}
     />
   )
 }
@@ -1123,7 +1128,7 @@ const navigation: {
 
   { path: "/feedback", label: "Feedback & Ideas", icon: MessageSquare },
 
-  { path: "/about", label: "About Me", icon: UserRound },
+  { path: "/about", label: "About Us", icon: UserRound },
 
   { path: "/settings", label: "Settings", icon: Settings },
 ]
@@ -1773,9 +1778,14 @@ function Layout() {
               it.
             </span>
             <span>
-              Designed &amp; Built by{" "}
+              Designed by{" "}
               <span className="font-medium text-foreground">
                 Emad A. Mohammed
+              </span>
+              <span aria-hidden="true"> · </span>
+              Developed by{" "}
+              <span className="font-medium text-foreground">
+                Farhang F. Jamal
               </span>
             </span>
           </footer>
@@ -3511,8 +3521,13 @@ function TopicDetail() {
       openWord={openWord}
       visitWord={visitWord}
       favorite={favorite}
-      art={(word, className, altText) => (
-        <Illustration word={word.id} className={className} altText={altText} />
+      art={(word, className, altText, onUnavailable) => (
+        <Illustration
+          word={word.id}
+          className={className}
+          altText={altText}
+          onUnavailable={onUnavailable}
+        />
       )}
       audio={(text) => <AudioButton word={text} />}
       topicArt={<TopicArt topic={category} />}
@@ -5000,6 +5015,10 @@ function PracticePage() {
 
   const [questionCount, setQuestionCount] = useState(5)
 
+  const [fallbackNotice, setFallbackNotice] = useState("")
+
+  const [failedVisualIds, setFailedVisualIds] = useState<string[]>([])
+
   const [selectedTopic, setSelectedTopic] = useState(
     params.get("topic") || "All topics",
   )
@@ -5056,21 +5075,117 @@ function PracticePage() {
         .includes(params.get("q")!.trim().toLowerCase()),
     )
 
-  const makeOptions = (question: Word) => {
+  const requestedModeAt = (sessionMode: string, position: number) =>
+    sessionMode === "topic-review"
+      ? [
+          "picture",
+
+          "word",
+
+          data.preferences.audio ? "listening" : "multiple",
+
+          "spelling",
+
+          "multiple",
+        ][position % 5]
+      : sessionMode
+
+  const makeOptions = (
+    question: Word,
+    optionMode: string,
+    excludedIds = failedVisualIds,
+  ) => {
     const questionImage = getVerifiedVocabularyImage(question)
+
+    const pictureChoices = optionMode === "word"
+
+    const localCandidates = pictureChoices ? visualVocabulary(pool) : pool
+
+    const fallbackCandidates = pictureChoices
+      ? visualPracticeVocabulary
+      : vocabulary
+
+    const candidates = [...localCandidates, ...fallbackCandidates].filter(
+      (item, position, all) =>
+        !excludedIds.includes(item.id) &&
+        all.findIndex((candidate) => candidate.id === item.id) === position,
+    )
 
     return shuffled([
       question,
 
       ...shuffled(
-        visualPracticeVocabulary.filter(
+        candidates.filter(
           (item) =>
             item.id !== question.id &&
             item.word !== question.word &&
-            getVerifiedVocabularyImage(item)?.src !== questionImage?.src,
+            (!pictureChoices ||
+              getVerifiedVocabularyImage(item)?.src !== questionImage?.src),
         ),
       ).slice(0, 3),
     ])
+  }
+
+  function handleVisualFailure(id: string) {
+    const excluded = [...new Set([...failedVisualIds, id])]
+
+    setFailedVisualIds(excluded)
+
+    setFallbackNotice(
+      "A picture could not load, so this round changed to a meaning question. Your score is not affected until you answer.",
+    )
+
+    if (current && current.id !== id) {
+      setOptions(
+        makeOptions(
+          current,
+          requestedModeAt(mode || "multiple", index),
+          excluded,
+        ),
+      )
+    }
+  }
+
+  function handleMatchingVisualFailure(id: string) {
+    const excluded = [...new Set([...failedVisualIds, id])]
+
+    setFailedVisualIds(excluded)
+
+    const usedIds = new Set(questions.map((word) => word.id))
+
+    const usedSources = new Set(
+      questions
+        .map((word) => getVerifiedVocabularyImage(word)?.src)
+        .filter(Boolean),
+    )
+
+    const replacement = visualVocabulary(pool).find((word) => {
+      const source = getVerifiedVocabularyImage(word)?.src
+
+      return (
+        !excluded.includes(word.id) &&
+        !usedIds.has(word.id) &&
+        Boolean(source) &&
+        !usedSources.has(source)
+      )
+    })
+
+    if (replacement && !matched.includes(id)) {
+      setQuestions((previous) =>
+        previous.map((word) => (word.id === id ? replacement : word)),
+      )
+      setOptions((previous) =>
+        shuffled(previous.map((word) => (word.id === id ? replacement : word))),
+      )
+      setFallbackNotice(
+        "A picture could not load and was replaced with another checked picture. No answer or score was lost.",
+      )
+      return
+    }
+
+    setFallbackNotice(
+      "A picture could not load. Its definition remains available, so you can continue without losing an answer or score.",
+    )
   }
 
   function start(nextMode: string) {
@@ -5129,24 +5244,46 @@ function PracticePage() {
     const count =
       activeMode === "matching"
         ? Math.min(4, sampleSource.length)
-        : imageDependentMode && visualSource.length
-          ? Math.min(questionCount, sampleSource.length)
-          : questionCount
+        : Math.min(questionCount, sampleSource.length)
 
     const sample = shuffled(sampleSource)
 
-    const nextQuestions = Array.from(
-      { length: count },
+    const nextQuestions =
+      nextMode === "topic-review"
+        ? (() => {
+            const mixedSource = shuffled(source)
 
-      (_, position) => sample[position % sample.length],
-    )
+            const mixedVisuals = shuffled(visualVocabulary(source))
+
+            const used = new Set<string>()
+
+            return Array.from({ length: count }, (_, position) => {
+              const requested = requestedModeAt(nextMode, position)
+
+              const needsPicture = ["picture", "word", "spelling"].includes(
+                requested,
+              )
+
+              const preferred = needsPicture ? mixedVisuals : mixedSource
+
+              const choice =
+                preferred.find((word) => !used.has(word.id)) ||
+                mixedSource.find((word) => !used.has(word.id)) ||
+                mixedSource[position % mixedSource.length]
+
+              used.add(choice.id)
+
+              return choice
+            })
+          })()
+        : sample.slice(0, count)
 
     setQuestions(nextQuestions)
 
     setOptions(
       activeMode === "matching"
         ? shuffled(nextQuestions)
-        : makeOptions(nextQuestions[0]),
+        : makeOptions(nextQuestions[0], requestedModeAt(activeMode, 0), []),
     )
 
     setMode(activeMode)
@@ -5176,6 +5313,14 @@ function PracticePage() {
     setMatchingAttempts(0)
 
     setRevealed(false)
+
+    setFailedVisualIds([])
+
+    setFallbackNotice(
+      imageDependentMode && !visualSource.length
+        ? "This collection has no checked pictures yet, so the activity switched to Multiple Choice. No answer or score was lost."
+        : "",
+    )
 
     setSessionTopic(
       practiceScene
@@ -5289,7 +5434,12 @@ function PracticePage() {
 
     setRevealed(false)
 
-    setOptions(makeOptions(questions[index + 1]))
+    setOptions(
+      makeOptions(
+        questions[index + 1],
+        requestedModeAt(mode || "multiple", index + 1),
+      ),
+    )
   }
 
   function match(id: string) {
@@ -5325,24 +5475,12 @@ function PracticePage() {
 
   const current = questions[index]
 
-  const requestedQuestionMode =
-    mode === "topic-review"
-      ? [
-          "picture",
-
-          "word",
-
-          data.preferences.audio ? "listening" : "multiple",
-
-          "spelling",
-
-          "multiple",
-        ][index % 5]
-      : mode
+  const requestedQuestionMode = mode ? requestedModeAt(mode, index) : mode
 
   const questionMode =
     !current ||
-    (!hasVerifiedVocabularyImage(current) &&
+    ((!hasVerifiedVocabularyImage(current) ||
+      failedVisualIds.includes(current.id)) &&
       ["picture", "word", "spelling"].includes(requestedQuestionMode || ""))
       ? "multiple"
       : requestedQuestionMode
@@ -5655,6 +5793,20 @@ function PracticePage() {
             }
             className="mb-8"
           />
+          {fallbackNotice && (
+            <div
+              role="status"
+              className="mb-6 flex flex-col gap-3 rounded-xl border border-primary/20 bg-secondary p-4 text-xs leading-5 text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
+            >
+              <span>{fallbackNotice}</span>
+              <button
+                onClick={() => setMode(null)}
+                className="shrink-0 rounded-lg px-3 py-2 font-semibold text-primary hover:bg-card"
+              >
+                Choose another activity
+              </button>
+            </div>
+          )}
           {mode === "matching" ? (
             <>
               <h2 className="mb-2 text-center font-display text-xl font-bold">
@@ -5712,6 +5864,9 @@ function PracticePage() {
                         word={word.id}
                         className="h-24 w-28"
                         altText="Picture answer option"
+                        onUnavailable={() =>
+                          handleMatchingVisualFailure(word.id)
+                        }
                       />
                       <span className="max-w-[210px] text-[10px] leading-4 text-muted-foreground">
                         {word.definition}
@@ -5804,6 +5959,7 @@ function PracticePage() {
                       word={current.word}
                       className="h-[210px] w-[245px]"
                       altText="Vocabulary question image"
+                      onUnavailable={() => handleVisualFailure(current.id)}
                     />
                   </div>
                 )
@@ -5903,6 +6059,7 @@ function PracticePage() {
                           word={word.word}
                           className="mx-auto h-[115px] w-[130px]"
                           altText="Picture answer option"
+                          onUnavailable={() => handleVisualFailure(word.id)}
                         />
                       ) : (
                         word.word
@@ -7313,63 +7470,140 @@ function AboutPage() {
     <>
       <PageHeading
         eyebrow="The story behind the project"
-        title="About Me & the Dictionary"
-        description="Meet the creator and learn how Emad Picture Dictionary was designed for everyday English learning."
+        title="About Us & the Dictionary"
+        description="Meet the team behind Emad Picture Dictionary and learn how the project was designed for everyday English learning."
       />
       <section className={`${card} overflow-hidden`}>
-        <div className="grid md:grid-cols-[minmax(240px,320px)_1fr]">
-          <div className="relative aspect-[4/5] overflow-hidden bg-muted md:aspect-auto md:min-h-[520px]">
-            <img
-              src="/images/brand/emad-a-mohammed.jpg"
-              alt="Emad A. Mohammed, creator of Emad Picture Dictionary"
-              width={896}
-              height={993}
-              className="absolute inset-0 h-full w-full object-cover object-[center_24%]"
-            />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#102f2b]/85 to-transparent px-5 pb-5 pt-16 text-white md:px-6">
-              <p className="font-display text-lg font-bold">Emad A. Mohammed</p>
-              <p className="mt-1 text-xs text-white/80">
-                Creator &amp; Designer
-              </p>
-            </div>
+        <div className="p-6 md:p-8 lg:p-10">
+          <SectionTitle title="Meet the Team" icon={UserRound} />
+          <div
+            data-testid="team-cards"
+            className="grid items-stretch gap-5 md:grid-cols-2 lg:gap-6"
+          >
+            <article
+              data-testid="team-card-emad"
+              className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-sm"
+            >
+              <div
+                data-testid="team-photo-emad"
+                className="relative aspect-[4/3] overflow-hidden bg-muted"
+              >
+                <img
+                  src="/images/brand/emad-a-mohammed-2026.jpg"
+                  alt="Emad A. Mohammed, creator and designer of Emad Picture Dictionary"
+                  width={1495}
+                  height={1993}
+                  className="absolute inset-0 h-full w-full object-cover object-[35%_20%]"
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-5 sm:p-6">
+                <p className="mb-2 w-fit rounded-full bg-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-[.12em] text-secondary-foreground">
+                  Creator &amp; Designer
+                </p>
+                <h3 className="font-display text-xl font-bold">
+                  Emad A. Mohammed
+                </h3>
+                <p className="mt-3 text-sm font-medium text-foreground">
+                  English Department
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Faculty of Arts
+                </p>
+                <a
+                  href="mailto:em20323115@soran.edu.iq"
+                  aria-label="Email Emad A. Mohammed"
+                  className="mt-5 inline-flex min-h-11 max-w-full items-center gap-2.5 self-start rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-primary hover:border-primary hover:bg-secondary"
+                >
+                  <Mail size={18} className="shrink-0" />
+                  <span className="break-all sm:break-normal">
+                    em20323115@soran.edu.iq
+                  </span>
+                </a>
+              </div>
+            </article>
+
+            <article
+              data-testid="team-card-farhang"
+              className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-sm"
+            >
+              <div
+                data-testid="team-photo-farhang"
+                className="relative aspect-[4/3] overflow-hidden bg-[#eef8f5] dark:bg-[#173b36]"
+              >
+                <img
+                  src="/images/brand/farhang-web-developer.svg"
+                  alt="Graphic of a web developer working at a laptop with code on screen"
+                  width={800}
+                  height={573}
+                  className="absolute inset-0 h-full w-full object-contain p-4 sm:p-6"
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-5 sm:p-6">
+                <p className="mb-2 w-fit rounded-full bg-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-[.12em] text-secondary-foreground">
+                  Website Developer
+                </p>
+                <h3 className="font-display text-xl font-bold">
+                  Farhang F. Jamal
+                </h3>
+                <p className="mt-3 text-sm font-medium text-foreground">
+                  Computer Science
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Faculty of Science
+                </p>
+                <a
+                  href="mailto:fj40223119@soran.edu.iq"
+                  aria-label="Email Farhang F. Jamal"
+                  className="mt-5 inline-flex min-h-11 max-w-full items-center gap-2.5 self-start rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-primary hover:border-primary hover:bg-secondary"
+                >
+                  <Mail size={18} className="shrink-0" />
+                  <span className="break-all sm:break-normal">
+                    fj40223119@soran.edu.iq
+                  </span>
+                </a>
+                <a
+                  href="https://undraw.co/illustration/programming_j1zw"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-auto pt-5 text-[10px] text-muted-foreground hover:text-primary hover:underline"
+                >
+                  Programming illustration by unDraw
+                </a>
+              </div>
+            </article>
           </div>
 
-          <div className="p-6 md:p-8 lg:p-10">
-            <SectionTitle title="About & Creator" />
-            <div className="mb-4 inline-flex rounded-xl bg-primary p-3 text-primary-foreground">
-              <BookOpen size={26} />
-            </div>
+          <div className="mt-8 rounded-2xl border border-border bg-secondary/45 p-5 sm:p-6 md:p-8">
+            <SectionTitle title="About the Dictionary" icon={BookOpen} />
             <h3 className="font-display text-xl font-bold">
               Emad Picture Dictionary
             </h3>
             <p className="mt-1 text-xs font-medium text-primary">
               Interactive English Vocabulary Learning
             </p>
-            <p className="mt-5 text-sm leading-7 text-muted-foreground">
+            <p className="mt-5 max-w-3xl text-sm leading-7 text-muted-foreground">
               An independent learning experience built to make English feel
               familiar. Original learning activities, licensed vocabulary and
               environment photography, everyday examples, and a little
               encouragement along the way.
             </p>
-            <p className="mt-4 text-sm leading-7 text-muted-foreground">
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground">
               Created and designed by{" "}
               <span className="font-medium text-foreground">
                 Emad A. Mohammed
               </span>
-              , English Department, Faculty of Arts.
-            </p>
-            <a
-              href="mailto:em20323115@soran.edu.iq"
-              className="mt-5 inline-flex max-w-full items-center gap-2.5 rounded-xl border border-border bg-background px-4 py-3 text-sm font-semibold text-primary hover:border-primary hover:bg-secondary"
-            >
-              <Mail size={18} className="shrink-0" />
-              <span className="break-all sm:break-normal">
-                em20323115@soran.edu.iq
+              , English Department, Faculty of Arts. Website development by{" "}
+              <span className="font-medium text-foreground">
+                Farhang F. Jamal
               </span>
-            </a>
+              , Computer Science, Faculty of Science.
+            </p>
             <p className="mt-6 border-t border-border pt-5 text-xs">
-              Designed &amp; Built by{" "}
+              Designed by{" "}
               <span className="font-semibold">Emad A. Mohammed</span>
+              {" • "}
+              Developed by{" "}
+              <span className="font-semibold">Farhang F. Jamal</span>
             </p>
             <p className="mt-3 text-[10px] leading-5 text-muted-foreground">
               Version 2.0 • {vocabulary.length} vocabulary entries •{" "}

@@ -23,7 +23,7 @@ const eligible = vocabulary.filter(hasVerifiedVocabularyImage)
 const withoutVerifiedImage = vocabulary.filter(
   (word) => !hasVerifiedVocabularyImage(word),
 )
-const reviewedBatchIds = [
+const reviewedBatch01Ids = [
   "home--balcony",
   "classroom--binder",
   "clothing--poncho",
@@ -32,6 +32,38 @@ const reviewedBatchIds = [
   "health--ointment",
   "food--tuna",
   "home--wardrobe",
+]
+const reviewedBatch02Ids = [
+  "market",
+  "head",
+  "food--spatula",
+  "classroom--workbook",
+  "classroom--poster",
+  "clothing--uniform",
+  "clothing--sleeve",
+  "communication--magazine",
+  "community--recycling-center",
+  "daily-activities--washing-dishes",
+  "daily-activities--watching-television",
+  "daily-activities--taking-a-bath",
+  "health--emergency",
+  "health--meditation",
+  "health--neck",
+  "health--sprain",
+  "health--stretching",
+  "animals--alligator",
+  "technology--battery",
+  "travel--souvenir",
+  "health--walking",
+  "home--ceiling",
+  "home--wall",
+  "batch-015--bacon",
+  "batch-015--basket",
+  "batch-016--candle",
+  "batch-016--cattle",
+  "batch-017--cherry",
+  "batch-019--doll",
+  "batch-022--guitar",
 ]
 const verifiedIllustrations = eligible.filter(
   (word) => word.visualKind === "illustration",
@@ -119,27 +151,33 @@ for (const word of vocabulary) {
   }
 }
 
-const reviewedBatch = reviewedBatchIds.map((id) => {
-  const word = vocabulary.find((entry) => entry.id === id)
-  const image = word ? getVerifiedVocabularyImage(word) : undefined
-  if (!word || !image) errors.push(`${id}: reviewed batch image is not linked`)
-  return word && image
-    ? {
-        id: word.id,
-        word: word.word,
-        sense: word.definition,
-        topic: word.topic,
-        src: image.src,
-        source: image.source,
-        author: image.author,
-        license: image.license,
-        licenseUrl: image.licenseUrl,
-        alt: image.alt || image.description,
-        mediaType: image.mediaType || "photo",
-        practiceEligible: true,
-      }
-    : null
-})
+function reviewedAssets(ids: string[]) {
+  return ids.map((id) => {
+    const word = vocabulary.find((entry) => entry.id === id)
+    const image = word ? getVerifiedVocabularyImage(word) : undefined
+    if (!word || !image)
+      errors.push(`${id}: reviewed batch image is not linked`)
+    return word && image
+      ? {
+          id: word.id,
+          word: word.word,
+          sense: word.definition,
+          topic: word.topic,
+          src: image.src,
+          source: image.source,
+          author: image.author,
+          license: image.license,
+          licenseUrl: image.licenseUrl,
+          alt: image.alt || image.description,
+          mediaType: image.mediaType || "photo",
+          practiceEligible: true,
+        }
+      : null
+  })
+}
+
+const reviewedBatch01 = reviewedAssets(reviewedBatch01Ids)
+const reviewedBatch02 = reviewedAssets(reviewedBatch02Ids)
 
 for (const [source, words] of verifiedWordsBySource) {
   if (words.size > 1 && !isAllowedSharedMeaning(words)) {
@@ -288,10 +326,10 @@ const backlogReport = {
   totalAwaiting: backlogEntries.length,
   learnerFilteredAwaiting: awaitingBySurface.size,
   reconciliation: {
-    previousFullCatalogCount: 2942,
-    previousLearnerFilteredCount: 2928,
+    previousFullCatalogCount: 2934,
+    previousLearnerFilteredCount: 2920,
     previousDifferenceExplainedByTopicAliases: 14,
-    reviewedAssetsAddedThisBatch: reviewedBatch.filter(Boolean).length,
+    reviewedAssetsAddedThisBatch: reviewedBatch02.filter(Boolean).length,
     currentFullCatalogCount: backlogEntries.length,
     currentLearnerFilteredCount: awaitingBySurface.size,
     currentDifferenceExplainedByTopicAliases:
@@ -318,14 +356,33 @@ fs.writeFileSync(
   path.join(root, "reports", "imagery-batch-01.json"),
   `${JSON.stringify(
     {
-      generatedAt: coverageReport.generatedAt,
+      generatedAt: "2026-11-10T08:24:53.367Z",
       status: "reviewed-and-linked",
       before: { fullCatalogAwaiting: 2942, learnerFilteredAwaiting: 2928 },
+      after: {
+        fullCatalogAwaiting: 2934,
+        learnerFilteredAwaiting: 2920,
+      },
+      added: reviewedBatch01.filter(Boolean),
+      rejectedCandidatePolicy:
+        "Ambiguous, generic, weakly visible, unlicensed or sense-mismatched candidates remain unlinked and do not count as completed.",
+    },
+    null,
+    2,
+  )}\n`,
+)
+fs.writeFileSync(
+  path.join(root, "reports", "imagery-batch-02.json"),
+  `${JSON.stringify(
+    {
+      generatedAt: coverageReport.generatedAt,
+      status: "reviewed-and-linked",
+      before: { fullCatalogAwaiting: 2934, learnerFilteredAwaiting: 2920 },
       after: {
         fullCatalogAwaiting: backlogEntries.length,
         learnerFilteredAwaiting: awaitingBySurface.size,
       },
-      added: reviewedBatch.filter(Boolean),
+      added: reviewedBatch02.filter(Boolean),
       rejectedCandidatePolicy:
         "Ambiguous, generic, weakly visible, unlicensed or sense-mismatched candidates remain unlinked and do not count as completed.",
     },

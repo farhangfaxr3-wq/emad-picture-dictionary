@@ -103,15 +103,6 @@ test("home search and dictionary search show deduplicated learner results", asyn
 test("dictionary uses a neutral state when a verified image is unavailable", async ({
   page,
 }) => {
-  await page.goto("/dictionary?q=spatula&images=all")
-  await expect(
-    page.locator('[data-image-status="unavailable"]').first(),
-  ).toBeVisible()
-  await expect(page.getByText("Image unavailable").first()).toBeVisible()
-  await expect(page.locator('img[data-vocabulary-word="spatula"]')).toHaveCount(
-    0,
-  )
-
   for (const word of ["bike", "bin", "bolt"]) {
     await page.goto(`/dictionary?q=${word}&images=all`)
     await expect(
@@ -134,9 +125,56 @@ test("reviewed image uploads render, fail safely and keep quiz alternatives neut
     ["ointment", "wikimedia-ointment.png"],
     ["tuna", "wikimedia-tuna.png"],
     ["wardrobe", "wikimedia-wardrobe.jpg"],
+    ["market", "wikimedia-b02-market.jpg"],
+    ["head", "wikimedia-b02-head.jpg"],
+    ["spatula", "wikimedia-b02-spatula.jpg"],
+    ["workbook", "wikimedia-b02-workbook.jpg"],
+    ["poster", "wikimedia-b02-poster.jpg"],
+    ["uniform", "wikimedia-b02-uniform.jpg"],
+    ["sleeve", "wikimedia-b02-sleeve.jpg"],
+    ["magazine", "wikimedia-b02-magazine.jpg"],
+    ["recycling center", "wikimedia-b02-recycling-center.jpg"],
+    ["washing dishes", "wikimedia-b02-washing-dishes.jpg"],
+    ["watching television", "wikimedia-b02-watching-television.jpg"],
+    ["taking a bath", "wikimedia-b02-taking-a-bath.jpg"],
+    ["emergency", "wikimedia-b02-emergency.jpg"],
+    ["meditation", "wikimedia-b02-meditation.jpg"],
+    ["neck", "wikimedia-b02-neck.jpg"],
+    ["sprain", "wikimedia-b02-sprain.jpg"],
+    ["stretching", "wikimedia-b02-stretching.jpg"],
+    ["alligator", "wikimedia-b02-alligator.jpg"],
+    ["battery", "wikimedia-b02-battery.jpg"],
+    ["souvenir", "wikimedia-b02-souvenir.jpg"],
+    ["walking", "wikimedia-b02-walking.jpg"],
+    ["ceiling", "wikimedia-b02-ceiling.jpg"],
+    ["wall", "wikimedia-b02-wall.jpg"],
+    ["bacon", "wikimedia-b02-bacon.jpg"],
+    ["basket", "wikimedia-b02-basket.jpg"],
+    ["candle", "wikimedia-b02-candle.jpg"],
+    ["cattle", "wikimedia-b02-cattle.jpg"],
+    ["cherry", "wikimedia-b02-cherry.jpg"],
+    ["doll", "wikimedia-b02-doll.jpg"],
+    ["guitar", "wikimedia-b02-guitar.jpg"],
   ]
 
-  for (const [word, filename] of reviewed) {
+  for (const [, filename] of reviewed) {
+    const response = await page.request.get(`/images/vocabulary/${filename}`)
+    expect(response.ok()).toBeTruthy()
+    expect(response.headers()["content-type"]).toMatch(/^image\//)
+  }
+
+  const rendered = [
+    ["balcony", "wikimedia-balcony.jpg"],
+    ["binder", "wikimedia-binder.jpg"],
+    ["tuna", "wikimedia-tuna.png"],
+    ["market", "wikimedia-b02-market.jpg"],
+    ["spatula", "wikimedia-b02-spatula.jpg"],
+    ["alligator", "wikimedia-b02-alligator.jpg"],
+    ["battery", "wikimedia-b02-battery.jpg"],
+    ["guitar", "wikimedia-b02-guitar.jpg"],
+  ]
+
+  for (const [word, filename] of rendered) {
     await page.goto(`/dictionary?q=${word}&images=all`)
     await expect(
       page.locator(`img[data-vocabulary-word="${word}"][src*="${filename}"]`),

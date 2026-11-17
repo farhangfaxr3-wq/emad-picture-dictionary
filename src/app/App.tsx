@@ -7531,11 +7531,11 @@ function AboutPage() {
                 className="relative aspect-[4/3] overflow-hidden bg-[#eef8f5] dark:bg-[#173b36]"
               >
                 <img
-                  src="/images/brand/farhang-web-developer.svg"
-                  alt="Graphic of a web developer working at a laptop with code on screen"
-                  width={800}
-                  height={573}
-                  className="absolute inset-0 h-full w-full object-contain p-4 sm:p-6"
+                  src="/images/brand/farhang-f-jamal-2026.jpg"
+                  alt="Farhang F. Jamal, website developer"
+                  width={1495}
+                  height={2328}
+                  className="absolute inset-0 h-full w-full object-cover object-[center_25%]"
                 />
               </div>
               <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -7560,14 +7560,6 @@ function AboutPage() {
                   <span className="break-all sm:break-normal">
                     fj40223119@soran.edu.iq
                   </span>
-                </a>
-                <a
-                  href="https://undraw.co/illustration/programming_j1zw"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-auto pt-5 text-[10px] text-muted-foreground hover:text-primary hover:underline"
-                >
-                  Programming illustration by unDraw
                 </a>
               </div>
             </article>

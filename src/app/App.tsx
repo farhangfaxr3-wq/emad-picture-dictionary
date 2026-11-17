@@ -7534,8 +7534,8 @@ function AboutPage() {
                   src="/images/brand/farhang-f-jamal-2026.jpg"
                   alt="Farhang F. Jamal, website developer"
                   width={1495}
-                  height={2328}
-                  className="absolute inset-0 h-full w-full object-cover object-[center_25%]"
+                  height={1121}
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
               </div>
               <div className="flex flex-1 flex-col p-5 sm:p-6">

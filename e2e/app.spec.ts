@@ -186,7 +186,7 @@ test("About Us presents both team members responsively with working contact link
     page.locator('img[src="/images/brand/emad-a-mohammed-2026.jpg"]'),
   ).toBeVisible()
   await expect(
-    page.locator('img[src="/images/brand/farhang-f-jamal-2026.jpg"]'),
+    page.locator('img[src="/images/brand/farhang-f-jamal-2026-v2.jpg"]'),
   ).toBeVisible()
   await expect(
     page.getByRole("link", { name: "Programming illustration by unDraw" }),

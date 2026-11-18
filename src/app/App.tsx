@@ -7531,7 +7531,7 @@ function AboutPage() {
                 className="relative aspect-[4/3] overflow-hidden bg-[#eef8f5] dark:bg-[#173b36]"
               >
                 <img
-                  src="/images/brand/farhang-f-jamal-2026-v2.jpg"
+                  src="/images/brand/farhang-f-jamal-white-2026.jpg"
                   alt="Farhang F. Jamal, website developer"
                   width={1495}
                   height={1121}
